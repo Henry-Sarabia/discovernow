@@ -5,7 +5,7 @@ import Msgs exposing (Msg(..))
 import Navigation
 import Routing exposing (parseLocation)
 import Subscriptions exposing (subscriptions)
-import Update exposing (update)
+import Update exposing (update) 
 import View exposing (view)
 
 init : Navigation.Location -> ( Model, Cmd Msg )
@@ -25,4 +25,4 @@ main =
         , update = update
         , subscriptions = subscriptions 
         } 
-  
+   

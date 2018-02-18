@@ -6,14 +6,11 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Models exposing (Login)
 import Msgs exposing (Msg(..))
-import RemoteData
 
 fetchLoginCmd : Cmd Msg
 fetchLoginCmd =
     Http.get fetchLoginUrl loginDecoder
-    |> RemoteData.sendRequest
-    |> Cmd.map OnFetchLogin
-
+    |> Http.send OnFetchLogin
 
 fetchLoginUrl : String
 fetchLoginUrl =
@@ -21,8 +18,8 @@ fetchLoginUrl =
  
 
 loginDecoder : Decode.Decoder Login
-loginDecoder =
+loginDecoder = 
     decode Login
         |> required "url" Decode.string
-
+ 
 

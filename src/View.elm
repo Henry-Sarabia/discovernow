@@ -36,9 +36,6 @@ page model =
         AboutRoute ->
             text "About Me"
 
-        LoginRoute ->
-            text "Logging in..."
-
         ResultsRoute ->
             text "Here are your results"
 
@@ -144,7 +141,7 @@ spotifyButton label =
         [ class "button is-primary is-inverted is-outlined" 
         , onClick FetchLogin
         ]
-        [ span
+        [ span 
             [ class "icon" ]
             [ i
                 [ class "fab fa-spotify" ]

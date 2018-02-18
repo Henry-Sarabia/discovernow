@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	redirectURI = "http://localhost:8080/callback"
+	redirectURI = "http://localhost:3000/results"
 )
 
 var (
@@ -22,7 +22,7 @@ var (
 	globalClient spotify.Client
 )
 
-// Payload contains the URL to be delivered to the ELM frontend.
+// Payload contains the URL to be delivered to the Elm frontend.
 type Payload struct {
 	URL string `json:"url"`
 }
