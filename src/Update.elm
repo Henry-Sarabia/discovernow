@@ -24,8 +24,7 @@ update msg model =
             ( model, fetchLoginCmd )
 
         OnFetchLogin (Ok response) -> 
-            ( { model | login = response }, Navigation.load response.url)
+            ( model, Navigation.load response.url)
  
         OnFetchLogin (Err error) -> 
             ( model, Cmd.none )
-            

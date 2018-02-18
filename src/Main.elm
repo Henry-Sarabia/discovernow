@@ -9,7 +9,7 @@ import Update exposing (update)
 import View exposing (view)
 
 init : Navigation.Location -> ( Model, Cmd Msg )
-init location =
+init location = 
     let 
         currentRoute =
             parseLocation location
