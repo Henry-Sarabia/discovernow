@@ -2,7 +2,7 @@ module View exposing (..)
 
 import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, section, footer, span, a, i, iframe, nav)
 import Html.Attributes exposing (src, class, href, height, width, alt)
-import Html.Events exposing (onWithOptions)
+import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
 import Models exposing (Model)
 import Msgs exposing (Msg(..))
@@ -36,6 +36,12 @@ page model =
         AboutRoute ->
             text "About Me"
 
+        LoginRoute ->
+            text "Logging in..."
+
+        ResultsRoute ->
+            text "Here are your results"
+
         NotFoundRoute ->
             text "Not Found"
 
@@ -50,7 +56,7 @@ hero =
         [ class "hero is-primary is-fullheight" ]   
         [ heroHead
         , heroBody
-        ]
+        ] 
 
 
 heroHead : Html Msg
@@ -129,13 +135,15 @@ subtitleText : String -> Html Msg
 subtitleText sub =
     h2
         [ class "subtitle is-3" ]
-        [ text sub ]
+        [ text sub ] 
 
 
 spotifyButton : String -> Html Msg
 spotifyButton label =
-    a
-        [ class "button is-primary is-inverted is-outlined" ]
+    a 
+        [ class "button is-primary is-inverted is-outlined" 
+        , onClick FetchLogin
+        ]
         [ span
             [ class "icon" ]
             [ i

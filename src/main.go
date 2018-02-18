@@ -5,6 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-chi/chi"
+	"github.com/go-chi/cors"
+	"github.com/go-chi/render"
 	"github.com/zmb3/spotify"
 )
 
@@ -13,32 +16,38 @@ const (
 )
 
 var (
-	auth  = spotify.NewAuthenticator(redirectURI, spotify.ScopeUserReadPrivate)
-	ch    = make(chan *spotify.Client)
-	state = "abc123"
+	auth         = spotify.NewAuthenticator(redirectURI, spotify.ScopeUserReadPrivate)
+	ch           = make(chan *spotify.Client)
+	state        = "abc123"
+	globalClient spotify.Client
 )
 
-func main() {
-	http.HandleFunc("/callback", completeAuth)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Got request for: ", r.URL.String())
-	})
-	go http.ListenAndServe(":8080", nil)
-
-	url := auth.AuthURL(state)
-	fmt.Println("Please log in to Spotify using: ", url)
-
-	client := <-ch
-
-	user, err := client.CurrentUser()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("You are logged in as: ", user.ID)
+// Payload contains the URL to be delivered to the ELM frontend.
+type Payload struct {
+	URL string `json:"url"`
 }
 
-func completeAuth(w http.ResponseWriter, r *http.Request) {
+func main() {
+	r := chi.NewRouter()
+
+	r.Use(cors.Default().Handler)
+
+	r.Get("/login", httpLoginURL)
+	r.Get("/callback", httpCompleteAuth)
+
+	http.ListenAndServe(":8080", r)
+}
+
+func httpLoginURL(w http.ResponseWriter, r *http.Request) {
+	log.Println("Got request for: ", r.URL.String())
+
+	url := auth.AuthURL(state)
+	payload := Payload{URL: url}
+
+	render.JSON(w, r, payload)
+}
+
+func httpCompleteAuth(w http.ResponseWriter, r *http.Request) {
 	tok, err := auth.Token(state, r)
 	if err != nil {
 		http.Error(w, "Couldn't get token", http.StatusForbidden)
@@ -53,5 +62,5 @@ func completeAuth(w http.ResponseWriter, r *http.Request) {
 
 	client := auth.NewClient(tok)
 	fmt.Fprintln(w, "Login Completed")
-	ch <- &client
+	globalClient = client
 }

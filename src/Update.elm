@@ -1,6 +1,7 @@
 module Update exposing (..)
 
-import Models exposing (Model)
+import Commands exposing (fetchLoginCmd)
+import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
 import Navigation
 import Routing exposing (parseLocation)
@@ -18,3 +19,9 @@ update msg model =
             
             in
                 ( { model | route = newRoute }, Cmd.none )
+
+        FetchLogin ->
+            ( model, fetchLoginCmd )
+
+        OnFetchLogin response ->
+            ( { model | login = response }, Cmd.none ) 
