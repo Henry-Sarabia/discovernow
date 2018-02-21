@@ -15,7 +15,7 @@ init location =
             parseLocation location
     in
         ( initialModel currentRoute, Cmd.none )
-
+ 
  
 main : Program Never Model Msg
 main =

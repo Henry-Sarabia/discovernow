@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -16,15 +15,19 @@ const (
 )
 
 var (
-	auth         = spotify.NewAuthenticator(redirectURI, spotify.ScopeUserReadPrivate)
-	ch           = make(chan *spotify.Client)
-	state        = "abc123"
-	globalClient spotify.Client
+	auth  = spotify.NewAuthenticator(redirectURI, spotify.ScopeUserReadPrivate)
+	ch    = make(chan *spotify.Client)
+	state = "abc123"
 )
 
 // Payload contains the URL to be delivered to the Elm frontend.
 type Payload struct {
 	URL string `json:"url"`
+}
+
+// Playlist contains the ID to a user's playlist
+type Playlist struct {
+	ID string `json:"id"`
 }
 
 func main() {
@@ -33,7 +36,7 @@ func main() {
 	r.Use(cors.Default().Handler)
 
 	r.Get("/login", httpLoginURL)
-	r.Get("/callback", httpCompleteAuth)
+	r.Get("/playlist", httpCompleteAuth)
 
 	http.ListenAndServe(":8080", r)
 }
@@ -43,7 +46,6 @@ func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 
 	url := auth.AuthURL(state)
 	payload := Payload{URL: url}
-
 	render.JSON(w, r, payload)
 }
 
@@ -61,6 +63,13 @@ func httpCompleteAuth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	client := auth.NewClient(tok)
-	fmt.Fprintln(w, "Login Completed")
-	globalClient = client
+
+	u, err := client.CurrentUser()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println(u.User.ID)
+	pl := Playlist{ID: "mockPlaylistID"}
+	render.JSON(w, r, pl)
 }

@@ -12,8 +12,7 @@ view : Model -> Html Msg
 view model =
     div 
         []
-        [ page model
-        ]
+        [ page model ]
 
 
 onLinkClick : Msg -> Attribute Msg
@@ -36,11 +35,40 @@ page model =
         AboutRoute ->
             text "About Me"
 
-        ResultsRoute ->
-            text "Here are your results"
+        ResultsRoute maybeCode maybeState ->
+            case (maybeCode, maybeState) of
+                ( Just code, Just state ) ->
+                    playlistButton code state
+
+                ( Nothing, Just state ) ->
+                    text "There is no code"
+
+                ( Just code, Nothing ) ->
+                    text "There is no state"
+
+                ( Nothing, Nothing ) ->
+                    text "There is no code or state"
 
         NotFoundRoute ->
-            text "Not Found"
+            text "Not Found" 
+
+
+playlistButton : String -> String -> Html Msg
+playlistButton code state =
+    a 
+        [ class "button is-primary" 
+        , onClick (FetchPlaylist code state)
+        ]
+        [ span 
+            [ class "icon" ]
+            [ i
+                [ class "fab fa-spotify" ]
+                []
+            ]
+        , span
+            []
+            [ text "Get Playlist" ]
+        ]
 
 
 homePage : Html Msg

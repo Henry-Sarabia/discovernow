@@ -1,23 +1,29 @@
 module Routing exposing (..)
 
 import Navigation
-import UrlParser
+import UrlParser exposing (s, top, (<?>), stringParam)
 
 type Route
     = HomeRoute
     | AboutRoute
-    | ResultsRoute
+    | ResultsRoute (Maybe String) (Maybe String)
     | NotFoundRoute
+
+
+type alias Token =
+    { code : Maybe String
+    , state : Maybe String
+    }
  
 
 matchers : UrlParser.Parser (Route -> a) a
 matchers =
     UrlParser.oneOf
-        [ UrlParser.map HomeRoute UrlParser.top
-        , UrlParser.map AboutRoute (UrlParser.s "about")
-        , UrlParser.map ResultsRoute (UrlParser.s "results")
+        [ UrlParser.map HomeRoute top
+        , UrlParser.map AboutRoute (s "about")
+        , UrlParser.map ResultsRoute (s "results" <?> stringParam "code" <?> stringParam "state")
         ]
- 
+
 
 parseLocation : Navigation.Location -> Route
 parseLocation location = 
@@ -32,7 +38,7 @@ parseLocation location =
 homePath : String
 homePath = 
     "/"
-
+ 
 
 aboutPath : String
 aboutPath =

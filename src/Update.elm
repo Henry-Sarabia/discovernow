@@ -1,10 +1,10 @@
 module Update exposing (..)
 
-import Commands exposing (fetchLoginCmd)
-import Models exposing (Model, Login)
+import Commands exposing (fetchLoginCmd, fetchPlaylistCmd)
+import Models exposing (Model, Login, Playlist)
 import Msgs exposing (Msg(..))
 import Navigation
-import Routing exposing (parseLocation)
+import Routing exposing (parseLocation, Route(..), resultsPath)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -20,11 +20,20 @@ update msg model =
             in
                 ( { model | route = newRoute }, Cmd.none )
 
-        FetchLogin ->
+        FetchLogin -> 
             ( model, fetchLoginCmd )
 
         OnFetchLogin (Ok response) -> 
-            ( model, Navigation.load response.url)
- 
+            ( { model | login = response }, Navigation.load response.url)
+
         OnFetchLogin (Err error) -> 
             ( model, Cmd.none )
+
+        FetchPlaylist code state -> 
+            ( model, fetchPlaylistCmd code state)
+
+        OnFetchPlaylist (Ok response) ->
+            ( { model | playlist = response }, Cmd.none )
+
+        OnFetchPlaylist (Err error) ->
+            ( { model | playlist = Playlist (toString error) }, Cmd.none ) 
