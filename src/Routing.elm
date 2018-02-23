@@ -6,14 +6,8 @@ import UrlParser exposing (s, top, (<?>), stringParam)
 type Route
     = HomeRoute
     | AboutRoute
-    | ResultsRoute (Maybe String) (Maybe String)
+    | CallbackRoute (Maybe String) (Maybe String)
     | NotFoundRoute
-
-
-type alias Token =
-    { code : Maybe String
-    , state : Maybe String
-    }
  
 
 matchers : UrlParser.Parser (Route -> a) a
@@ -21,7 +15,7 @@ matchers =
     UrlParser.oneOf
         [ UrlParser.map HomeRoute top
         , UrlParser.map AboutRoute (s "about")
-        , UrlParser.map ResultsRoute (s "results" <?> stringParam "code" <?> stringParam "state")
+        , UrlParser.map CallbackRoute (s "results" <?> stringParam "code" <?> stringParam "state")
         ]
 
 
@@ -32,7 +26,7 @@ parseLocation location =
             route
 
         Nothing -> 
-            NotFoundRoute
+            NotFoundRoute 
 
  
 homePath : String

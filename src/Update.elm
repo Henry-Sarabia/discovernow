@@ -1,10 +1,10 @@
 module Update exposing (..)
 
 import Commands exposing (fetchLoginCmd, fetchPlaylistCmd)
-import Models exposing (Model, Login, Playlist)
+import Models exposing (Model, Login, Playlist, Token)
 import Msgs exposing (Msg(..))
 import Navigation
-import Routing exposing (parseLocation, Route(..), resultsPath)
+import Routing exposing (parseLocation, Route, resultsPath)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =

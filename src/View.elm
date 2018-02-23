@@ -4,7 +4,7 @@ import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, secti
 import Html.Attributes exposing (src, class, href, height, width, alt)
 import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
-import Models exposing (Model)
+import Models exposing (Model, Token)
 import Msgs exposing (Msg(..))
 import Routing exposing (..)
 
@@ -35,40 +35,53 @@ page model =
         AboutRoute ->
             text "About Me"
 
-        ResultsRoute maybeCode maybeState ->
-            case (maybeCode, maybeState) of
-                ( Just code, Just state ) ->
-                    playlistButton code state
-
-                ( Nothing, Just state ) ->
-                    text "There is no code"
-
-                ( Just code, Nothing ) ->
-                    text "There is no state"
-
-                ( Nothing, Nothing ) ->
-                    text "There is no code or state"
+        CallbackRoute _ _ ->
+            tempContainer model
 
         NotFoundRoute ->
             text "Not Found" 
 
 
-playlistButton : String -> String -> Html Msg
-playlistButton code state =
-    a 
-        [ class "button is-primary" 
-        , onClick (FetchPlaylist code state)
-        ]
-        [ span 
-            [ class "icon" ]
-            [ i
-                [ class "fab fa-spotify" ]
+tempContainer : Model -> Html Msg
+tempContainer model =
+    case model.token of
+        Nothing ->
+            errorPage
+        
+        Just token ->
+            div
                 []
+                [ playlistButton token ]
+
+
+errorPage : Html Msg
+errorPage =
+    div
+        []
+        [ text "Uh oh! Seems like you've run into an error" ]
+
+
+playlistButton : Token -> Html Msg
+playlistButton token =
+    let
+        code = token.code
+        state = token.state
+
+    in
+        a 
+            [ class "button is-primary" 
+            , onClick (FetchPlaylist code state)
             ]
-        , span
-            []
-            [ text "Get Playlist" ]
-        ]
+            [ span 
+                [ class "icon" ]
+                [ i
+                    [ class "fab fa-spotify" ]
+                    []
+                ]
+            , span
+                []
+                [ text "Get Playlist" ]
+            ]
 
 
 homePage : Html Msg
