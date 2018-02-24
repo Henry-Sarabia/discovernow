@@ -6,7 +6,7 @@ import UrlParser exposing (s, top, (<?>), stringParam)
 type Route
     = HomeRoute
     | AboutRoute
-    | CallbackRoute (Maybe String) (Maybe String)
+    | ResultsRoute (Maybe String) (Maybe String)
     | NotFoundRoute
  
 
@@ -15,7 +15,7 @@ matchers =
     UrlParser.oneOf
         [ UrlParser.map HomeRoute top
         , UrlParser.map AboutRoute (s "about")
-        , UrlParser.map CallbackRoute (s "results" <?> stringParam "code" <?> stringParam "state")
+        , UrlParser.map ResultsRoute (s "results" <?> stringParam "code" <?> stringParam "state")
         ]
 
 

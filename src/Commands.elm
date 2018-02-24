@@ -4,7 +4,7 @@ import Http
 -- import Json.Encode as Encode
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
-import Models exposing (Login, Playlist)
+import Models exposing (Login, Playlist, Token, PlaylistRange(..))
 import Msgs exposing (Msg(..))
 
 
@@ -25,15 +25,23 @@ loginDecoder =
         |> required "url" Decode.string
  
 
-fetchPlaylistCmd : String -> String -> Cmd Msg
-fetchPlaylistCmd code state =
-    Http.get (createPlaylistUrl code state) playlistDecoder
+fetchPlaylistCmd : Token -> PlaylistRange -> Cmd Msg
+fetchPlaylistCmd token range =
+    Http.get (createPlaylistUrl token range) playlistDecoder
     |> Http.send OnFetchPlaylist
 
 
-createPlaylistUrl : String -> String -> String
-createPlaylistUrl code state =
-    fetchPlaylistUrl ++ "?" ++ "code=" ++ code ++ "&" ++ "state=" ++ state
+createPlaylistUrl : Token -> PlaylistRange -> String
+createPlaylistUrl token range =
+    case range of
+        Short ->
+            fetchPlaylistUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=short"
+
+        Medium ->
+            fetchPlaylistUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=medium"
+
+        Long ->
+            fetchPlaylistUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=long"
 
 
 fetchPlaylistUrl : String

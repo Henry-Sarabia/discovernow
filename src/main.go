@@ -45,6 +45,7 @@ func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 	log.Println("Got request for: ", r.URL.String())
 
 	url := auth.AuthURL(state)
+	// send this state to elm app through payload
 	payload := Payload{URL: url}
 	render.JSON(w, r, payload)
 }
@@ -53,23 +54,41 @@ func httpCompleteAuth(w http.ResponseWriter, r *http.Request) {
 	tok, err := auth.Token(state, r)
 	if err != nil {
 		http.Error(w, "Couldn't get token", http.StatusForbidden)
-		log.Fatal(err)
+		log.Print(err)
+		return
 	}
 
 	if st := r.FormValue("state"); st != state {
 		http.NotFound(w, r)
-		log.Fatalf("State mismatch: %s != %s\n", st, state)
+		log.Printf("State mismatch: %s != %s\n", st, state)
+		return
 
 	}
+
+	var tr string
+	if tr = r.FormValue("timerange"); !isValidRange(tr) {
+		http.NotFound(w, r)
+		log.Printf("Timerange '%s' is not valid", tr)
+		return
+	}
+	log.Println(tr)
 
 	client := auth.NewClient(tok)
 
 	u, err := client.CurrentUser()
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return
 	}
 
 	log.Println(u.User.ID)
 	pl := Playlist{ID: "mockPlaylistID"}
 	render.JSON(w, r, pl)
+}
+
+func isValidRange(r string) bool {
+	if r == "short" || r == "medium" || r == "long" {
+		return true
+	}
+	return false
 }

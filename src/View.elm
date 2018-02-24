@@ -4,7 +4,7 @@ import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, secti
 import Html.Attributes exposing (src, class, href, height, width, alt)
 import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
-import Models exposing (Model, Token)
+import Models exposing (Model, Token, PlaylistRange(..))
 import Msgs exposing (Msg(..))
 import Routing exposing (..)
 
@@ -35,23 +35,21 @@ page model =
         AboutRoute ->
             text "About Me"
 
-        CallbackRoute _ _ ->
-            tempContainer model
+        ResultsRoute _ _ ->
+            checkResults model
 
         NotFoundRoute ->
             text "Not Found" 
 
 
-tempContainer : Model -> Html Msg
-tempContainer model =
+checkResults : Model -> Html Msg
+checkResults model =
     case model.token of
         Nothing ->
             errorPage
-        
+         
         Just token ->
-            div
-                []
-                [ playlistButton token ]
+            resultsPage token
 
 
 errorPage : Html Msg
@@ -61,39 +59,74 @@ errorPage =
         [ text "Uh oh! Seems like you've run into an error" ]
 
 
-playlistButton : Token -> Html Msg
-playlistButton token =
-    let
-        code = token.code
-        state = token.state
 
-    in
-        a 
-            [ class "button is-primary" 
-            , onClick (FetchPlaylist code state)
+resultsPage : Token -> Html Msg
+resultsPage token =
+    hero heroHead (resultsBody token)
+
+
+resultsBody : Token -> Html Msg
+resultsBody token =
+    div
+        [ class "hero-body" ]
+        [ div
+            [ class "container has-text-centered" ]
+            [ titleText "Hello."
+            , subtitleText "I generate playlists based on what you like to listen to."
+            , subtitleText "How far back would you like me to analyze?"
+            , playlistPicker
+                [ ("fas fa-hourglass-start", "Just a few weeks", FetchPlaylist token Short)
+                , ("fas fa-hourglass-half", "At least a few months", FetchPlaylist token Medium)
+                , ("fas fa-hourglass-end", "As far back as you can", FetchPlaylist token Long)
+                ]
             ]
-            [ span 
+        ]
+
+
+playlistPicker : List (String, String, Msg) -> Html Msg
+playlistPicker options =
+    nav
+        [ class "field is-grouped is-grouped-centered" ] 
+        ( List.map playlistButton options )
+
+
+playlistButton : (String, String, Msg) -> Html Msg
+playlistButton (icon, name, msg) =
+    div
+        [ class "control" ]
+        [ a 
+            [ class "button is-primary is-inverted is-outlined is-large" 
+            , onClick msg
+            ]
+            [ span
                 [ class "icon" ]
-                [ i
-                    [ class "fab fa-spotify" ]
+                [ i 
+                    [ class icon ]
                     []
                 ]
             , span
                 []
-                [ text "Get Playlist" ]
+                [ text name ]
             ]
+        ]
 
 
 homePage : Html Msg
 homePage =
-    hero
+    hero heroHead homeBody
 
-hero : Html Msg
-hero =
+
+aboutPage : Html Msg
+aboutPage =
+    hero heroHead homeBody
+
+
+hero : Html Msg -> Html Msg -> Html Msg
+hero head body=
     section
         [ class "hero is-primary is-fullheight" ]   
-        [ heroHead
-        , heroBody
+        [ head
+        , body
         ] 
 
 
@@ -119,7 +152,7 @@ navBrand =
         [ a
             [ class "navbar-item" ]
             [ img
-                [ src "http://localhost:3000/"
+                [ src "logoxx.png"
                 , alt "Logo"
                 ]
                 []
@@ -149,8 +182,8 @@ navItem label path =
         [ text label ]
 
 
-heroBody : Html Msg
-heroBody =
+homeBody : Html Msg
+homeBody =
     div
         [ class "hero-body" ]
         [ div
@@ -179,7 +212,7 @@ subtitleText sub =
 spotifyButton : String -> Html Msg
 spotifyButton label =
     a 
-        [ class "button is-primary is-inverted is-outlined" 
+        [ class "button is-primary is-inverted is-outlined is-large" 
         , onClick FetchLogin
         ]
         [ span 

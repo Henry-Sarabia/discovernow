@@ -1,7 +1,7 @@
 module Msgs exposing (..)
 
 import Http
-import Models exposing (Login, Playlist)
+import Models exposing (Login, Playlist, Token, PlaylistRange)
 import Navigation exposing (Location)
 
 type Msg
@@ -10,4 +10,4 @@ type Msg
     | OnFetchLogin (Result Http.Error Login)
     | FetchLogin  
     | OnFetchPlaylist (Result Http.Error Playlist)
-    | FetchPlaylist String String
+    | FetchPlaylist Token PlaylistRange 

@@ -5,7 +5,6 @@ import Routing exposing (Route(..))
 type alias Model =
     { route : Route
     , changes : Int
-    , login : Login
     , token : Maybe Token
     , playlist: Playlist
     }
@@ -23,7 +22,7 @@ initialModel route =
         NotFoundRoute ->
             baseModel route
 
-        CallbackRoute maybeCode maybeState ->
+        ResultsRoute maybeCode maybeState ->
             case (maybeCode, maybeState) of
                 ( Just newCode, Just newState ) ->
                     let 
@@ -31,7 +30,6 @@ initialModel route =
                     in
                         { route = route
                         , changes = 0
-                        , login = Login ""
                         , token = newToken
                         , playlist = Playlist ""
                         } 
@@ -42,12 +40,11 @@ initialModel route =
                 ( _, Nothing ) ->
                     baseModel route
 
-
+ 
 baseModel : Route -> Model
 baseModel route =
     { route = route
     , changes = 0
-    , login = Login ""
     , token = Nothing
     , playlist = Playlist ""
     } 
@@ -64,3 +61,6 @@ type alias Token =
 
 type alias Playlist =
     { id: String }
+
+
+type PlaylistRange = Short | Medium | Long
