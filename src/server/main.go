@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	auth  = spotify.NewAuthenticator(redirectURI, spotify.ScopeUserReadPrivate)
+	auth  = spotify.NewAuthenticator(redirectURI, spotify.ScopeUserReadPrivate, spotify.ScopeUserTopRead)
 	ch    = make(chan *spotify.Client)
 	state = "abc123"
 )
@@ -74,6 +74,13 @@ func httpCompleteAuth(w http.ResponseWriter, r *http.Request) {
 	log.Println(tr)
 
 	client := auth.NewClient(tok)
+	g := generator{client: &client}
+
+	err = g.playlist(tr)
+	if err != nil {
+		log.Print(err)
+		return
+	}
 
 	u, err := client.CurrentUser()
 	if err != nil {
