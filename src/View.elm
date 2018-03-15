@@ -75,9 +75,9 @@ resultsBody token =
             , subtitleText "I generate playlists based on what you like to listen to."
             , subtitleText "How far back would you like me to analyze?"
             , playlistPicker
-                [ ("fas fa-hourglass-start", "Just a few weeks", FetchPlaylist token Short)
-                , ("fas fa-hourglass-half", "At least a few months", FetchPlaylist token Medium)
-                , ("fas fa-hourglass-end", "As far back as you can", FetchPlaylist token Long)
+                [ ("fas fa-hourglass-start", "Just a few weeks", FetchSummary token Short)
+                , ("fas fa-hourglass-half", "At least a few months", FetchSummary token Medium)
+                , ("fas fa-hourglass-end", "As far back as you can", FetchSummary token Long)
                 ]
             ]
         ]

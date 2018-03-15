@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Commands exposing (fetchLoginCmd, fetchPlaylistCmd)
+import Commands exposing (fetchLoginCmd, fetchSummaryCmd, fetchDiscoverCmd)
 import Models exposing (Model, Login, Playlist, Token)
 import Msgs exposing (Msg(..))
 import Navigation
@@ -11,11 +11,11 @@ update msg model =
     case msg of
         ChangeLocation path ->
             ( { model | changes = model.changes + 1 }, Navigation.newUrl path )
-        
+         
         OnLocationChange location ->
             let
                 newRoute =
-                    parseLocation location
+                    parseLocation location 
             
             in
                 ( { model | route = newRoute }, Cmd.none )
@@ -29,11 +29,20 @@ update msg model =
         OnFetchLogin (Err error) -> 
             ( model, Cmd.none )
  
-        FetchPlaylist token range ->
-            ( model, fetchPlaylistCmd token range )
+        FetchSummary token range ->
+            ( model, fetchSummaryCmd token range )
 
-        OnFetchPlaylist (Ok response) ->
-            ( { model | playlist = response }, Cmd.none )
+        OnFetchSummary (Ok response) ->
+            ( { model | summary = response }, Cmd.none )
 
-        OnFetchPlaylist (Err error) ->
-            ( { model | playlist = Playlist (toString error) }, Cmd.none ) 
+        OnFetchSummary (Err error) ->
+            ( { model | summary = Playlist (toString error) }, Cmd.none )
+
+        FetchDiscover token ->
+            ( model, fetchDiscoverCmd token ) 
+
+        OnFetchDiscover (Ok response) ->
+            ( { model | discover = response }, Cmd.none )
+
+        OnFetchDiscover (Err error) ->
+            ( { model | summary = Playlist (toString error) }, Cmd.none )

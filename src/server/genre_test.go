@@ -1,59 +1,41 @@
 package main
 
 import (
-	"encoding/json"
-	"os"
 	"testing"
-
-	"github.com/zmb3/spotify"
 )
 
-type testClient struct {
-}
-
-func (ts testClient) CurrentUsersTopArtistsOpt(opt *spotify.Options) (*spotify.FullArtistPage, error) {
-	a, err := loadArtists("testdata.json")
-	if err != nil {
-		return nil, err
-	}
-
-	return a, nil
-}
-
-func loadArtists(name string) (*spotify.FullArtistPage, error) {
-	var a spotify.FullArtistPage
-	file, err := os.Open(name)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	dec := json.NewDecoder(file)
-	dec.Decode(&a)
-	return &a, nil
-}
-
-func TestArtists(t *testing.T) {
+func TestExtractGenres(t *testing.T) {
 	g := generator{
 		client: testClient{},
 	}
 
-	art, err := g.artists(50, "long")
+	art, err := g.topArtists(50, "long")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	expLength := 50
-	actLength := len(art.Artists)
+	genres, err := extractGenres(art)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expLength := 137
+	actLength := len(genres)
 	if actLength != expLength {
+		// scs := spew.ConfigState{SortKeys: true, MaxDepth: 2}
+		// t.Fatal(scs.Sdump(genres))
 		t.Fatalf("Expected length %d, got %d", expLength, actLength)
 	}
 
-	expName := "Radiohead"
-	actName := art.Artists[0].Name
-	if actName != expName {
-		t.Fatalf("Expected name %s, got %s", expName, actName)
+	if _, ok := genres["vaporwave"]; !ok {
+		t.Fatal("Expected genre string 'vaporwave', got nil")
 	}
 
-	return
+	if _, ok := genres["zolo"]; !ok {
+		t.Fatal("Expected genre string 'zolo', got nil")
+	}
+
+	if _, ok := genres["adult standards"]; !ok {
+		t.Fatal("Expected genre string 'adults standards', got nil")
+	}
 }

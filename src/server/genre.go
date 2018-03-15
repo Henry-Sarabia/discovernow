@@ -2,88 +2,169 @@ package main
 
 import (
 	"errors"
-	"log"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/zmb3/spotify"
 )
 
 const (
-	maxArtists    = 15 // max = 50
+	maxArtists    = 50 // max = 50
 	minArtistData = 15
+	maxSeedInput  = 5
 )
-
-type generator struct {
-	client clienter
-}
 
 type genre struct {
 	name    string
-	artists []string
-	score   int
+	artists map[string]*spotify.FullArtist
 }
 
-type genres map[string]*genre
-
-// clienter is implemented by any type that has certain Spotify functions.
-// Helpful for testing purposes.
-type clienter interface {
-	CurrentUsersTopArtistsOpt(*spotify.Options) (*spotify.FullArtistPage, error)
+// score returns the score of the genre based on the amount of artists in the
+// provided genre.
+func (g *genre) score() int {
+	return len(g.artists)
 }
 
-func (g *generator) playlist(tr string) error {
-	log.Println("Calling playlist()")
-	ta, err := g.artists(maxArtists, tr)
-	if err != nil {
-		return err
+// isTrend returns true if the genre is considered a trend in a user's taste
+// profile. A genre is a trend if its score is above 1.
+func (g *genre) isTrend() bool {
+	if g.score() > 2 {
+		return true
+	}
+	return false
+}
+
+// seed returns a seed using the artists of the genre.
+func (g *genre) seed() spotify.Seeds {
+	sd := spotify.Seeds{}
+
+	for _, a := range g.artists {
+		if len(sd.Artists) >= maxSeedInput {
+			break
+		}
+		sd.Artists = append(sd.Artists, a.ID)
 	}
 
-	gs, err := extractGenres(ta)
-	if err != nil {
-		return err
-	}
+	return sd
+}
 
-	scs := spew.ConfigState{SortKeys: true}
-	scs.Dump(gs)
+// genreMap contains a list of genre names mapped to their respective genre
+// objects.
+type genreMap map[string]*genre
+
+// deleteGenre removes the provided genre from the map if it exists.
+func (gm genreMap) deleteGenre(g *genre) error {
+	if _, ok := gm[g.name]; !ok {
+		return errors.New("cannot delete genre as it does not exist in the genreMap")
+	}
+	delete(gm, g.name)
+
 	return nil
 }
 
-func (g *generator) artists(lim int, tr string) (*spotify.FullArtistPage, error) {
-	log.Println("Calling artists()")
-	opt := spotify.Options{
-		Limit:     &lim,
-		Timerange: &tr,
-	}
-	ta, err := g.client.CurrentUsersTopArtistsOpt(&opt)
-	if err != nil {
-		return nil, err
-	}
-
-	return ta, nil
-}
-
-func extractGenres(art *spotify.FullArtistPage) (genres, error) {
-	log.Println("Calling extractGenres()")
-	if len(art.Artists) < minArtistData {
-		return nil, errors.New("insufficient artist data")
-	}
-
-	genmap := make(genres)
-	for _, a := range art.Artists {
-		for _, n := range a.Genres {
-			if _, ok := genmap[n]; !ok {
-				genmap[n] = &genre{
-					name:    n,
-					artists: make([]string, 1),
-					score:   0,
-				}
-			}
-			genmap[n].artists = append(genmap[n].artists, a.Name)
-			genmap[n].score++
+// purgeArtist removes all instances of the provided artist from each genre in
+// the map.
+func (gm genreMap) purgeArtist(fa *spotify.FullArtist) {
+	for _, gs := range fa.Genres {
+		if _, ok := gm[gs]; ok {
+			delete(gm[gs].artists, fa.Name)
 		}
 	}
 
-	return genmap, nil
+	return
 }
 
-// func ()
+// popMax returns the genre with the highest score and removes it from the map.
+func (gm genreMap) popMax() (*genre, error) {
+	if len(gm) < 1 {
+		return nil, errors.New("insufficient genres in genreMap")
+	}
+
+	max := &genre{
+		artists: make(map[string]*spotify.FullArtist),
+	}
+
+	for _, g := range gm {
+		if g.score() >= max.score() {
+			max = g
+		}
+	}
+
+	gm.deleteGenre(max)
+
+	for _, a := range max.artists {
+		gm.purgeArtist(a)
+	}
+
+	return max, nil
+}
+
+// popMaxTrend returns the trending genre with highest score and removes it
+// from the map. If no trending genres exist, popMaxTrend returns nil.
+func (gm genreMap) popMaxTrend() *genre {
+	if len(gm) < 1 {
+		return nil
+	}
+
+	g, err := gm.popMax()
+	if err != nil {
+		return nil
+	}
+
+	if !g.isTrend() {
+		return nil
+	}
+
+	return g
+}
+
+// extractGenres returns a map of genres extracted from the provided full
+// artist page.
+func extractGenres(fap *spotify.FullArtistPage) (genreMap, error) {
+	if len(fap.Artists) < minArtistData {
+		return nil, errors.New("insufficient artist data")
+	}
+
+	gm := make(genreMap)
+	for fan, fa := range fap.Artists {
+		for _, gs := range fa.Genres {
+			if _, ok := gm[gs]; !ok {
+				gm[gs] = &genre{
+					name:    gs,
+					artists: make(map[string]*spotify.FullArtist),
+				}
+			}
+			gm[gs].artists[fa.Name] = &fap.Artists[fan]
+		}
+	}
+
+	return gm, nil
+}
+
+// processGenres returns a slice of trending genres in the order of highest
+// score to lowest score.
+func processGenres(gm genreMap) ([]*genre, error) {
+	gs := make([]*genre, 0)
+	for g := gm.popMaxTrend(); g != nil; g = gm.popMaxTrend() {
+		gs = append(gs, g)
+	}
+
+	return gs, nil
+}
+
+// seeds returns a slice of seeds created with the provided genres.
+func genreSeeds(gs []*genre) []spotify.Seeds {
+	sds := make([]spotify.Seeds, 0, len(gs))
+	for _, g := range gs {
+		sds = append(sds, g.seed())
+	}
+
+	return sds
+}
+
+// sumScore returns the sum of all the scores for each of the provided genres.
+func sumScore(gs []*genre) int {
+	sum := 0
+	for _, g := range gs {
+		sum += g.score()
+	}
+	return sum
+}

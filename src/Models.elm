@@ -6,12 +6,13 @@ type alias Model =
     { route : Route
     , changes : Int
     , token : Maybe Token
-    , playlist: Playlist
+    , summary: Playlist
+    , discover: Playlist
     }
 
 
 initialModel : Route -> Model
-initialModel route =
+initialModel route = 
     case route of
         HomeRoute ->
             baseModel route
@@ -31,7 +32,8 @@ initialModel route =
                         { route = route
                         , changes = 0
                         , token = newToken
-                        , playlist = Playlist ""
+                        , summary = Playlist ""
+                        , discover = Playlist ""
                         } 
 
                 ( Nothing, _ ) ->
@@ -46,8 +48,10 @@ baseModel route =
     { route = route
     , changes = 0
     , token = Nothing
-    , playlist = Playlist ""
+    , summary = Playlist ""
+    , discover = Playlist ""
     } 
+  
   
 type alias Login = 
     { url: String }  

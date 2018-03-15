@@ -15,9 +15,10 @@ fetchLoginCmd =
 
 
 fetchLoginUrl : String
-fetchLoginUrl =
-    "http://localhost:8080/login" 
- 
+fetchLoginUrl = 
+    "http://localhost:8080/login"
+    -- "https://nameless-thicket-99291.herokuapp.com/login"
+  
 
 loginDecoder : Decode.Decoder Login
 loginDecoder = 
@@ -25,31 +26,48 @@ loginDecoder =
         |> required "url" Decode.string
  
 
-fetchPlaylistCmd : Token -> PlaylistRange -> Cmd Msg
-fetchPlaylistCmd token range =
-    Http.get (createPlaylistUrl token range) playlistDecoder
-    |> Http.send OnFetchPlaylist
+fetchSummaryCmd : Token -> PlaylistRange -> Cmd Msg
+fetchSummaryCmd token range =
+    Http.get (createSummaryUrl token range) playlistDecoder
+    |> Http.send OnFetchSummary
 
 
-createPlaylistUrl : Token -> PlaylistRange -> String
-createPlaylistUrl token range =
+createSummaryUrl : Token -> PlaylistRange -> String
+createSummaryUrl token range =
     case range of
         Short ->
-            fetchPlaylistUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=short"
+            fetchSummaryUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=short"
 
         Medium ->
-            fetchPlaylistUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=medium"
+            fetchSummaryUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=medium"
 
         Long ->
-            fetchPlaylistUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=long"
+            fetchSummaryUrl ++ "?code=" ++ token.code ++ "&state=" ++ token.state ++ "&timerange=long"
 
 
-fetchPlaylistUrl : String
-fetchPlaylistUrl =
-    "http://localhost:8080/playlist"
+fetchSummaryUrl : String
+fetchSummaryUrl =
+    "http://localhost:8080/summary"
+    -- "https://nameless-thicket-99291.herokuapp.com/summary"
 
 
 playlistDecoder : Decode.Decoder Playlist
 playlistDecoder =
     decode Playlist
         |> required "id" Decode.string
+
+
+fetchDiscoverCmd : Token -> Cmd Msg
+fetchDiscoverCmd token =
+    Http.get (fetchDiscoverUrl ++ createTokenUrl token) playlistDecoder
+    |> Http.send OnFetchSummary
+
+
+createTokenUrl : Token -> String
+createTokenUrl token =
+    "?code=" ++ token.code ++ "&state=" ++ token.state
+
+
+fetchDiscoverUrl : String
+fetchDiscoverUrl =
+    "http://localhost:8080/discover"
