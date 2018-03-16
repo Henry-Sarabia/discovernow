@@ -12,7 +12,7 @@ update msg model =
         ChangeLocation path ->
             ( { model | changes = model.changes + 1 }, Navigation.newUrl path )
          
-        OnLocationChange location ->
+        OnLocationChange location -> 
             let
                 newRoute =
                     parseLocation location 
@@ -32,17 +32,11 @@ update msg model =
         FetchSummary token range ->
             ( model, fetchSummaryCmd token range )
 
-        OnFetchSummary (Ok response) ->
+        OnFetchSummary response ->
             ( { model | summary = response }, Cmd.none )
-
-        OnFetchSummary (Err error) ->
-            ( { model | summary = Playlist (toString error) }, Cmd.none )
 
         FetchDiscover token ->
             ( model, fetchDiscoverCmd token ) 
 
-        OnFetchDiscover (Ok response) ->
+        OnFetchDiscover response ->
             ( { model | discover = response }, Cmd.none )
-
-        OnFetchDiscover (Err error) ->
-            ( { model | summary = Playlist (toString error) }, Cmd.none )

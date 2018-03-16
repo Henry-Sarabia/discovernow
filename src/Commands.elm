@@ -6,6 +6,7 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Models exposing (Login, Playlist, Token, PlaylistRange(..))
 import Msgs exposing (Msg(..))
+import RemoteData
 
 
 fetchLoginCmd : Cmd Msg
@@ -13,7 +14,7 @@ fetchLoginCmd =
     Http.get fetchLoginUrl loginDecoder
     |> Http.send OnFetchLogin
 
-
+ 
 fetchLoginUrl : String
 fetchLoginUrl = 
     "http://localhost:8080/login"
@@ -26,10 +27,15 @@ loginDecoder =
         |> required "url" Decode.string
  
 
+-- fetchSummaryCmd : Token -> PlaylistRange -> Cmd Msg
+-- fetchSummaryCmd token range =
+--     Http.get (createSummaryUrl token range) playlistDecoder
+--     |> Http.send OnFetchSummary
 fetchSummaryCmd : Token -> PlaylistRange -> Cmd Msg
 fetchSummaryCmd token range =
     Http.get (createSummaryUrl token range) playlistDecoder
-    |> Http.send OnFetchSummary
+    |> RemoteData.sendRequest
+    |> Cmd.map OnFetchSummary
 
 
 createSummaryUrl : Token -> PlaylistRange -> String
@@ -57,10 +63,15 @@ playlistDecoder =
         |> required "id" Decode.string
 
 
+-- fetchDiscoverCmd : Token -> Cmd Msg
+-- fetchDiscoverCmd token =
+--     Http.get (fetchDiscoverUrl ++ createTokenUrl token) playlistDecoder
+--     |> Http.send OnFetchSummary
 fetchDiscoverCmd : Token -> Cmd Msg
 fetchDiscoverCmd token =
     Http.get (fetchDiscoverUrl ++ createTokenUrl token) playlistDecoder
-    |> Http.send OnFetchSummary
+    |> RemoteData.sendRequest
+    |> Cmd.map OnFetchSummary
 
 
 createTokenUrl : Token -> String

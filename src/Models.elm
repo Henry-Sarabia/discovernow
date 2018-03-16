@@ -1,13 +1,14 @@
 module Models exposing (..)
 
+import RemoteData exposing (WebData)
 import Routing exposing (Route(..))
 
 type alias Model =
     { route : Route
     , changes : Int
     , token : Maybe Token
-    , summary: Playlist
-    , discover: Playlist
+    , summary: WebData Playlist
+    , discover: WebData Playlist
     }
 
 
@@ -32,8 +33,8 @@ initialModel route =
                         { route = route
                         , changes = 0
                         , token = newToken
-                        , summary = Playlist ""
-                        , discover = Playlist ""
+                        , summary = RemoteData.NotAsked
+                        , discover = RemoteData.NotAsked
                         } 
 
                 ( Nothing, _ ) ->
@@ -48,8 +49,8 @@ baseModel route =
     { route = route
     , changes = 0
     , token = Nothing
-    , summary = Playlist ""
-    , discover = Playlist ""
+    , summary = RemoteData.NotAsked
+    , discover = RemoteData.NotAsked
     } 
   
   

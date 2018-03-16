@@ -1,6 +1,6 @@
 module View exposing (..)
 
-import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, section, footer, span, a, i, iframe, nav)
+import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, section, footer, span, a, i, iframe, nav, p)
 import Html.Attributes exposing (src, class, href, height, width, alt)
 import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
@@ -59,7 +59,6 @@ errorPage =
         [ text "Uh oh! Seems like you've run into an error" ]
 
 
-
 resultsPage : Token -> Html Msg
 resultsPage token =
     hero heroHead (resultsBody token)
@@ -113,7 +112,65 @@ playlistButton (icon, name, msg) =
 
 homePage : Html Msg
 homePage =
-    hero heroHead homeBody
+    div
+        []
+        [ hero heroHead homeBody
+        , featureHero
+        ]
+
+
+featureHero : Html Msg
+featureHero =
+    section 
+        [ class "hero is-light"]
+        [ div
+            [ class "hero-body" ]
+            [ div
+                [ class "container" ]
+                [ nav 
+                    [ class "columns" ]
+                    [ iconColumn "fab fa-github fa-3x" "Open Source" "Check it out on GitHub"
+                    , iconColumn "fab fa-spotify fa-3x" "Simple Login" "Use your existing Spotify account"
+                    , iconColumn "fas fa-unlock-alt fa-3x" "Forever Free" "No ads, no analytics, no subscription"
+                    , iconColumn "fas fa-mobile-alt fa-3x" "Responsive Design" "Designed for desktop and mobile"
+                    ]
+                ]
+            ]
+        ]
+
+
+iconColumn : String -> String -> String -> Html Msg
+iconColumn iconLink title sub =
+    div
+        [ class "column has-text-centered" ]
+        [ icon iconLink
+        , featureTitle title
+        , featureSub sub 
+        ]
+
+
+icon : String -> Html Msg
+icon label =
+    span
+        [ class "icon is-large" ]
+        [ i
+            [ class label ]
+            []
+        ]
+
+
+featureTitle : String -> Html Msg
+featureTitle label =
+    p
+        [ class "title is-4" ]
+        [ text label ]
+
+
+featureSub : String -> Html Msg
+featureSub label =
+    p
+        [ class "subtitle" ]
+        [ text label ]
 
 
 aboutPage : Html Msg
@@ -203,7 +260,7 @@ titleText title =
 
 
 subtitleText : String -> Html Msg
-subtitleText sub =
+subtitleText sub = 
     h2
         [ class "subtitle is-3" ]
         [ text sub ] 

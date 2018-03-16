@@ -3,7 +3,7 @@ module Msgs exposing (..)
 import Http
 import Models exposing (Login, Playlist, Token, PlaylistRange)
 import Navigation exposing (Location)
--- import RemoteData exposing (WebData)
+import RemoteData exposing (WebData)
 
 type Msg
     = ChangeLocation String
@@ -11,6 +11,6 @@ type Msg
     | FetchLogin  
     | OnFetchLogin (Result Http.Error Login)
     | FetchSummary Token PlaylistRange
-    | OnFetchSummary (Result Http.Error Playlist)
-    | FetchDiscover Token
-    | OnFetchDiscover (Result Http.Error Playlist)
+    | OnFetchSummary (WebData Playlist)
+    | FetchDiscover Token 
+    | OnFetchDiscover (WebData Playlist)
