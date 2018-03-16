@@ -1,7 +1,7 @@
 module View exposing (..)
 
 import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, section, footer, span, a, i, iframe, nav, p)
-import Html.Attributes exposing (src, class, href, height, width, alt)
+import Html.Attributes exposing (src, style, class, href, height, width, alt)
 import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
 import Models exposing (Model, Token, PlaylistRange(..))
@@ -30,7 +30,8 @@ page : Model -> Html Msg
 page model =
     case model.route of
         HomeRoute ->
-            homePage
+            -- homePage
+            homePageTest
 
         AboutRoute ->
             text "About Me"
@@ -110,6 +111,38 @@ playlistButton (icon, name, msg) =
         ]
 
 
+homePageTest : Html Msg
+homePageTest =
+    div
+        []
+        [ navBar
+        , heroImage
+        , featureHero ]
+
+
+heroImage : Html Msg
+heroImage =
+    section
+        [ class "hero is-large"
+        , style 
+            [ ("background-image", "linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url(herobg2.jpg)")
+            , ("background-position", "center")
+            , ("background-repeat", "no-repeat")
+            , ("background-size", "cover")
+            ]
+        ]
+        [ homeBody
+        ]
+
+navBar : Html Msg
+navBar =
+    nav
+        [ class "navbar" ]
+        [ navBrand
+        , navMenu
+        ]
+
+
 homePage : Html Msg
 homePage =
     div
@@ -122,21 +155,42 @@ homePage =
 featureHero : Html Msg
 featureHero =
     section 
-        [ class "hero is-light"]
+        [ class "hero is-light is-medium"]
         [ div
             [ class "hero-body" ]
             [ div
                 [ class "container" ]
                 [ nav 
                     [ class "columns" ]
-                    [ iconColumn "fab fa-github fa-3x" "Open Source" "Check it out on GitHub"
-                    , iconColumn "fab fa-spotify fa-3x" "Simple Login" "Use your existing Spotify account"
-                    , iconColumn "fas fa-unlock-alt fa-3x" "Forever Free" "No ads, no analytics, no subscription"
-                    , iconColumn "fas fa-mobile-alt fa-3x" "Responsive Design" "Designed for desktop and mobile"
+                    [ iconColumn "far fa-plus-square fa-5x" "Taste Summary" "Analyze weeks, months, or up to years of data and generate playlists that summarize your distinct taste in music"
+                    , iconColumn "fas fa-search fa-5x" "Discover Now" "No need to wait a week, get an automatically curated discover playlist right now"
+                    , iconColumn "fab fa-spotify fa-5x" "Simple Login" "You have enough accounts to worry about - use your existing Spotify account to log in"
+                    , iconColumn "fas fa-unlock-alt fa-5x" "Forever Free" "No ads, no analytics, no subscription - simply share and enjoy"
+                    -- , iconColumn "fas fa-mobile-alt fa-5x" "Responsive Design" "Designed for desktop and mobile for those on the go"
                     ]
                 ]
             ]
         ]
+
+
+-- featureHero : Html Msg
+-- featureHero =
+--     section 
+--         [ class "hero is-light"]
+--         [ div
+--             [ class "hero-body" ]
+--             [ div
+--                 [ class "container" ]
+--                 [ nav 
+--                     [ class "columns" ]
+--                     [ iconColumn "fab fa-github fa-3x" "Open Source" "Check it out on GitHub"
+--                     , iconColumn "fab fa-spotify fa-3x" "Simple Login" "Use your existing Spotify account"
+--                     , iconColumn "fas fa-unlock-alt fa-3x" "Forever Free" "No ads, no analytics, no subscription"
+--                     , iconColumn "fas fa-mobile-alt fa-3x" "Responsive Design" "Designed for desktop and mobile"
+--                     ]
+--                 ]
+--             ]
+--         ]
 
 
 iconColumn : String -> String -> String -> Html Msg
@@ -162,14 +216,16 @@ icon label =
 featureTitle : String -> Html Msg
 featureTitle label =
     p
-        [ class "title is-4" ]
+        [ class "title is-4 is-spaced" ]
         [ text label ]
 
 
 featureSub : String -> Html Msg
 featureSub label =
     p
-        [ class "subtitle" ]
+        [ class "subtitle"
+        , style [ ("line-height", "1.6") ]
+        ]
         [ text label ]
 
 
@@ -245,8 +301,9 @@ homeBody =
         [ class "hero-body" ]
         [ div
             [ class "container has-text-centered" ]
+            -- [ class "container"]
             [ titleText "MyFy"
-            , subtitleText "Generate your own personalized Spotify playlist"
+            , subtitleText "Analyze your Spotify data to create personalized summary and instant Discover playlists"
             , spotifyButton "Get Started"
             ]
         ]
@@ -255,21 +312,22 @@ homeBody =
 titleText : String -> Html Msg
 titleText title =
     h1 
-        [ class "title is-1 is-spaced" ]
+        [ class "title is-1 is-spaced has-text-light" ]
         [ text title ]
 
 
 subtitleText : String -> Html Msg
 subtitleText sub = 
     h2
-        [ class "subtitle is-3" ]
+        [ class "subtitle is-3 has-text-light" ]
         [ text sub ] 
 
 
 spotifyButton : String -> Html Msg
 spotifyButton label =
     a 
-        [ class "button is-primary is-inverted is-outlined is-large" 
+        -- [ class "button is-success is-inverted is-outlined is-large" 
+        [ class "button is-success is-large"
         , onClick FetchLogin
         ]
         [ span 
