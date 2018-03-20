@@ -3,17 +3,17 @@ module Routing exposing (..)
 import Navigation
 import UrlParser exposing (s, top, (<?>), stringParam)
 
-type Route
-    = HomeRoute
-    | AboutRoute
+type Route 
+    = LandingRoute
+    | AboutRoute 
     | ResultsRoute (Maybe String) (Maybe String)
     | NotFoundRoute
  
-
+ 
 matchers : UrlParser.Parser (Route -> a) a
 matchers =
     UrlParser.oneOf
-        [ UrlParser.map HomeRoute top
+        [ UrlParser.map LandingRoute top
         , UrlParser.map AboutRoute (s "about")
         , UrlParser.map ResultsRoute (s "results" <?> stringParam "code" <?> stringParam "state")
         ]
