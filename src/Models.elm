@@ -4,7 +4,7 @@ import RemoteData exposing (WebData)
 import Routing exposing (Route(..))
 
 type alias Model =
-    { route : Route
+    { route : Route 
     , changes : Int
     , token : Maybe Token
     , summary: WebData Playlist
