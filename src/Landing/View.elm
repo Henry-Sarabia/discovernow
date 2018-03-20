@@ -96,7 +96,7 @@ heroFeatures =
                 [ class "container" ]
                 [ nav 
                     [ class "columns" ]
-                    [ iconColumn "far fa-plus-square fa-5x" "Taste Summary" "Analyze weeks, months, or up to years of data and generate playlists that summarize your distinct taste in music"
+                    [ iconColumn "far fa-address-card fa-5x" "Taste Summary" "Analyze weeks, months, or up to years of data and generate playlists that exemplify your distinct taste in music"
                     , iconColumn "fas fa-search fa-5x" "Discover Now" "No need to wait a week, get an automatically curated discover playlist right now"
                     , iconColumn "fab fa-spotify fa-5x" "Simple Login" "You have enough accounts to worry about - use your existing Spotify account to log in"
                     , iconColumn "fas fa-unlock-alt fa-5x" "Forever Free" "No ads, no analytics, no subscription - simply share and enjoy"

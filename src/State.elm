@@ -30,7 +30,7 @@ initialModel route =
             case (maybeCode, maybeState) of
                 ( Just newCode, Just newState ) ->
                     let
-                        newToken = Just (Token newCode newState)
+                        newToken = Just (Token newCode newState) 
                     in
                         { route = route
                         , changes = 0 
@@ -69,6 +69,7 @@ initialCommands =
         , Cmd.map DiscoverMsg Discover.initialCommands
         ] 
 
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -87,18 +88,23 @@ update msg model =
                 (newModel, newCmd) = 
                     Landing.update subMsg model.landing
             in
-                ( { model | landing = newModel }, newCmd )
+                ( { model | landing = newModel }, Cmd.map LandingMsg newCmd )
 
         TasteMsg subMsg ->
             let
                 (newModel, newCmd) =
                     Taste.update subMsg model.taste
             in
-                ( { model | taste = newModel }, newCmd )
+                ( { model | taste = newModel }, Cmd.map TasteMsg newCmd )
                 
         DiscoverMsg subMsg ->
             let 
                 (newModel, newCmd) =
                     Discover.update subMsg model.discover
             in
-                ( { model | discover = newModel }, newCmd )
+                ( { model | discover = newModel }, Cmd.map DiscoverMsg newCmd )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none

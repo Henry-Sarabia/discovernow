@@ -4,15 +4,69 @@ import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, secti
 import Html.Attributes exposing (src, style, class, href, height, width, alt)
 import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
-import Models exposing (Model, Token, PlaylistRange(..))
-import Msgs exposing (Msg(..))
+import Landing.View as Landing
 import Routing exposing (..)
+import Types exposing (..)
 
-view : Model -> Html Msg
-view model =
+root : Model -> Html Msg
+root model =
     div 
         []
-        [ page model ]
+        [ navBar
+        , page model
+        ]
+
+
+page : Model -> Html Msg
+page model =
+    case model.route of
+        LandingRoute ->
+            landingPage model
+
+        AboutRoute ->
+            aboutPage model
+
+        ResultsRoute _ _ ->
+            checkResults model
+
+        NotFoundRoute ->
+            notFoundPage
+
+
+landingPage : Model -> Html Msg
+landingPage model =
+    div
+        []
+        [ Html.map LandingMsg (Landing.root model.landing) ]
+
+
+aboutPage : Model -> Html Msg
+aboutPage model =
+    text "about me"
+
+
+resultsPage : Model -> Html Msg
+resultsPage model =
+    div
+        []
+        [ text "results"]
+
+
+notFoundPage : Html Msg
+notFoundPage =
+    div
+        []
+        [ text "404" ]
+
+checkResults : Model -> Html Msg
+checkResults model =
+    case model.token of
+        Nothing ->
+            text "you found an error"
+         
+        Just token ->
+            -- resultsPage token
+            resultsPage model
 
 
 navBar : Html Msg
@@ -45,8 +99,8 @@ navMenu =
         [ class "navbar-menu" ]
         [ div
             [ class "navbar-end" ]
-            [ navItem "Home" "homePath"
-            , navItem "About" "aboutPath"
+            [ navItem "Home" homePath
+            , navItem "About" aboutPath
             ]
         ]
 
@@ -70,39 +124,6 @@ onLinkClick msg =
             }
     in
         onWithOptions "click" options (Decode.succeed msg)
-
--- page : Model -> Html Msg
--- page model =
---     case model.route of
---         HomeRoute ->
---             -- homePage
---             homePageTest
-
---         AboutRoute ->
---             text "About Me"
-
---         ResultsRoute _ _ ->
---             checkResults model
-
---         NotFoundRoute ->
---             text "Not Found" 
-
-
--- checkResults : Model -> Html Msg
--- checkResults model =
---     case model.token of
---         Nothing ->
---             errorPage
-         
---         Just token ->
---             resultsPage token
-
-
--- errorPage : Html Msg
--- errorPage =
---     div
---         []
---         [ text "Uh oh! Seems like you've run into an error" ]
 
 
 -- resultsPage : Token -> Html Msg
@@ -209,79 +230,41 @@ onLinkClick msg =
 --         ]
 
 
-aboutPage : Html Msg
-aboutPage =
-    hero heroHead homeBody
+-- aboutPage : Html Msg
+-- aboutPage =
+--     hero heroHead homeBody
 
 
-hero : Html Msg -> Html Msg -> Html Msg
-hero head body=
-    section
-        [ class "hero is-primary is-fullheight" ]   
-        [ head
-        , body
-        ] 
-
-
-heroHead : Html Msg
-heroHead =
-    div
-        [ class "hero-head" ]
-        [ nav 
-            [ class "navbar has-shadow" ]
-            [ div 
-                [ class "container" ]
-                [ navBrand
-                , navMenu
-                ]
-            ]
-        ]
-
-
-heroFoot : Html Msg
-heroFoot =
-    div
-        [ class "hero-foot" ]
-        [ ]
-----------------------------------
-
--- header : Html Msg
--- header = 
+-- hero : Html Msg -> Html Msg -> Html Msg
+-- hero head body=
 --     section
---         [ class "hero is-primary is-medium is-bold" ]
---         [ div
---             [ class "hero-body" ]
+--         [ class "hero is-primary is-fullheight" ]   
+--         [ head
+--         , body
+--         ] 
+
+
+-- heroHead : Html Msg
+-- heroHead =
+--     div
+--         [ class "hero-head" ]
+--         [ nav 
+--             [ class "navbar has-shadow" ]
 --             [ div 
 --                 [ class "container" ]
---                 [ h1
---                     [ class "title is-1" ]
---                     [text "MyFy" ]
---                 , h2
---                     [ class "subtitle" ]
---                     [text "Personalized Spotify Playlist" ]
+--                 [ navBrand
+--                 , navMenu
 --                 ]
 --             ]
 --         ]
 
 
--- body : Html Msg
--- body =
---     section
---         [ class "section " ]
---         [ div 
---             [ class "container" ]
---             [ h1
---                 [ class "title is-2" ]
---                 [ text "Generate your own personalized playlist"]
---             , h2
---                 [ class "subtitle" ]
---                 [text "Simply log in to Spotify"]
---             ]
---         ]
-
-
-
--------------------------------
+-- heroFoot : Html Msg
+-- heroFoot =
+--     div
+--         [ class "hero-foot" ]
+--         [ ]
+----------------------------------
 
 -- body : Html Msg
 -- body =
