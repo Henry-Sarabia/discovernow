@@ -8,7 +8,6 @@ import Json.Decode as Decode
 import Landing.View as Landing
 import Routing exposing (..)
 import Spotify.Types as Spotify
-import Taste.View as Taste
 import Types exposing (..)
 
 root : Model -> Html Msg
@@ -49,13 +48,6 @@ landingPage model =
 aboutPage : Model -> Html Msg
 aboutPage model =
     text "about me"
-
-
-tastePage : Model -> Spotify.Token -> Html Msg
-tastePage model token =
-    div
-        [] 
-        [ Html.map TasteMsg (Taste.root model.taste token) ]
 
 
 discoverPage : Model -> Spotify.Token -> Html Msg

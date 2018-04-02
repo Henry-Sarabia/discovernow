@@ -5,7 +5,6 @@ import Landing.State as Landing
 import Navigation 
 import Routing exposing (..) 
 import Spotify.Types exposing (Token)
-import Taste.State as Taste
 import Types exposing (..)
  
 init : Navigation.Location -> ( Model, Cmd Msg )
@@ -36,7 +35,6 @@ initialModel route =
                         , changes = 0 
                         , token = newToken
                         , landing = Landing.initialModel
-                        , taste = Taste.initialModel
                         , discover = Discover.initialModel
                         }
                     
@@ -59,7 +57,6 @@ baseModel route =
     , changes = 0
     , token = Nothing
     , landing = Landing.initialModel
-    , taste = Taste.initialModel
     , discover = Discover.initialModel
     }
  
@@ -68,7 +65,6 @@ initialCommands : Cmd Msg
 initialCommands =
     Cmd.batch 
         [ Cmd.map LandingMsg Landing.initialCommands
-        , Cmd.map TasteMsg Taste.initialCommands
         , Cmd.map DiscoverMsg Discover.initialCommands
         ] 
 
@@ -92,13 +88,6 @@ update msg model =
                     Landing.update subMsg model.landing
             in
                 ( { model | landing = newModel }, Cmd.map LandingMsg newCmd )
-
-        TasteMsg subMsg ->
-            let
-                (newModel, newCmd) =
-                    Taste.update subMsg model.taste
-            in
-                ( { model | taste = newModel }, Cmd.map TasteMsg newCmd )
                 
         DiscoverMsg subMsg ->
             let 
