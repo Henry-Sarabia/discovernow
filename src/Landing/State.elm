@@ -29,3 +29,20 @@ update msg model =
 
         LoadLogin url ->
             ( model, Navigation.load url) 
+
+        ForceFetchLogin ->
+            ( model, forceFetchLoginCmd )
+
+        OnForceFetchLogin response ->
+            case response of
+                RemoteData.NotAsked ->
+                    ( { model | login = response }, Cmd.none )
+
+                RemoteData.Loading ->
+                    ( { model | login = response }, Cmd.none )
+
+                RemoteData.Success resp ->
+                    ( { model | login = response }, Navigation.load resp.url )
+
+                RemoteData.Failure err ->
+                    ( { model | login = response }, Navigation.newUrl "/error" )
