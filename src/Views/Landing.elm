@@ -1,10 +1,11 @@
-module Landing.View exposing (root)
+module Views.Landing exposing (root)
 
 import Html exposing (Html, Attribute, div, text, h1, h2, nav, section, span, a, i, p, img, footer)
 import Html.Attributes exposing (class, style, src, href, alt, height, width, attribute)
 import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
-import Landing.Types exposing (..)
+import Models exposing (Model, Login)
+import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
 
  
