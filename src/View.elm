@@ -1,14 +1,14 @@
 module View exposing (..)
 
-import Discover.View as Discover
 import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, section, footer, span, a, i, iframe, nav, p)
 import Html.Attributes exposing (src, style, class, href, height, width, alt)
 import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
-import Landing.View as Landing
+import Models exposing (Model, Token, Login)
+import Msgs exposing (Msg(..))
 import Routing exposing (..)
-import Spotify.Types as Spotify
-import Types exposing (..)
+import Views.Discover as Discover
+import Views.Landing as Landing
 
 root : Model -> Html Msg
 root model =
@@ -42,7 +42,7 @@ landingPage : Model -> Html Msg
 landingPage model =
     div
         []
-        [ Html.map LandingMsg (Landing.root model.landing) ]
+        [ Landing.root model ]
 
 
 aboutPage : Model -> Html Msg
@@ -50,11 +50,11 @@ aboutPage model =
     text "about me"
 
 
-discoverPage : Model -> Spotify.Token -> Html Msg
+discoverPage : Model -> Token -> Html Msg
 discoverPage model token =
     div
         []
-        [ Html.map DiscoverMsg (Discover.root model.discover token) ]
+        [ Discover.root model token]
  
 errorPage : Html Msg
 errorPage =
@@ -100,7 +100,7 @@ navBar =
 --                 ]
 --                 []
 --             ]
---         ]
+--         ] 
 
 navBrand : Html Msg -> Html Msg
 navBrand child =

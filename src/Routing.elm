@@ -9,7 +9,7 @@ type Route
     | ResultsRoute (Maybe String) (Maybe String)
     | ErrorRoute
     | NotFoundRoute
- 
+  
  
 matchers : UrlParser.Parser (Route -> a) a
 matchers =
@@ -35,7 +35,7 @@ homePath : String
 homePath = 
     "/"
  
-
+ 
 aboutPath : String
 aboutPath =
     "/about"

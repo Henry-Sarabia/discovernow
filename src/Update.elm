@@ -1,26 +1,25 @@
-module Landing.State exposing (..)
+module Update exposing (..)
 
-import Landing.Rest exposing (..)
-import Landing.Types exposing (..)
+import Commands exposing (..)
+import Models exposing (Model)
+import Msgs exposing (Msg(..))
 import Navigation
 import RemoteData
+import Routing exposing (parseLocation)
 
-
-init : ( Model, Cmd Msg )
-init =
-    ( initialModel, fetchLoginCmd )
-
-initialModel : Model
-initialModel =
-    { login = RemoteData.Loading }
-
-initialCommands : Cmd Msg
-initialCommands =
-    fetchLoginCmd
- 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of  
+        ChangeLocation path ->
+            ( { model | changes = model.changes + 1 }, Navigation.newUrl path )
+
+        OnLocationChange location ->
+            let
+                newRoute =
+                    parseLocation location
+            in
+                ( { model | route = newRoute }, Cmd.none )
+
         FetchLogin ->
             ( model, fetchLoginCmd )
         
@@ -29,9 +28,9 @@ update msg model =
 
         LoadLogin url ->
             ( model, Navigation.load url) 
-
+ 
         ForceFetchLogin ->
-            ( model, forceFetchLoginCmd )
+            ( model, forceFetchLoginCmd ) 
 
         OnForceFetchLogin response ->
             case response of
@@ -46,3 +45,9 @@ update msg model =
 
                 RemoteData.Failure err ->
                     ( { model | login = response }, Navigation.newUrl "/error" )
+
+        FetchPlaylist token ->
+            ( { model | discover = RemoteData.Loading } , fetchDiscoverCmd token )
+
+        OnFetchPlaylist response ->
+            ( { model | discover = response }, Cmd.none )
