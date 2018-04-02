@@ -4,18 +4,21 @@ import (
 	"log"
 	"math"
 	"math/rand"
+	"strconv"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/pkg/errors"
 
 	"github.com/zmb3/spotify"
 )
 
 const (
-	playlistSize     = 30
-	maxRequestTracks = 50
-	publicPlaylist   = true
+	playlistSize      = 30
+	maxRequestTracks  = 50
+	maxRequestArtists = 50
+	publicPlaylist    = true
+	targetPopularity  = 40
+	recRetryLimit     = 3
 )
 
 // clienter is implemented by any type that has certain Spotify functions.
@@ -56,7 +59,8 @@ func (g *generator) TasteSummary(time string) (*spotify.FullPlaylist, error) {
 	}
 
 	name := playlistName(time)
-	pl, err := g.playlist(name, shuffleTracks(recs))
+	IDs := extractTrackIDs(shuffleTracks(recs))
+	pl, err := g.playlist(name, IDs)
 	if err != nil {
 		return nil, err
 	}
@@ -68,22 +72,58 @@ func (g *generator) TasteSummary(time string) (*spotify.FullPlaylist, error) {
 // Discover returns a playlist based on the analysis of a user's recently
 // played tracks.
 func (g *generator) Discover() (*spotify.FullPlaylist, error) {
-	rt, err := g.recentTracks(maxRequestTracks)
+	tracks, err := g.discoverTracks()
 	if err != nil {
-		return nil, errors.WithMessage(err, "discover: requires recent tracks")
+		return nil, err
 	}
 
-	recs, err := g.recommendationsByTracks(rt)
-	if err != nil {
-		return nil, errors.WithMessage(err, "discover: requires recommendations")
-	}
-
-	pl, err := g.playlist("MyFy - Discover Now", recs)
+	name := "Discover Now - Popularity " + strconv.Itoa(targetPopularity)
+	IDs := extractTrackIDs(tracks)
+	pl, err := g.playlist(name, IDs)
 	if err != nil {
 		return nil, errors.WithMessage(err, "discover: cannot create playlist")
 	}
 
 	log.Println("Discover finished.")
+	return pl, nil
+}
+
+// discoverTracks returns a list of tracks based on the analysis of the logged
+// in user's recently played tracks.
+func (g *generator) discoverTracks() ([]spotify.SimpleTrack, error) {
+	rt, err := g.recentTracks(maxRequestTracks)
+	if err != nil {
+		return nil, errors.WithMessage(err, "discover: requires recent tracks")
+	}
+
+	attr := spotify.NewTrackAttributes().TargetPopularity(targetPopularity)
+
+	recs, err := g.recommendationsByTracks(rt, attr)
+	if err != nil {
+		return nil, errors.WithMessage(err, "discover: requires recommendations")
+	}
+
+	return recs, nil
+}
+
+// playlist creates and returns a playlist with the provided name and
+// populates it with the tracks corresponding to the provided IDs.
+func (g *generator) playlist(name string, IDs []spotify.ID) (*spotify.FullPlaylist, error) {
+	u, err := g.client.CurrentUser()
+	if err != nil {
+		return nil, err
+	}
+
+	pl, err := g.client.CreatePlaylistForUser(u.ID, name, publicPlaylist)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = g.client.AddTracksToPlaylist(u.ID, pl.ID, IDs...)
+	if err != nil {
+		return nil, err
+	}
+
 	return pl, nil
 }
 
@@ -102,6 +142,44 @@ func (g *generator) topArtists(num int, time string) (*spotify.FullArtistPage, e
 	return top, nil
 }
 
+// allTopArtists returns a list of the user's top artists from every available
+// timeframe.
+func (g *generator) allTopArtists() ([]spotify.FullArtist, error) {
+	s, err := g.topArtists(maxRequestArtists, "short")
+	if err != nil {
+		return nil, err
+	}
+
+	m, err := g.topArtists(maxRequestArtists, "medium")
+	if err != nil {
+		return nil, err
+	}
+
+	l, err := g.topArtists(maxRequestArtists, "long")
+	if err != nil {
+		return nil, err
+	}
+
+	all := append(l.Artists, m.Artists...)
+	all = append(all, s.Artists...)
+	all = removeDuplicateArtists(all)
+
+	return all, nil
+}
+
+// removeDuplicateArtists returns a list with only unique artists.
+func removeDuplicateArtists(old []spotify.FullArtist) []spotify.FullArtist {
+	visited := make(map[string]bool)
+	new := make([]spotify.FullArtist, 0)
+	for _, a := range old {
+		if ok := visited[a.Name]; !ok {
+			visited[a.Name] = true
+			new = append(new, a)
+		}
+	}
+	return new
+}
+
 // recentTracks returns a list of the user's recently played tracks.
 func (g *generator) recentTracks(num int) ([]spotify.SimpleTrack, error) {
 	opt := spotify.RecentlyPlayedOptions{
@@ -111,8 +189,6 @@ func (g *generator) recentTracks(num int) ([]spotify.SimpleTrack, error) {
 	if err != nil {
 		return nil, err
 	}
-	scs := spew.ConfigState{SortKeys: true, MaxDepth: 2}
-	scs.Dump(rp)
 
 	tracks := make([]spotify.SimpleTrack, 0)
 	for _, t := range rp {
@@ -124,9 +200,7 @@ func (g *generator) recentTracks(num int) ([]spotify.SimpleTrack, error) {
 
 // recommendation returns a list of recommended tracks based on the given
 // seed.
-func (g *generator) recommendation(sd spotify.Seeds, num int) ([]spotify.SimpleTrack, error) {
-	attr := spotify.NewTrackAttributes()
-
+func (g *generator) recommendation(sd spotify.Seeds, num int, attr *spotify.TrackAttributes) ([]spotify.SimpleTrack, error) {
 	opt := &spotify.Options{Limit: &num}
 	rec, err := g.client.GetRecommendations(sd, attr, opt)
 	if err != nil {
@@ -134,6 +208,31 @@ func (g *generator) recommendation(sd spotify.Seeds, num int) ([]spotify.SimpleT
 	}
 
 	return rec.Tracks, nil
+}
+
+// uniqueRecommendation returns a list of recommended tracks omitting any
+// which have any of the provided artists.
+func (g *generator) uniqueRecommendations(sd spotify.Seeds, num int, attr *spotify.TrackAttributes, visited map[string]bool) ([]spotify.SimpleTrack, error) {
+	uniq := make([]spotify.SimpleTrack, 0)
+
+	for i := 0; len(uniq) < num; {
+		if i > recRetryLimit {
+			break
+		}
+		rec, err := g.recommendation(sd, num, attr)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, r := range rec {
+			if ok := visited[r.Artists[0].Name]; !ok {
+				uniq = append(uniq, r)
+			}
+			visited[r.Artists[0].Name] = true
+		}
+	}
+
+	return uniq, nil
 }
 
 // recommendationsByGenre returns a list of about 30 tracks recommended based on the
@@ -147,7 +246,7 @@ func (g *generator) recommendationsByGenres(gens []*genre) ([]spotify.SimpleTrac
 		tracks := ratio * playlistSize
 		num := math.Ceil(tracks)
 
-		rec, err := g.recommendation(gen.seed(), int(num))
+		rec, err := g.recommendation(gen.seed(), int(num), nil)
 		if err != nil {
 			return nil, errors.WithMessage(err, "cannot get recommendation with a genre seed")
 		}
@@ -159,42 +258,42 @@ func (g *generator) recommendationsByGenres(gens []*genre) ([]spotify.SimpleTrac
 
 // recommendationsByTracks returns a list of about 30 tracks recommended based
 // on the provided tracks.
-func (g *generator) recommendationsByTracks(tracks []spotify.SimpleTrack) ([]spotify.SimpleTrack, error) {
+func (g *generator) recommendationsByTracks(tracks []spotify.SimpleTrack, attr *spotify.TrackAttributes) ([]spotify.SimpleTrack, error) {
 	sds := trackSeeds(shuffleTracks(tracks))
+
+	ta, err := g.allTopArtists()
+	if err != nil {
+		return nil, errors.WithMessage(err, "cannot retrieve all top artists")
+	}
+
+	visited := visitedArtists(ta, tracks)
+	log.Println(len(visited))
 
 	recs := make([]spotify.SimpleTrack, 0)
 	num := playlistSize / len(sds)
 	for _, sd := range sds {
-		rec, err := g.recommendation(sd, num)
+		rec, err := g.uniqueRecommendations(sd, num, attr, visited)
 		if err != nil {
 			return nil, errors.WithMessage(err, "cannot get recommendation with a track seed")
 		}
 		recs = append(recs, rec...)
+		log.Println(len(visited))
 	}
 
 	return recs, nil
 }
 
-// playlist creates and returns a playlist with the provided name and
-// tracks for the user.
-func (g *generator) playlist(name string, tracks []spotify.SimpleTrack) (*spotify.FullPlaylist, error) {
-	u, err := g.client.CurrentUser()
-	if err != nil {
-		return nil, err
+// visitedArtists returns a map of artists marked as visited derived from the
+// provided list of artists and the artists from the provided list of tracks.
+func visitedArtists(arts []spotify.FullArtist, tracks []spotify.SimpleTrack) map[string]bool {
+	visited := make(map[string]bool)
+	for _, a := range arts {
+		visited[a.Name] = true
 	}
-
-	pl, err := g.client.CreatePlaylistForUser(u.ID, name, publicPlaylist)
-	if err != nil {
-		return nil, err
+	for _, t := range tracks {
+		visited[t.Artists[0].Name] = true
 	}
-
-	IDs := extractIDs(tracks)
-	_, err = g.client.AddTracksToPlaylist(u.ID, pl.ID, IDs...)
-	if err != nil {
-		return nil, err
-	}
-
-	return pl, nil
+	return visited
 }
 
 // shuffleTracks returns returns a shuffled list of the provided tracks.
@@ -209,8 +308,8 @@ func shuffleTracks(old []spotify.SimpleTrack) []spotify.SimpleTrack {
 
 }
 
-// extractIDs returns a list of IDs corresponding to the provided tracks.
-func extractIDs(tracks []spotify.SimpleTrack) []spotify.ID {
+// extractTrackIDs returns a list of IDs corresponding to the provided tracks.
+func extractTrackIDs(tracks []spotify.SimpleTrack) []spotify.ID {
 	IDs := make([]spotify.ID, 0)
 	for _, t := range tracks {
 		IDs = append(IDs, t.ID)
