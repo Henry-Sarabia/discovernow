@@ -20,6 +20,7 @@ var (
 		redirectURI,
 		spotify.ScopeUserReadPrivate,
 		spotify.ScopeUserTopRead,
+		spotify.ScopeUserReadRecentlyPlayed,
 		spotify.ScopePlaylistModifyPublic,
 	)
 	ch    = make(chan *spotify.Client)
@@ -55,6 +56,7 @@ func main() {
 
 func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 	log.Println("Got request for: ", r.URL.String())
+	// time.Sleep(2 * time.Second)
 
 	url := auth.AuthURL(state)
 	// send this state to elm app through login
@@ -112,6 +114,7 @@ func completeAuth(w http.ResponseWriter, r *http.Request) *generator {
 	}
 
 	c := auth.NewClient(tok)
+	c.AutoRetry = true
 	return &generator{client: &c}
 }
 
