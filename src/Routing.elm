@@ -7,6 +7,7 @@ type Route
     = LandingRoute
     | AboutRoute 
     | ResultsRoute (Maybe String) (Maybe String)
+    | ErrorRoute
     | NotFoundRoute
  
  
@@ -16,6 +17,7 @@ matchers =
         [ UrlParser.map LandingRoute top
         , UrlParser.map AboutRoute (s "about")
         , UrlParser.map ResultsRoute (s "results" <?> stringParam "code" <?> stringParam "state")
+        , UrlParser.map ErrorRoute (s "error")
         ]
 
 
@@ -42,3 +44,8 @@ aboutPath =
 resultsPath : String
 resultsPath =
     "/results"
+
+
+errorPath : String
+errorPath =
+    "/error"

@@ -3,7 +3,7 @@ module Types exposing (..)
 import Discover.Types as Discover
 import Landing.Types as Landing
 import Navigation
-import Routing exposing (Route)
+import Routing exposing (Route) 
 import Spotify.Types exposing (Token)
 import Taste.Types as Taste
  

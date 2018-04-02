@@ -24,3 +24,9 @@ loginDecoder =
     decode Login
         |> required "url" Decode.string
  
+
+forceFetchLoginCmd : Cmd Msg
+forceFetchLoginCmd =
+    Http.get fetchLoginUrl loginDecoder
+    |> RemoteData.sendRequest
+    |> Cmd.map OnForceFetchLogin

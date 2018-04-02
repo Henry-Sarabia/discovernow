@@ -1,18 +1,21 @@
 module View exposing (..)
 
+import Discover.View as Discover
 import Html exposing (Html, Attribute, text, div, h1, h2, h3, img, button, section, footer, span, a, i, iframe, nav, p)
 import Html.Attributes exposing (src, style, class, href, height, width, alt)
 import Html.Events exposing (onWithOptions, onClick)
 import Json.Decode as Decode
 import Landing.View as Landing
 import Routing exposing (..)
+import Spotify.Types as Spotify
+import Taste.View as Taste
 import Types exposing (..)
 
 root : Model -> Html Msg
 root model =
     div 
         []
-        [ navBar
+        [ container navBar
         , page model
         ]
 
@@ -22,12 +25,15 @@ page model =
     case model.route of
         LandingRoute ->
             landingPage model
-
+ 
         AboutRoute ->
             aboutPage model
 
         ResultsRoute _ _ ->
             checkResults model
+
+        ErrorRoute ->
+            errorPage
 
         NotFoundRoute ->
             notFoundPage
@@ -45,11 +51,24 @@ aboutPage model =
     text "about me"
 
 
-resultsPage : Model -> Html Msg
-resultsPage model =
+tastePage : Model -> Spotify.Token -> Html Msg
+tastePage model token =
+    div
+        [] 
+        [ Html.map TasteMsg (Taste.root model.taste token) ]
+
+
+discoverPage : Model -> Spotify.Token -> Html Msg
+discoverPage model token =
     div
         []
-        [ text "results"]
+        [ Html.map DiscoverMsg (Discover.root model.discover token) ]
+ 
+errorPage : Html Msg
+errorPage =
+    div
+        []
+        [ text "Uh oh, looks like you found an error" ]
 
 
 notFoundPage : Html Msg
@@ -65,33 +84,43 @@ checkResults model =
             text "you found an error"
          
         Just token ->
-            -- resultsPage token
-            resultsPage model
+            discoverPage model token
 
 
 navBar : Html Msg
 navBar =
     nav
         [ class "navbar" ]
-        [ navBrand
+        [ navBrand logo
         , navMenu
         ]
 
 
-navBrand : Html Msg
-navBrand =
-    div 
+-- navBrand : Html Msg
+-- navBrand =
+--     div 
+--         [ class "navbar-brand" ]
+--         [ a
+--             [ class "navbar-item" ]
+--             [ img
+--                 [ src "logoxx.png"
+--                 , alt "Logo"
+--                 ]
+--                 []
+--             ]
+--         ]
+
+navBrand : Html Msg -> Html Msg
+navBrand child =
+    div
         [ class "navbar-brand" ]
         [ a
-            [ class "navbar-item" ]
-            [ img
-                [ src "logoxx.png"
-                , alt "Logo"
-                ]
-                []
+            [ class "navbar-item" 
+            , href homePath
+            , onLinkClick (ChangeLocation homePath)
             ]
+            [ child ]
         ]
-
 
 navMenu : Html Msg
 navMenu =
@@ -126,8 +155,24 @@ onLinkClick msg =
         onWithOptions "click" options (Decode.succeed msg)
 
 
--- resultsPage : Token -> Html Msg
--- resultsPage token =
+logo : Html Msg
+logo =
+    span
+        [ class "icon is-large" ]
+        [ i
+            [ class "fas fa-headphones fa-3x" ]
+            []
+        ]
+
+container : Html Msg -> Html Msg
+container child =
+    div
+        [ class "container" ]
+        [ child ]
+
+
+-- tastePage : Token -> Html Msg
+-- tastePage token =
 --     hero heroHead (resultsBody token)
 
 

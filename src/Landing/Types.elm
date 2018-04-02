@@ -10,6 +10,8 @@ type Msg
     = FetchLogin
     | OnFetchLogin (WebData Login)
     | LoadLogin String
+    | ForceFetchLogin
+    | OnForceFetchLogin (WebData Login)
 
 type alias Login =
     { url : String } 

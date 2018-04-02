@@ -46,9 +46,12 @@ initialModel route =
                 ( _, Nothing ) ->
                     baseModel route
 
-        NotFoundRoute -> 
+        ErrorRoute ->
             baseModel route
 
+        NotFoundRoute -> 
+            baseModel route
+ 
 
 baseModel : Route -> Model
 baseModel route =
@@ -59,7 +62,7 @@ baseModel route =
     , taste = Taste.initialModel
     , discover = Discover.initialModel
     }
-
+ 
 
 initialCommands : Cmd Msg 
 initialCommands =
