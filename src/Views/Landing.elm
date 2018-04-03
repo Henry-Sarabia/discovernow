@@ -1,12 +1,12 @@
 module Views.Landing exposing (root)
 
-import Html exposing (Html, Attribute, div, text, h1, h2, nav, section, span, a, i, p, img, footer)
-import Html.Attributes exposing (class, style, src, href, alt, height, width, attribute)
-import Html.Events exposing (onWithOptions, onClick)
-import Json.Decode as Decode
+import Html exposing (Html, div, text, h1, h2, nav, section, span, a, p)
+import Html.Attributes exposing (class, style, alt)
+import Html.Events exposing (onClick)
 import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
+import Views.Common exposing (..)
 
  
 root : Model -> Html Msg
@@ -15,19 +15,7 @@ root model =
         []
         [ heroImage model
         , heroFeatures
-        , footerInfo
         ]
-
-
-onLinkClick : Msg -> Attribute Msg
-onLinkClick msg =
-    let
-        options =
-            { stopPropagation = False
-            , preventDefault = True
-            }
-    in
-        onWithOptions "click" options (Decode.succeed msg)
 
 
 heroImage : Model -> Html Msg
@@ -64,7 +52,7 @@ titleText title =
         [ text title ]
 
 
-subtitleText : String -> Html Msg
+subtitleText : String -> Html Msg 
 subtitleText sub = 
     h2
         [ class "subtitle is-3 has-text-light" ]
@@ -111,23 +99,6 @@ spotifyButton login label =
                 ]
 
 
-icon : String -> Html Msg
-icon link =
-    span
-        [ class "icon" ]
-        [ i
-            [ class link ]
-            []
-        ]
-
-
-spanText : String -> Html Msg
-spanText txt =
-    span
-        []
-        [ text txt ]
-
-
 heroFeatures : Html Msg
 heroFeatures =
     section 
@@ -157,16 +128,6 @@ iconColumn iconLink title sub =
         ]
 
 
-largeIcon : String -> Html Msg
-largeIcon link =
-    span
-        [ class "icon is-large" ]
-        [ i
-            [ class link ]
-            []
-        ]
-
-
 featureTitle : String -> Html Msg
 featureTitle label =
     p
@@ -181,119 +142,3 @@ featureSub label =
         , style [ ("line-height", "1.6") ]
         ]
         [ text label ]
-
-
-footerInfo : Html Msg
-footerInfo =
-    footer
-        [ class "footer" 
-        , style [ ("background-color", "#F0F0F0")] 
-        ]
-        [ div
-            [ class "container" ]
-            [ div
-                [ class "columns" ] 
-                [ footerItem githubInfo
-                , footerItem authorInfo
-                ]
-            ]
-        ]
-
-
-footerItem : Html Msg -> Html Msg
-footerItem child =
-    div
-        [ class "column is-4" ]
-        [ child ]
-
-
-authorInfo : Html Msg
-authorInfo =
-    div
-        [ class "has-text-centered" ]
-        [ div
-            []
-            [ text "Created by Henry Sarabia" ]
-        , div
-            []
-            [ text "Licensed under MIT" ]
-        ]
-
-
-githubInfo : Html Msg
-githubInfo =
-    div
-        [ class "container" ]
-        [ followButton
-        , starButton ]
-
-followButton : Html Msg
-followButton =
-    div
-        []
-        [ a  
-            [ class "github-button"
-            , href "https://github.com/Henry-Sarabia"
-            , attribute "data-size" "large"
-            , attribute "aria-label" "Follow @Henry-Sarabia on GitHub"
-            ]
-            [  span
-                []
-                [ text "Follow @Henry-Sarabia" ]
-            ]
-        ]
-
-
-starButton : Html Msg
-starButton =
-    div
-        []
-        [ a
-            [ class "github-button" 
-            , href "https://github.com/Henry-Sarabia/myfy"
-            , attribute "data-icon" "octicon-star"
-            , attribute "data-size" "large"
-            , attribute "data-show-count" "true"
-            , attribute "aria-label" "Star Henry-Sarabia on GitHub"
-            ]
-            [ span
-                []
-                [ text "Star" ]
-            ]]
-
-
-bulmaButton : Html Msg
-bulmaButton =
-    a
-        [ href "https://bulma.io" ]
-        [ img
-            [ src "https://bulma.io/images/made-with-bulma.png" 
-            , alt "Made with Bulma"
-            , width 128
-            , height 24
-            ]
-            []
-        ]
-
-unsplashButton : Html Msg
-unsplashButton =
-    a
-        [ class "button is-small"
-        , href "https://unsplash.com/photos/pFqrYbhIAXs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" ]
-        [ span
-            [ class "icon" ]
-            [ i
-                [ class "fas fa-camera"]
-                []
-            ]
-        , span
-            []
-            [ text "Photo by Luke Chesser" ]
-        ]
-
-container : Html Msg -> Html Msg
-container child =
-    div
-        [ class "container" ]
-        [ child ]
-
