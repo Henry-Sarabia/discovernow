@@ -77,22 +77,22 @@ repoButton =
 --         ]
 
 
-starButton : Html Msg
-starButton =
-    div
-        []
-        [ a
-            [ class "github-button" 
-            , href "https://github.com/Henry-Sarabia/myfy"
-            , attribute "data-icon" "octicon-star"
-            , attribute "data-size" "large"
-            , attribute "data-show-count" "true"
-            , attribute "aria-label" "Star Henry-Sarabia on GitHub"
-            ]
-            [ span
-                []
-                [ text "Star" ]
-            ]]
+-- starButton : Html Msg
+-- starButton =
+--     div
+--         []
+--         [ a
+--             [ class "github-button" 
+--             , href "https://github.com/Henry-Sarabia/myfy"
+--             , attribute "data-icon" "octicon-star"
+--             , attribute "data-size" "large"
+--             , attribute "data-show-count" "true"
+--             , attribute "aria-label" "Star Henry-Sarabia on GitHub"
+--             ]
+--             [ span
+--                 []
+--                 [ text "Star" ]
+--             ]]
 
 creditInfo : Html Msg
 creditInfo =
@@ -121,7 +121,7 @@ bulmaButton =
 unsplashButton : Html Msg
 unsplashButton =
     a
-        [ class "button is-small"
+        [ class "button is-small is-text"
         , href "https://unsplash.com/photos/pFqrYbhIAXs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" ]
         [ icon "fas fa-camera fa-lg"
         , span

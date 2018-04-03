@@ -13,13 +13,14 @@ root : Model -> Html Msg
 root model =
     div 
         []
-        [ heroImage model
+        [ heroBanner model
         , heroFeatures
+        , heroPhases model
         ]
 
 
-heroImage : Model -> Html Msg
-heroImage model =
+heroBanner : Model -> Html Msg
+heroBanner model =
     section
         [ class "hero is-large"
         , style 
@@ -29,67 +30,86 @@ heroImage model =
             , ("background-size", "cover")
             ]
         ]
-        [ heroImageBody model ]
+        [ heroBannerBody model ]
 
 
-heroImageBody : Model -> Html Msg
-heroImageBody model =
+heroBannerBody : Model -> Html Msg
+heroBannerBody model =
     div
         [ class "hero-body" ]
         [ div
             [ class "container has-text-centered" ]
-            [ titleText "Discover your MyFy experience today"
-            , subtitleText "Analyze your Spotify data to create personalized summary and instant Discover playlists"
-            , spotifyButton model.login
+            [ bannerTitle "Discover your new obsession"
+            , bannerSub "Analyze your Spotify data and create a Discover playlist instantly"
+            , stack 
+                [ loginButton (spotifyButton) model.login
+                , phasesButton
+                ]
             ]
         ]
 
 
-titleText : String -> Html Msg
-titleText title =
+bannerTitle : String -> Html Msg
+bannerTitle title =
     h1 
-        [ class "title is-1 is-spaced has-text-light" ]
+        [ class "title is-size-1 is-spaced has-text-light has-text-weight-light" ]
         [ text title ]
 
 
-subtitleText : String -> Html Msg 
-subtitleText sub = 
+bannerSub : String -> Html Msg 
+bannerSub sub = 
     h2
-        [ class "subtitle is-3 has-text-light" ]
+        [ class "subtitle is-size-3 has-text-light has-text-weight-light" ]
         [ text sub ] 
 
 
-spotifyButton : WebData Login -> Html Msg
-spotifyButton login  =
+loginButton : (Msg -> Html Msg) -> WebData Login -> Html Msg
+loginButton base login  =
     case login of
         RemoteData.NotAsked ->
-            baseSpotifyButton ForceFetchLogin
+            base ForceFetchLogin
 
         RemoteData.Loading ->
-            baseSpotifyButton ForceFetchLogin
+            base ForceFetchLogin
 
         RemoteData.Success response ->
-            baseSpotifyButton (LoadLogin response.url)
+            base (LoadLogin response.url)
 
         RemoteData.Failure err ->
-            baseSpotifyButton ForceFetchLogin
+            base ForceFetchLogin
 
 
-baseSpotifyButton : Msg -> Html Msg
-baseSpotifyButton msg =
+spotifyButton : Msg -> Html Msg
+spotifyButton msg =
     a 
         [ class "button is-success is-large"
         , onClick msg
         ]
-        [ icon "fab fa-spotify"
-        , spanText "Get Started"
+        [ icon "fab fa-spotify fa-lg"
+        , iconText "Connect to Spotify"
         ]
 
+
+iconText : String -> Html Msg
+iconText txt =
+    span
+        [ style
+            [ ("padding-left", "0.33em") ]
+        ]
+        [ text txt ]
+
+
+phasesButton : Html Msg
+phasesButton =
+    a
+        [ class "button is-info is-rounded is-inverted is-outlined" ]
+        [ spanText "How It Works"
+        ]
 
 heroFeatures : Html Msg
 heroFeatures =
     section 
-        [ class "hero is-light is-medium"]
+        [ class "hero is-warning is-medium"]
         [ div
             [ class "hero-body" ]
             [ div 
@@ -106,26 +126,84 @@ heroFeatures =
         ]
 
 iconColumn : String -> String -> String -> Html Msg
-iconColumn iconLink title sub =
+iconColumn link title sub =
     div
         [ class "column has-text-centered" ]
-        [ largeIcon iconLink
+        [ largeIcon link
         , featureTitle title
         , featureSub sub 
         ]
 
 
 featureTitle : String -> Html Msg
-featureTitle label =
+featureTitle txt =
     p
-        [ class "title is-4 is-spaced" ]
-        [ text label ]
+        [ class "title is-size-4 is-spaced" ]
+        [ text txt ]
 
 
 featureSub : String -> Html Msg
-featureSub label =
+featureSub txt =
     p
         [ class "subtitle"
         , style [ ("line-height", "1.6") ]
         ]
-        [ text label ]
+        [ text txt ]
+
+
+heroPhases : Model -> Html Msg
+heroPhases model =
+    section
+        [ class "hero is-primary is-medium" ]
+        [ div
+            [ class "hero-body has-text-centered" ]
+            [ div
+                [ class "container" ]
+                [ phaseTitle "How It Works"
+                , spacer (text "")
+                , nav
+                    [ class "columns" ]
+                    [ largeIconColumn "fab fa-spotify fa-10x" "Connect" "Connect to your Spotify account"
+                    , level [largeIcon "fas fa-arrow-right fa-5x"]
+                    , largeIconColumn "fas fa-chart-pie fa-10x" "Analyze" "Analyze your preferences"
+                    , level [largeIcon "fas fa-arrow-right fa-5x"]
+                    , largeIconColumn "far fa-play-circle fa-10x" "Discover" "Discover a new obsession"
+                    ]
+                , spacer (loginButton (subSpotifyButton) model.login)
+                ]
+            ]
+        ]
+
+        
+largeIconColumn : String -> String -> String -> Html Msg
+largeIconColumn link title sub =
+    div
+        [ class "column has-text-centered" ]
+        [ level [iconImage link]
+        , level [phaseTitle title]
+        , level [phaseSub sub]
+        ]
+
+phaseTitle : String -> Html Msg
+phaseTitle txt =
+    p
+        [ class "title is-size-2 is-spaced" ]
+        [ text txt ]
+
+
+phaseSub : String -> Html Msg
+phaseSub txt =
+    p
+        [ class "subtitle is-size-4 has-text-weight-light" ]
+        [ text txt ]
+
+
+subSpotifyButton : Msg -> Html Msg
+subSpotifyButton msg =
+    a 
+        [ class "button is-success is-large is-inverted is-outlined"
+        , onClick msg
+        ]
+        [ icon "fab fa-spotify fa-lg"
+        , iconText "Connect to Spotify"
+        ]
