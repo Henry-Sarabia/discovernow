@@ -1,7 +1,7 @@
 module Views.Landing exposing (root)
 
 import Html exposing (Html, div, text, h1, h2, nav, section, span, a, p)
-import Html.Attributes exposing (class, style, alt)
+import Html.Attributes exposing (class, style, alt, id)
 import Html.Events exposing (onClick)
 import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
@@ -43,7 +43,7 @@ heroBannerBody model =
             , bannerSub "Analyze your Spotify data and create a Discover playlist instantly"
             , stack
                 [ loginButton (spotifyButton) model.login
-                , phasesButton
+                , scrollButton "heroPhases"
                 ]
             ]
         ]
@@ -99,10 +99,12 @@ iconText txt =
         [ text txt ]
 
 
-phasesButton : Html Msg
-phasesButton =
+scrollButton : String -> Html Msg
+scrollButton domId =
     a
-        [ class "button is-info is-rounded is-inverted is-outlined" ]
+        [ class "button is-info is-rounded is-inverted is-outlined"
+        , onClick (ScrollToDomId domId)
+        ]
         [ spanText "How It Works"
         ]
 
@@ -156,7 +158,9 @@ featureSub txt =
 heroPhases : Model -> Html Msg
 heroPhases model =
     section
-        [ class "hero is-primary is-medium" ]
+        [ class "hero is-primary is-medium"
+        , id "heroPhases"
+        ]
         [ div
             [ class "hero-body has-text-centered" ]
             [ div

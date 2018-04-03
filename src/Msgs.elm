@@ -15,3 +15,4 @@ type Msg
     | OnForceFetchLogin (WebData Login)
     | FetchPlaylist Token
     | OnFetchPlaylist (WebData Playlist)
+    | ScrollToDomId String

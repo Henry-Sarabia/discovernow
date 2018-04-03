@@ -4,6 +4,7 @@ import Commands exposing (..)
 import Models exposing (Model)
 import Msgs exposing (Msg(..))
 import Navigation
+import Ports exposing (..)
 import RemoteData
 import Routing exposing (parseLocation)
 
@@ -52,3 +53,6 @@ update msg model =
 
         OnFetchPlaylist response ->
             ( { model | discover = response }, Cmd.none )
+
+        ScrollToDomId id ->
+            ( model, scrollIdIntoView id )
