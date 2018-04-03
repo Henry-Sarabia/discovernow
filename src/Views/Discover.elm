@@ -1,8 +1,8 @@
 module Views.Discover exposing (root)
 
-import Html exposing (Html, Attribute, div, text, h1, h2, nav, section, span, a, i, p, ul, li, img, header, footer, article)
-import Html.Attributes exposing (class, style, src, href, alt, height, width, attribute)
-import Html.Events exposing (onWithOptions, onClick)
+import Html exposing (Html, div, text, span, a)
+import Html.Attributes exposing (class, src, height, width)
+import Html.Events exposing (onClick)
 import Models exposing (Model, Token)
 import Msgs exposing (Msg(..))
 
