@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -56,7 +57,8 @@ func main() {
 
 func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 	log.Println("Got request for: ", r.URL.String())
-	// time.Sleep(2 * time.Second)
+	time.Sleep(2 * time.Second)
+	log.Println("Replied.")
 
 	url := auth.AuthURL(state)
 	// send this state to elm app through login

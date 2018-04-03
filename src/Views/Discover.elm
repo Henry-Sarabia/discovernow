@@ -28,6 +28,7 @@ page model token =
         [ class "container has-text-centered" ]
         [ discoverButton token ]
 
+
 discoverButton : Token -> Html Msg
 discoverButton token =
     a

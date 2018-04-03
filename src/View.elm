@@ -54,7 +54,7 @@ discoverPage : Model -> Token -> Html Msg
 discoverPage model token =
     div
         []
-        [ Discover.root model token]
+        [ Discover.root model token ]
  
 errorPage : Html Msg
 errorPage =
@@ -68,6 +68,7 @@ notFoundPage =
     div
         []
         [ text "404" ]
+
 
 checkResults : Model -> Html Msg
 checkResults model =

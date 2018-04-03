@@ -40,7 +40,7 @@ heroImageBody model =
             [ class "container has-text-centered" ]
             [ titleText "Discover your MyFy experience today"
             , subtitleText "Analyze your Spotify data to create personalized summary and instant Discover playlists"
-            , spotifyButton model.login "Get Started"
+            , spotifyButton model.login
             ]
         ]
 
@@ -59,44 +59,31 @@ subtitleText sub =
         [ text sub ] 
 
 
-spotifyButton : WebData Login -> String -> Html Msg
-spotifyButton login label =
+spotifyButton : WebData Login -> Html Msg
+spotifyButton login  =
     case login of
         RemoteData.NotAsked ->
-            a 
-                [ class "button is-success is-large"
-                , onClick ForceFetchLogin
-                ]
-                [ icon "fab fa-spotify"
-                , spanText label
-                ]
+            baseSpotifyButton ForceFetchLogin
 
         RemoteData.Loading ->
-            a 
-                [ class "button is-success is-large"
-                , onClick ForceFetchLogin
-                ]
-                [ icon "fab fa-spotify"
-                , spanText label
-                ]
+            baseSpotifyButton ForceFetchLogin
 
         RemoteData.Success response ->
-            a 
-                [ class "button is-success is-large"
-                , onClick (LoadLogin response.url)
-                ]
-                [ icon "fab fa-spotify"
-                , spanText label
-                ]
+            baseSpotifyButton (LoadLogin response.url)
 
         RemoteData.Failure err ->
-            a 
-                [ class "button is-success is-large"
-                , onClick ForceFetchLogin
-                ]
-                [ icon "fab fa-spotify"
-                , spanText label
-                ]
+            baseSpotifyButton ForceFetchLogin
+
+
+baseSpotifyButton : Msg -> Html Msg
+baseSpotifyButton msg =
+    a 
+        [ class "button is-success is-large"
+        , onClick msg
+        ]
+        [ icon "fab fa-spotify"
+        , spanText "Get Started"
+        ]
 
 
 heroFeatures : Html Msg
