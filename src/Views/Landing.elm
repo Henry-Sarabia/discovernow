@@ -39,8 +39,11 @@ heroBannerBody model =
         [ class "hero-body" ]
         [ div
             [ class "container has-text-centered" ]
-            [ bannerTitle "Discover your new obsession"
-            , bannerSub "Analyze your Spotify data and create a Discover playlist instantly"
+            -- [ bannerTitle "Discover your new obsession"
+            [ bannerTitle "Discover Now"
+
+            -- , bannerSub "Analyze your Spotify data and create a Discover playlist instantly"
+            , bannerSub "Don't wait for Monday. Discover new music now."
             , stack
                 [ loginButton (spotifyButton) model.login
                 , scrollButton "heroPhases"
@@ -165,26 +168,47 @@ heroPhases model =
             [ class "hero-body has-text-centered" ]
             [ div
                 [ class "container" ]
-                [ phaseTitle "How It Works"
-                , spacer (text "")
-                , nav
-                    [ class "level" ]
-                    [ largeIconColumn "fab fa-spotify fa-10x fa-fw" "Connect" "Connect to your Spotify account"
-                    , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
-                    , largeIconColumn "fas fa-chart-pie fa-10x fa-fw" "Analyze" "Analyze your preferences"
-                    , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
-                    , largeIconColumn "far fa-play-circle fa-10x fa-fw" "Discover" "Discover a new obsession"
-                    ]
-                , spacer (loginButton (subSpotifyButton) model.login)
+                [ innerHeroPhases model
                 ]
             ]
         ]
 
 
+innerHeroPhases : Model -> Html Msg
+innerHeroPhases model =
+    div
+        [ class "hero is-primary is-small" ]
+        [ div
+            [ class "hero-head has-text-centered" ]
+            [ phaseHeader "How It Works" ]
+        , div
+            [ class "hero-body has-text-centered" ]
+            [ nav
+                [ class "columns" ]
+                [ largeIconColumn "fab fa-spotify fa-10x fa-fw" "Connect" "Connect to your Spotify account"
+                , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
+                , largeIconColumn "fas fa-chart-pie fa-10x fa-fw" "Analyze" "Analyze your preferences"
+                , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
+                , largeIconColumn "far fa-play-circle fa-10x fa-fw" "Discover" "Discover a new obsession"
+                ]
+            ]
+        , div
+            [ class "hero-foot has-text-centered" ]
+            [ loginButton (subSpotifyButton) model.login ]
+        ]
+
+
+phaseHeader : String -> Html Msg
+phaseHeader txt =
+    h1
+        [ class "title is-size-1 has-text-weight-normal" ]
+        [ text txt ]
+
+
 largeIconColumn : String -> String -> String -> Html Msg
 largeIconColumn link title sub =
     div
-        [ class "level-item has-text-centered" ]
+        [ class "column has-text-centered" ]
         [ stack [ largeIcon link, phaseTitle title, phaseSub sub ]
         ]
 
@@ -192,14 +216,14 @@ largeIconColumn link title sub =
 phaseTitle : String -> Html Msg
 phaseTitle txt =
     p
-        [ class "title is-size-2 is-spaced" ]
+        [ class "title is-size-1 is-spaced has-text-weight-normal" ]
         [ text txt ]
 
 
 phaseSub : String -> Html Msg
 phaseSub txt =
     p
-        [ class "subtitle is-size-4 has-text-weight-light" ]
+        [ class "subtitle is-size-3 has-text-weight-light" ]
         [ text txt ]
 
 
