@@ -6,6 +6,7 @@ import Html.Events exposing (onWithOptions)
 import Json.Decode as Decode
 import Msgs exposing (Msg)
 
+
 onLinkClick : Msg -> Attribute Msg
 onLinkClick msg =
     let
@@ -33,6 +34,7 @@ icon link =
             []
         ]
 
+
 smallIcon : String -> Html Msg
 smallIcon link =
     span
@@ -42,6 +44,7 @@ smallIcon link =
             []
         ]
 
+
 largeIcon : String -> Html Msg
 largeIcon link =
     span
@@ -50,6 +53,7 @@ largeIcon link =
             [ class link ]
             []
         ]
+
 
 iconImage : String -> Html Msg
 iconImage link =
@@ -67,11 +71,13 @@ spanText txt =
         []
         [ text txt ]
 
+
 wrap : Html Msg -> Html Msg
 wrap child =
-    div 
+    div
         []
         [ child ]
+
 
 level : List (Html Msg) -> Html Msg
 level items =
@@ -86,6 +92,7 @@ levelItem item =
         [ class "level-item" ]
         [ item ]
 
+
 stack : List (Html Msg) -> Html Msg
 stack items =
     div
@@ -96,15 +103,16 @@ stack items =
 stackItem : Html Msg -> Html Msg
 stackItem item =
     div
-        [ style 
-            [ ("margin-top", "2rem")
-            , ("margin-bottom", "3rem")
+        [ style
+            [ ( "margin-top", "2rem" )
+            , ( "margin-bottom", "3rem" )
             ]
         ]
         [ item ]
 
+
 spacer : Html Msg -> Html Msg
 spacer child =
     div
-        [ style [("margin-top", "5rem")]]
+        [ style [ ( "margin-top", "5rem" ) ] ]
         [ child ]

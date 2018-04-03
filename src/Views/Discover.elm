@@ -6,11 +6,13 @@ import Html.Events exposing (onClick)
 import Models exposing (Model, Token)
 import Msgs exposing (Msg(..))
 
+
 root : Model -> Token -> Html Msg
 root model token =
     div
         []
-        [ hero [page model token]]
+        [ hero [ page model token ] ]
+
 
 hero : List (Html Msg) -> Html Msg
 hero children =

@@ -7,9 +7,10 @@ import Navigation
 import RemoteData
 import Routing exposing (parseLocation)
 
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of  
+    case msg of
         ChangeLocation path ->
             ( { model | changes = model.changes + 1 }, Navigation.newUrl path )
 
@@ -22,15 +23,15 @@ update msg model =
 
         FetchLogin ->
             ( model, fetchLoginCmd )
-        
+
         OnFetchLogin response ->
             ( { model | login = response }, Cmd.none )
 
         LoadLogin url ->
-            ( model, Navigation.load url) 
- 
+            ( model, Navigation.load url )
+
         ForceFetchLogin ->
-            ( model, forceFetchLoginCmd ) 
+            ( model, forceFetchLoginCmd )
 
         OnForceFetchLogin response ->
             case response of
@@ -47,7 +48,7 @@ update msg model =
                     ( { model | login = response }, Navigation.newUrl "/error" )
 
         FetchPlaylist token ->
-            ( { model | discover = RemoteData.Loading } , fetchDiscoverCmd token )
+            ( { model | discover = RemoteData.Loading }, fetchDiscoverCmd token )
 
         OnFetchPlaylist response ->
             ( { model | discover = response }, Cmd.none )

@@ -9,9 +9,10 @@ import Views.Header exposing (navHeader)
 import Views.Footer exposing (infoFooter)
 import Views.Landing as Landing
 
+
 root : Model -> Html Msg
 root model =
-    div 
+    div
         []
         [ navHeader
         , page model
@@ -24,7 +25,7 @@ page model =
     case model.route of
         LandingRoute ->
             landingPage model
- 
+
         AboutRoute ->
             aboutPage model
 
@@ -55,7 +56,8 @@ discoverPage model token =
     div
         []
         [ Discover.root model token ]
- 
+
+
 errorPage : Html Msg
 errorPage =
     div
@@ -75,9 +77,10 @@ checkResults model =
     case model.token of
         Nothing ->
             text "you found an error"
-         
+
         Just token ->
             discoverPage model token
+
 
 
 -- playlist : Html Msg

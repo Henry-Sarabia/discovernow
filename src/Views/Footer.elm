@@ -5,22 +5,23 @@ import Html.Attributes exposing (class, style, src, href, alt, height, width, at
 import Msgs exposing (Msg(..))
 import Views.Common exposing (..)
 
+
 infoFooter : Html Msg
 infoFooter =
     footer
-        [ class "footer" 
-        , style [ ("background-color", "#F0F0F0")] 
+        [ class "footer"
+        , style [ ( "background-color", "#F0F0F0" ) ]
         ]
         [ div
             [ class "container" ]
             [ div
-                [ class "columns" ] 
+                [ class "columns" ]
                 [ footerItem githubInfo
                 , footerItem authorInfo
                 , footerItem creditInfo
                 ]
             ]
-        ] 
+        ]
 
 
 footerItem : Html Msg -> Html Msg
@@ -47,7 +48,7 @@ githubInfo : Html Msg
 githubInfo =
     div
         []
-        [ wrap repoButton 
+        [ wrap repoButton
         ]
 
 
@@ -60,11 +61,12 @@ repoButton =
         ]
 
 
+
 -- repoButton : Html Msg
 -- repoButton =
 --     div
 --         []
---         [ a  
+--         [ a
 --             [ class "github-button"
 --             , href "https://github.com/Henry-Sarabia"
 --             , attribute "data-size" "large"
@@ -75,14 +77,12 @@ repoButton =
 --                 [ text "Follow @Henry-Sarabia" ]
 --             ]
 --         ]
-
-
 -- starButton : Html Msg
 -- starButton =
 --     div
 --         []
 --         [ a
---             [ class "github-button" 
+--             [ class "github-button"
 --             , href "https://github.com/Henry-Sarabia/myfy"
 --             , attribute "data-icon" "octicon-star"
 --             , attribute "data-size" "large"
@@ -94,6 +94,7 @@ repoButton =
 --                 [ text "Star" ]
 --             ]]
 
+
 creditInfo : Html Msg
 creditInfo =
     div
@@ -102,6 +103,7 @@ creditInfo =
         , wrap unsplashButton
         ]
 
+
 bulmaButton : Html Msg
 bulmaButton =
     a
@@ -109,7 +111,7 @@ bulmaButton =
         , href "https://bulma.io"
         ]
         [ img
-            [ src "https://bulma.io/images/made-with-bulma--semiblack.png" 
+            [ src "https://bulma.io/images/made-with-bulma--semiblack.png"
             , alt "Made with Bulma"
             , width 128
             , height 24
@@ -122,7 +124,8 @@ unsplashButton : Html Msg
 unsplashButton =
     a
         [ class "button is-small is-text"
-        , href "https://unsplash.com/photos/pFqrYbhIAXs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" ]
+        , href "https://unsplash.com/photos/pFqrYbhIAXs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        ]
         [ icon "fas fa-camera fa-lg"
         , span
             []

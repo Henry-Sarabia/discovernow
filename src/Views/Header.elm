@@ -6,6 +6,7 @@ import Msgs exposing (Msg(..))
 import Routing exposing (..)
 import Views.Common exposing (..)
 
+
 navHeader : Html Msg
 navHeader =
     div
@@ -18,9 +19,10 @@ navHeader =
         ]
 
 
+
 -- navBrand : Html Msg
 -- navBrand =
---     div 
+--     div
 --         [ class "navbar-brand" ]
 --         [ a
 --             [ class "navbar-item" ]
@@ -30,19 +32,21 @@ navHeader =
 --                 ]
 --                 []
 --             ]
---         ] 
+--         ]
+
 
 navBrand : Html Msg -> Html Msg
 navBrand child =
     div
         [ class "navbar-brand" ]
         [ a
-            [ class "navbar-item" 
+            [ class "navbar-item"
             , href homePath
             , onLinkClick (ChangeLocation homePath)
             ]
             [ child ]
         ]
+
 
 navMenu : Html Msg
 navMenu =
@@ -57,13 +61,14 @@ navMenu =
 
 
 navItem : String -> String -> Html Msg
-navItem label path = 
+navItem label path =
     a
         [ class "navbar-item"
         , href path
         , onLinkClick (ChangeLocation path)
         ]
         [ text label ]
+
 
 logo : Html Msg
 logo =

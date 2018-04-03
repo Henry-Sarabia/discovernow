@@ -7,37 +7,41 @@ import Models exposing (Login, Token, Playlist)
 import Msgs exposing (Msg(..))
 import RemoteData
 
+
 fetchLoginCmd : Cmd Msg
 fetchLoginCmd =
     Http.get fetchLoginUrl loginDecoder
-    |> RemoteData.sendRequest
-    |> Cmd.map OnFetchLogin
+        |> RemoteData.sendRequest
+        |> Cmd.map OnFetchLogin
 
 
 fetchLoginUrl : String
-fetchLoginUrl = 
+fetchLoginUrl =
     "http://localhost:8080/login"
-    -- "https://nameless-thicket-99291.herokuapp.com/login"
-  
+
+
+
+-- "https://nameless-thicket-99291.herokuapp.com/login"
+
 
 loginDecoder : Decode.Decoder Login
-loginDecoder =  
+loginDecoder =
     decode Login
         |> required "url" Decode.string
- 
+
 
 forceFetchLoginCmd : Cmd Msg
 forceFetchLoginCmd =
     Http.get fetchLoginUrl loginDecoder
-    |> RemoteData.sendRequest
-    |> Cmd.map OnForceFetchLogin
+        |> RemoteData.sendRequest
+        |> Cmd.map OnForceFetchLogin
 
 
 fetchDiscoverCmd : Token -> Cmd Msg
 fetchDiscoverCmd token =
     Http.get (fetchDiscoverUrl ++ createTokenUrl token) playlistDecoder
-    |> RemoteData.sendRequest
-    |> Cmd.map OnFetchPlaylist 
+        |> RemoteData.sendRequest
+        |> Cmd.map OnFetchPlaylist
 
 
 createTokenUrl : Token -> String
@@ -51,6 +55,6 @@ fetchDiscoverUrl =
 
 
 playlistDecoder : Decode.Decoder Playlist
-playlistDecoder = 
+playlistDecoder =
     decode Playlist
         |> required "id" Decode.string

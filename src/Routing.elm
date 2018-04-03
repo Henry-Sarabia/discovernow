@@ -3,14 +3,15 @@ module Routing exposing (..)
 import Navigation
 import UrlParser exposing (s, top, (<?>), stringParam)
 
-type Route 
+
+type Route
     = LandingRoute
-    | AboutRoute 
+    | AboutRoute
     | ResultsRoute (Maybe String) (Maybe String)
     | ErrorRoute
     | NotFoundRoute
-  
- 
+
+
 matchers : UrlParser.Parser (Route -> a) a
 matchers =
     UrlParser.oneOf
@@ -22,20 +23,20 @@ matchers =
 
 
 parseLocation : Navigation.Location -> Route
-parseLocation location = 
+parseLocation location =
     case (UrlParser.parsePath matchers location) of
         Just route ->
             route
 
-        Nothing -> 
-            NotFoundRoute 
+        Nothing ->
+            NotFoundRoute
 
- 
+
 homePath : String
-homePath = 
+homePath =
     "/"
- 
- 
+
+
 aboutPath : String
 aboutPath =
     "/about"

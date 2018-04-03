@@ -4,7 +4,8 @@ import Navigation
 import Models exposing (Login, Token, Playlist)
 import RemoteData exposing (WebData)
 
-type Msg 
+
+type Msg
     = ChangeLocation String
     | OnLocationChange Navigation.Location
     | FetchLogin
@@ -13,4 +14,4 @@ type Msg
     | ForceFetchLogin
     | OnForceFetchLogin (WebData Login)
     | FetchPlaylist Token
-    | OnFetchPlaylist (WebData Playlist)  
+    | OnFetchPlaylist (WebData Playlist)

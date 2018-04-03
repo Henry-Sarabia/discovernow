@@ -6,30 +6,32 @@ import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Routing exposing (Route(..))
 
+
 initialModel : Route -> Model
 initialModel route =
-    case route of 
+    case route of
         LandingRoute ->
             baseModel route
-            
+
         AboutRoute ->
             baseModel route
 
         ResultsRoute maybeCode maybeState ->
-            case (maybeCode, maybeState) of
+            case ( maybeCode, maybeState ) of
                 ( Just newCode, Just newState ) ->
                     let
-                        newToken = Just (Token newCode newState) 
+                        newToken =
+                            Just (Token newCode newState)
                     in
                         { route = route
-                        , changes = 0 
+                        , changes = 0
                         , token = newToken
                         , login = RemoteData.Loading
                         , discover = RemoteData.NotAsked
                         }
-                    
+
                 ( Nothing, _ ) ->
-                    baseModel route 
+                    baseModel route
 
                 ( _, Nothing ) ->
                     baseModel route
@@ -37,7 +39,7 @@ initialModel route =
         ErrorRoute ->
             baseModel route
 
-        NotFoundRoute -> 
+        NotFoundRoute ->
             baseModel route
 
 
@@ -50,12 +52,13 @@ baseModel route =
     , discover = RemoteData.NotAsked
     }
 
+
 initialCommands : Route -> Cmd Msg
 initialCommands route =
     case route of
         LandingRoute ->
             fetchLoginCmd
-            
+
         AboutRoute ->
             fetchLoginCmd
 
@@ -65,6 +68,5 @@ initialCommands route =
         ErrorRoute ->
             Cmd.none
 
-        NotFoundRoute -> 
+        NotFoundRoute ->
             Cmd.none
-
