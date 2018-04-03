@@ -1,0 +1,25 @@
+.arrow {
+    text-align: center;
+    margin: 8% 0;
+}
+
+.bounce {
+    -moz-animation: bounce 4s infinite;
+    -webkit-animation: bounce 4s infinite;
+    animation: bounce 4s infinite;
+}
+  
+@keyframes bounce {
+    0%, 10%, 25%, 40%, 50% {
+        transform: translateY(0);
+    }
+    20% {
+        transform: translateY(-20px);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

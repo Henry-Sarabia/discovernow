@@ -65,6 +65,16 @@ iconImage link =
         ]
 
 
+bouncingIcon : String -> Html Msg
+bouncingIcon link =
+    span
+        [ class "icon is-large bounce" ]
+        [ i
+            [ class link ]
+            []
+        ]
+
+
 spanText : String -> Html Msg
 spanText txt =
     span

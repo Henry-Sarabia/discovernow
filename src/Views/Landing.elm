@@ -55,7 +55,7 @@ heroBannerBody model =
 bannerTitle : String -> Html Msg
 bannerTitle title =
     h1
-        [ class "title is-size-1 is-spaced has-text-light has-text-weight-light" ]
+        [ class "title is-size-1 is-spaced has-text-light has-text-weight-normal" ]
         [ text title ]
 
 
@@ -108,7 +108,7 @@ scrollButton domId =
         [ class "button is-info is-rounded is-inverted is-outlined"
         , onClick (ScrollToDomId domId)
         ]
-        [ spanText "How It Works"
+        [ spanText "Learn more"
         ]
 
 
@@ -122,10 +122,10 @@ heroFeatures =
                 [ class "container" ]
                 [ nav
                     [ class "columns" ]
-                    [ iconColumn "far fa-address-card fa-5x" "Taste Summary" "Analyze weeks, months, or up to years of data and generate playlists that exemplify your distinct taste in music"
-                    , iconColumn "fas fa-search fa-5x" "Discover Now" "No need to wait a week, get an automatically curated discover playlist right now"
-                    , iconColumn "fab fa-spotify fa-5x" "Simple Login" "You have enough accounts to worry about - use your existing Spotify account to log in"
-                    , iconColumn "fas fa-unlock-alt fa-5x" "Forever Free" "No ads, no analytics, no subscription - simply share and enjoy"
+                    [ iconColumn "fab fa-github fa-5x fa-fw" "Open Source" "Honest code for honest users. Contributions are always appreciated - explore on GitHub"
+                    , iconColumn "fab fa-spotify fa-5x fa-fw" "Simple Login" "You have enough accounts to worry about - connect to your existing Spotify account to log in"
+                    , iconColumn "fas fa-unlock-alt fa-5x fa-fw" "Forever Free" "No ads, no analytics, no subscription - simply share and enjoy"
+                    , iconColumn "fas fa-mobile-alt fa-5x fa-fw" "Responsive Design" "Designed for both desktop and mobile - for when you need new music on the go"
                     ]
                 ]
             ]
@@ -165,43 +165,35 @@ heroPhases model =
         , id "heroPhases"
         ]
         [ div
-            [ class "hero-body has-text-centered" ]
-            [ div
-                [ class "container" ]
-                [ innerHeroPhases model
-                ]
-            ]
-        ]
-
-
-innerHeroPhases : Model -> Html Msg
-innerHeroPhases model =
-    div
-        [ class "hero is-primary is-small" ]
-        [ div
             [ class "hero-head has-text-centered" ]
             [ phaseHeader "How It Works" ]
         , div
             [ class "hero-body has-text-centered" ]
-            [ nav
-                [ class "columns" ]
-                [ largeIconColumn "fab fa-spotify fa-10x fa-fw" "Connect" "Connect to your Spotify account"
-                , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
-                , largeIconColumn "fas fa-chart-pie fa-10x fa-fw" "Analyze" "Analyze your preferences"
-                , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
-                , largeIconColumn "far fa-play-circle fa-10x fa-fw" "Discover" "Discover a new obsession"
+            [ div
+                [ class "container" ]
+                [ nav
+                    [ class "columns" ]
+                    [ largeIconColumn "fab fa-spotify fa-10x fa-fw" "Connect" "Connect to your Spotify account using a secure connection provided by Spotify"
+                    , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
+                    , largeIconColumn "fas fa-chart-pie fa-10x fa-fw" "Analyze" "Our algorithm will analyze and generate a personal Discover playlist just for you"
+                    , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
+                    , largeIconColumn "far fa-play-circle fa-10x fa-fw" "Discover" "Your personalized Discover playlist is ready for you right on your preferred Spotify player"
+                    ]
+                , stack
+                    [ bouncingIcon "fas fa-chevron-down fa-5x"
+                    , loginButton (subSpotifyButton) model.login
+                    ]
                 ]
             ]
-        , div
-            [ class "hero-foot has-text-centered" ]
-            [ loginButton (subSpotifyButton) model.login ]
         ]
 
 
 phaseHeader : String -> Html Msg
 phaseHeader txt =
     h1
-        [ class "title is-size-1 has-text-weight-normal" ]
+        [ class "title is-size-1 has-text-weight-normal"
+        , style [ ( "padding-top", "6rem" ) ]
+        ]
         [ text txt ]
 
 
