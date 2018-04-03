@@ -168,12 +168,12 @@ heroPhases model =
                 [ phaseTitle "How It Works"
                 , spacer (text "")
                 , nav
-                    [ class "columns" ]
-                    [ largeIconColumn "fab fa-spotify fa-10x" "Connect" "Connect to your Spotify account"
-                    , level [ largeIcon "fas fa-arrow-right fa-5x" ]
-                    , largeIconColumn "fas fa-chart-pie fa-10x" "Analyze" "Analyze your preferences"
-                    , level [ largeIcon "fas fa-arrow-right fa-5x" ]
-                    , largeIconColumn "far fa-play-circle fa-10x" "Discover" "Discover a new obsession"
+                    [ class "level" ]
+                    [ largeIconColumn "fab fa-spotify fa-10x fa-fw" "Connect" "Connect to your Spotify account"
+                    , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
+                    , largeIconColumn "fas fa-chart-pie fa-10x fa-fw" "Analyze" "Analyze your preferences"
+                    , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
+                    , largeIconColumn "far fa-play-circle fa-10x fa-fw" "Discover" "Discover a new obsession"
                     ]
                 , spacer (loginButton (subSpotifyButton) model.login)
                 ]
@@ -184,10 +184,8 @@ heroPhases model =
 largeIconColumn : String -> String -> String -> Html Msg
 largeIconColumn link title sub =
     div
-        [ class "column has-text-centered" ]
-        [ level [ iconImage link ]
-        , level [ phaseTitle title ]
-        , level [ phaseSub sub ]
+        [ class "level-item has-text-centered" ]
+        [ stack [ largeIcon link, phaseTitle title, phaseSub sub ]
         ]
 
 
