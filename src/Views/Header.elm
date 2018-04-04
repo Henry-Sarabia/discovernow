@@ -1,7 +1,7 @@
 module Views.Header exposing (navHeader)
 
 import Html exposing (Html, text, div, img, span, a, nav)
-import Html.Attributes exposing (src, class, href)
+import Html.Attributes exposing (style, src, class, href)
 import Msgs exposing (Msg(..))
 import Routing exposing (..)
 import Views.Common exposing (..)
@@ -10,7 +10,9 @@ import Views.Common exposing (..)
 navHeader : Html Msg
 navHeader =
     div
-        [ class "container" ]
+        [ class "container"
+        , style [ ( "background-color", "#F0F0F0" ) ]
+        ]
         [ nav
             [ class "navbar" ]
             [ navBrand logo

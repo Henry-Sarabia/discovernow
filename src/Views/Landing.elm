@@ -105,7 +105,7 @@ iconText txt =
 scrollButton : String -> Html Msg
 scrollButton domId =
     a
-        [ class "button is-medium is-info is-rounded is-inverted is-outlined"
+        [ class "button is-medium is-link is-rounded is-inverted is-outlined"
         , onClick (ScrollToDomId domId)
         ]
         [ spanText "Learn more"
@@ -222,7 +222,7 @@ phaseSub txt =
 subSpotifyButton : Msg -> Html Msg
 subSpotifyButton msg =
     a
-        [ class "button is-success is-large is-inverted is-outlined"
+        [ class "button is-primary is-large is-inverted is-outlined"
         , onClick msg
         ]
         [ icon "fab fa-spotify fa-lg"
