@@ -105,7 +105,7 @@ iconText txt =
 scrollButton : String -> Html Msg
 scrollButton domId =
     a
-        [ class "button is-info is-rounded is-inverted is-outlined"
+        [ class "button is-medium is-info is-rounded is-inverted is-outlined"
         , onClick (ScrollToDomId domId)
         ]
         [ spanText "Learn more"

@@ -1,5 +1,5 @@
 // import './main.css';
-import './bulma.css';
+// import './bulma.css';
 import './anim.css';
 import { Main } from './Main.elm';
 import registerServiceWorker from './registerServiceWorker';
