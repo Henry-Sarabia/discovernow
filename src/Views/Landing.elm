@@ -1,7 +1,7 @@
 module Views.Landing exposing (root)
 
-import Html exposing (Html, div, text, h1, h2, nav, section, span, a, p)
-import Html.Attributes exposing (class, style, alt, id)
+import Html exposing (Html, div, text, h1, h2, nav, section, span, a, p, i)
+import Html.Attributes exposing (class, style, alt, id, attribute)
 import Html.Events exposing (onClick)
 import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
@@ -9,20 +9,30 @@ import RemoteData exposing (WebData)
 import Views.Common exposing (..)
 
 
+-- root : Model -> Html Msg
+-- root model =
+--     div
+--         []
+--         [ heroBanner model
+--         , heroFeatures
+--         , heroPhases model
+--         ]
+
+
 root : Model -> Html Msg
 root model =
     div
         []
         [ heroBanner model
-        , heroFeatures
         , heroPhases model
+        , heroFeatures
         ]
 
 
 heroBanner : Model -> Html Msg
 heroBanner model =
     section
-        [ class "hero is-large"
+        [ class "hero is-fullheight"
         , style
             [ ( "background-image", "linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url(herobg2.jpg)" )
             , ( "background-position", "center" )
@@ -30,7 +40,8 @@ heroBanner model =
             , ( "background-size", "cover" )
             ]
         ]
-        [ heroBannerBody model ]
+        [ heroBannerBody model
+        ]
 
 
 heroBannerBody : Model -> Html Msg
@@ -39,15 +50,25 @@ heroBannerBody model =
         [ class "hero-body" ]
         [ div
             [ class "container has-text-centered" ]
-            -- [ bannerTitle "Discover your new obsession"
             [ bannerTitle "Discover Now"
-
-            -- , bannerSub "Analyze your Spotify data and create a Discover playlist instantly"
             , bannerSub "Don't wait for Monday. Discover new music now."
-            , stack
-                [ loginButton (spotifyButton) model.login
-                , scrollButton "heroPhases"
-                ]
+
+            -- , stack
+            --     [ loginButton (spotifyButton) model.login
+            --     , scrollButton "heroPhases"
+            --     ]
+            , bannerButtons model
+            ]
+        ]
+
+
+bannerButtons : Model -> Html Msg
+bannerButtons model =
+    div
+        [ style [ ( "padding-top", "5rem" ) ] ]
+        [ stack
+            [ loginButton (spotifyButton) model.login
+            , scrollButton "heroPhases"
             ]
         ]
 
@@ -55,14 +76,26 @@ heroBannerBody model =
 bannerTitle : String -> Html Msg
 bannerTitle title =
     h1
-        [ class "title is-size-1 is-spaced has-text-light has-text-weight-normal" ]
+        -- [ class "title is-size-1 is-spaced has-text-light has-text-weight-normal" ]
+        [ class "title has-text-light is-spaced"
+        , style
+            [ ( "font-size", "8em" )
+            , ( "font-weight", "200" )
+            ]
+        ]
         [ text title ]
 
 
 bannerSub : String -> Html Msg
 bannerSub sub =
     h2
-        [ class "subtitle is-size-3 has-text-light has-text-weight-light" ]
+        -- [ class "subtitle is-size-3 has-text-light has-text-weight-light" ]
+        [ class "subtitle has-text-light"
+        , style
+            [ ( "font-size", "3em" )
+            , ( "font-weight", "200" )
+            ]
+        ]
         [ text sub ]
 
 
@@ -85,7 +118,9 @@ loginButton base login =
 spotifyButton : Msg -> Html Msg
 spotifyButton msg =
     a
-        [ class "button is-success is-large"
+        [ class "button is-info is-large is-rounded"
+
+        -- , style [ ( "margin-top", "2rem" ) ]
         , onClick msg
         ]
         [ icon "fab fa-spotify fa-lg"
@@ -145,7 +180,13 @@ iconColumn link title sub =
 featureTitle : String -> Html Msg
 featureTitle txt =
     p
-        [ class "title is-size-4 is-spaced" ]
+        -- [ class "title is-size-4 is-spaced" ]
+        [ class "title is-spaced"
+        , style
+            [ ( "font-size", "2em" )
+            , ( "font-weight", "400" )
+            ]
+        ]
         [ text txt ]
 
 
@@ -153,7 +194,11 @@ featureSub : String -> Html Msg
 featureSub txt =
     p
         [ class "subtitle"
-        , style [ ( "line-height", "1.6" ) ]
+
+        --"is-5"
+        , style
+            [ ( "line-height", "1.6" )
+            ]
         ]
         [ text txt ]
 
@@ -161,7 +206,7 @@ featureSub txt =
 heroPhases : Model -> Html Msg
 heroPhases model =
     section
-        [ class "hero is-primary is-medium"
+        [ class "hero is-link is-fullheight"
         , id "heroPhases"
         ]
         [ div
@@ -173,14 +218,28 @@ heroPhases model =
                 [ class "container" ]
                 [ nav
                     [ class "columns" ]
-                    [ largeIconColumn "fab fa-spotify fa-10x fa-fw" "Connect" "Connect to your Spotify account using a secure connection provided by Spotify"
-                    , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
-                    , largeIconColumn "fas fa-chart-pie fa-10x fa-fw" "Analyze" "Our algorithm will analyze and generate a personal Discover playlist just for you"
-                    , level [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
-                    , largeIconColumn "far fa-play-circle fa-10x fa-fw" "Discover" "Your personalized Discover playlist is ready for you right on your preferred Spotify player"
+                    [ largeIconColumn
+                        -- ( largeColorIcon "fas fa-user-circle fa-10x fa-fw" "has-text-danger"
+                        ( userIcon
+                        , "Connect"
+                        , "Connect to your Spotify account using a secure connection provided by Spotify"
+                        )
+                    , level [ arrowIcon ]
+                    , largeIconColumn
+                        ( dnaIcon
+                        , "Analyze"
+                        , "Our algorithm will analyze and generate a personal Discover playlist just for you"
+                        )
+                    , level [ arrowIcon ]
+                    , largeIconColumn
+                        ( largeColorIcon "far fa-play-circle fa-10x fa-fw" "has-text-danger"
+                        , "Discover"
+                        , "Your personalized Discover playlist is ready for you right on your preferred Spotify player"
+                        )
                     ]
                 , stack
-                    [ bouncingIcon "fas fa-chevron-down fa-5x"
+                    [ phaseCall "Why wait? Discover now."
+                    , bouncingIcon "fas fa-chevron-down fa-5x"
                     , loginButton (subSpotifyButton) model.login
                     ]
                 ]
@@ -191,38 +250,114 @@ heroPhases model =
 phaseHeader : String -> Html Msg
 phaseHeader txt =
     h1
-        [ class "title is-size-1 has-text-weight-normal"
-        , style [ ( "padding-top", "6rem" ) ]
+        [ class "title"
+        , style
+            [ ( "padding-top", "6rem" )
+            , ( "font-size", "7em" )
+            , ( "font-weight", "200" )
+            ]
         ]
         [ text txt ]
 
 
-largeIconColumn : String -> String -> String -> Html Msg
-largeIconColumn link title sub =
+largeIconColumn : ( Html Msg, String, String ) -> Html Msg
+largeIconColumn ( ico, title, sub ) =
     div
         [ class "column has-text-centered" ]
-        [ stack [ largeIcon link, phaseTitle title, phaseSub sub ]
+        [ stack [ ico, phaseTitle title, phaseSub sub ]
         ]
 
 
 phaseTitle : String -> Html Msg
 phaseTitle txt =
     p
-        [ class "title is-size-1 is-spaced has-text-weight-normal" ]
+        -- [ class "title is-size-1 is-spaced has-text-weight-bold" ]
+        [ class "title is-spaced is-paddingless"
+        , style
+            [ ( "font-size", "4em" )
+            , ( "font-weight", "300" )
+            ]
+        ]
         [ text txt ]
 
 
 phaseSub : String -> Html Msg
 phaseSub txt =
     p
-        [ class "subtitle is-size-3 has-text-weight-light" ]
+        -- [ class "subtitle is-size-3 has-text-weight-light" ]
+        [ class "subtitle"
+        , style
+            [ ( "font-size", "2em" )
+            , ( "font-weight", "300" )
+            ]
+        ]
         [ text txt ]
+
+
+phaseCall : String -> Html Msg
+phaseCall txt =
+    h2
+        [ class "title"
+        , style
+            [ ( "font-size", "2.5em" )
+            , ( "font-weight", "300" )
+            ]
+        ]
+        [ text txt ]
+
+
+arrowIcon : Html Msg
+arrowIcon =
+    span
+        [ style [ ( "margin-bottom", "2rem" ) ] ]
+        [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
+
+
+dnaIcon : Html Msg
+dnaIcon =
+    span
+        [ class "icon fa-fw fa-10x has-text-danger" ]
+        [ span
+            [ class "fa-layers fa-fw" ]
+            [ i
+                [ class "far fa-circle"
+                , attribute "data-fa-transform" "left-7"
+                ]
+                []
+            , i
+                [ class "fas fa-dna"
+                , attribute "data-fa-transform" "shrink-7 left-6"
+                ]
+                []
+            ]
+        ]
+
+
+userIcon : Html Msg
+userIcon =
+    span
+        [ class "icon fa-fw fa-10x has-text-danger" ]
+        [ span
+            [ class "fa-layers fa-fw" ]
+            [ i
+                [ class "far fa-circle"
+                , attribute "data-fa-transform" "left-7"
+                ]
+                []
+            , i
+                [ class "fas fa-user"
+                , attribute "data-fa-transform" "shrink-8 left-7 up-0.5"
+                ]
+                []
+            ]
+        ]
 
 
 subSpotifyButton : Msg -> Html Msg
 subSpotifyButton msg =
     a
-        [ class "button is-primary is-large is-inverted is-outlined"
+        -- [ class "button is-rounded is-danger is-large "
+        [ class "button is-info is-large is-rounded"
         , onClick msg
         ]
         [ icon "fab fa-spotify fa-lg"

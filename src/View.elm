@@ -10,12 +10,21 @@ import Views.Footer exposing (infoFooter)
 import Views.Landing as Landing
 
 
+-- root : Model -> Html Msg
+-- root model =
+--     div
+--         []
+--         [ navHeader
+--         , page model
+--         , infoFooter
+--         ]
+
+
 root : Model -> Html Msg
 root model =
     div
         []
-        [ navHeader
-        , page model
+        [ page model
         , infoFooter
         ]
 

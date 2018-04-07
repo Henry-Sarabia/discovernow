@@ -55,6 +55,16 @@ largeIcon link =
         ]
 
 
+largeColorIcon : String -> String -> Html Msg
+largeColorIcon link color =
+    span
+        [ class ("icon " ++ color) ]
+        [ i
+            [ class link ]
+            []
+        ]
+
+
 iconImage : String -> Html Msg
 iconImage link =
     span
@@ -125,4 +135,18 @@ spacer : Html Msg -> Html Msg
 spacer child =
     div
         [ style [ ( "margin-top", "5rem" ) ] ]
+        [ child ]
+
+
+columns : List (Html Msg) -> Html Msg
+columns children =
+    div
+        [ class "columns" ]
+        (List.map column children)
+
+
+column : Html Msg -> Html Msg
+column child =
+    div
+        [ class "column has-text-centered" ]
         [ child ]

@@ -4,9 +4,9 @@
 }
 
 .bounce {
-    -moz-animation: bounce 4s infinite;
-    -webkit-animation: bounce 4s infinite;
-    animation: bounce 4s infinite;
+    -moz-animation: bounce 3.5s infinite;
+    -webkit-animation: bounce 3.5s infinite;
+    animation: bounce 3.5s infinite;
 }
   
 @keyframes bounce {

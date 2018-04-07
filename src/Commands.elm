@@ -54,6 +54,18 @@ fetchDiscoverUrl =
     "http://localhost:8080/discover"
 
 
+fetchSummaryUrl : String
+fetchSummaryUrl =
+    "http://localhost:8080/summary"
+
+
+fetchSummaryCmd : Token -> Cmd Msg
+fetchSummaryCmd token =
+    Http.get (fetchSummaryUrl ++ createTokenUrl token ++ "&timerange=long") playlistDecoder
+        |> RemoteData.sendRequest
+        |> Cmd.map OnFetchPlaylist
+
+
 playlistDecoder : Decode.Decoder Playlist
 playlistDecoder =
     decode Playlist
