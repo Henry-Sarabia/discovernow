@@ -1,7 +1,11 @@
 module Msgs exposing (..)
 
+-- import Html exposing (Attribute)
+-- import Html.Events exposing (onWithOptions)
+-- import Json.Decode as Decode
+
+import Models exposing (Login, Token, Playlist, Direction(..))
 import Navigation
-import Models exposing (Login, Token, Playlist)
 import RemoteData exposing (WebData)
 
 
@@ -16,3 +20,4 @@ type Msg
     | FetchPlaylist Token
     | OnFetchPlaylist (WebData Playlist)
     | ScrollToDomId String
+    | OnScroll Direction String

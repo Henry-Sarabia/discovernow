@@ -1,7 +1,7 @@
 module Update exposing (..)
 
 import Commands exposing (..)
-import Models exposing (Model)
+import Models exposing (Model, Direction(..))
 import Msgs exposing (Msg(..))
 import Navigation
 import Ports exposing (..)
@@ -56,3 +56,17 @@ update msg model =
 
         ScrollToDomId id ->
             ( model, scrollIdIntoView id )
+
+        -- OnScroll dir ->
+        --     case dir of
+        --         Up ->
+        --             ( model, scrollIdIntoView "heroBanner" )
+        --         Down ->
+        --             ( model, scrollIdIntoView "heroPhases" )
+        OnScroll dir domId ->
+            case dir of
+                Up ->
+                    ( model, scrollNextSibling domId )
+
+                Down ->
+                    ( model, scrollPrevSibling domId )

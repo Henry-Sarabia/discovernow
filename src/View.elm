@@ -5,19 +5,8 @@ import Models exposing (Model, Token, Login)
 import Msgs exposing (Msg(..))
 import Routing exposing (..)
 import Views.Discover as Discover
-import Views.Header exposing (navHeader)
 import Views.Footer exposing (infoFooter)
 import Views.Landing as Landing
-
-
--- root : Model -> Html Msg
--- root model =
---     div
---         []
---         [ navHeader
---         , page model
---         , infoFooter
---         ]
 
 
 root : Model -> Html Msg

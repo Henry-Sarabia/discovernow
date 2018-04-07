@@ -9,20 +9,10 @@ import RemoteData exposing (WebData)
 import Views.Common exposing (..)
 
 
--- root : Model -> Html Msg
--- root model =
---     div
---         []
---         [ heroBanner model
---         , heroFeatures
---         , heroPhases model
---         ]
-
-
 root : Model -> Html Msg
 root model =
     div
-        []
+        [ id "landing" ]
         [ heroBanner model
         , heroPhases model
         , heroFeatures
@@ -33,12 +23,14 @@ heroBanner : Model -> Html Msg
 heroBanner model =
     section
         [ class "hero is-fullheight"
+        , id "heroBanner"
         , style
             [ ( "background-image", "linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url(herobg2.jpg)" )
             , ( "background-position", "center" )
             , ( "background-repeat", "no-repeat" )
             , ( "background-size", "cover" )
             ]
+        , onWheelScroll "heroBanner"
         ]
         [ heroBannerBody model
         ]
@@ -150,7 +142,10 @@ scrollButton domId =
 heroFeatures : Html Msg
 heroFeatures =
     section
-        [ class "hero is-warning is-medium" ]
+        [ class "hero is-warning is-medium"
+        , id "heroFeatures"
+        , onWheelScroll "heroFeatures"
+        ]
         [ div
             [ class "hero-body" ]
             [ div
@@ -208,6 +203,7 @@ heroPhases model =
     section
         [ class "hero is-link is-fullheight"
         , id "heroPhases"
+        , onWheelScroll "heroPhases"
         ]
         [ div
             [ class "hero-head has-text-centered" ]
@@ -219,7 +215,6 @@ heroPhases model =
                 [ nav
                     [ class "columns" ]
                     [ largeIconColumn
-                        -- ( largeColorIcon "fas fa-user-circle fa-10x fa-fw" "has-text-danger"
                         ( userIcon
                         , "Connect"
                         , "Connect to your Spotify account using a secure connection provided by Spotify"

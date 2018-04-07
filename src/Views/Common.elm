@@ -4,7 +4,9 @@ import Html exposing (Html, Attribute, div, span, text, a, i)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onWithOptions)
 import Json.Decode as Decode
-import Msgs exposing (Msg)
+import Models exposing (Direction(..))
+import Msgs exposing (Msg(..))
+import Wheel
 
 
 onLinkClick : Msg -> Attribute Msg
@@ -16,6 +18,53 @@ onLinkClick msg =
             }
     in
         onWithOptions "click" options (Decode.succeed msg)
+
+
+
+-- checkScroll : Wheel.Event -> String -> Msg
+-- checkScroll event domId =
+--     if event.deltaY > 0 then
+--         OnScroll Down domId
+--     else
+--         OnScroll Up domId
+
+
+siblingScroll : String -> (Wheel.Event -> Msg)
+siblingScroll domId =
+    \event ->
+        if event.deltaY > 0 then
+            OnScroll Up domId
+        else
+            OnScroll Down domId
+
+
+
+-- onWheelScroll : String -> Attribute Msg
+-- onWheelScroll domId =
+--     let
+--         options =
+--             { stopPropagation = False
+--             , preventDefault = True
+--             }
+--     in
+--         Wheel.onWithOptions options checkScroll
+
+
+onWheelScroll : String -> Attribute Msg
+onWheelScroll domId =
+    Wheel.onWheel (siblingScroll domId)
+
+
+
+-- onScroll : (Int -> Msg) -> Attribute Msg
+-- onScroll msg =
+--     let
+--         options =
+--             { stopPropagation = False
+--             , preventDefault = True
+--             }
+--     in
+--         onWithOptions "wheel" options (Decode.map msg (Decode.at [ "deltaY" ] Decode.int))
 
 
 container : Html Msg -> Html Msg
