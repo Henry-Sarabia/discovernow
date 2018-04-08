@@ -33,6 +33,7 @@ heroBanner model =
         , onWheelScroll "heroBanner"
         ]
         [ heroBannerBody model
+        , heroBannerFoot
         ]
 
 
@@ -54,13 +55,21 @@ heroBannerBody model =
         ]
 
 
+heroBannerFoot : Html Msg
+heroBannerFoot =
+    div
+        [ class "hero-foot has-text-light has-text-centered" ]
+        [ bouncingIcon "fas fa-chevron-down fa-3x" ]
+
+
 bannerButtons : Model -> Html Msg
 bannerButtons model =
     div
         [ style [ ( "padding-top", "5rem" ) ] ]
         [ stack
             [ loginButton (spotifyButton) model.login
-            , scrollButton "heroPhases"
+
+            -- , scrollButton "heroPhases"
             ]
         ]
 
@@ -214,29 +223,31 @@ heroPhases model =
                 [ class "container" ]
                 [ nav
                     [ class "columns" ]
-                    [ largeIconColumn
+                    [ largeIconColumn "animated wow fade-right-1"
                         ( userIcon
                         , "Connect"
                         , "Connect to your Spotify account using a secure connection provided by Spotify"
                         )
-                    , level [ arrowIcon ]
-                    , largeIconColumn
+                    , level [ arrowIcon "animated wow fade-right-2" ]
+                    , largeIconColumn "animated wow fade-right-3"
                         ( dnaIcon
                         , "Analyze"
                         , "Our algorithm will analyze and generate a personal Discover playlist just for you"
                         )
-                    , level [ arrowIcon ]
-                    , largeIconColumn
+                    , level [ arrowIcon "animated wow fade-right-4" ]
+                    , largeIconColumn "animated wow fade-right-5"
                         ( largeColorIcon "far fa-play-circle fa-10x fa-fw" "has-text-danger"
                         , "Discover"
                         , "Your personalized Discover playlist is ready for you right on your preferred Spotify player"
                         )
                     ]
-                , stack
-                    [ phaseCall "Why wait? Discover now."
-                    , bouncingIcon "fas fa-chevron-down fa-5x"
-                    , loginButton (subSpotifyButton) model.login
-                    ]
+                , loginButton (subSpotifyButton) model.login
+
+                -- , stack
+                --     [ phaseCall "Why wait? Discover now."
+                --     , bouncingIcon "fas fa-chevron-down fa-5x"
+                --     , loginButton (subSpotifyButton) model.login
+                --     ]
                 ]
             ]
         ]
@@ -245,7 +256,8 @@ heroPhases model =
 phaseHeader : String -> Html Msg
 phaseHeader txt =
     h1
-        [ class "title"
+        [ class "title animated wow fade-in"
+        , attribute "data-wow-offset" "6"
         , style
             [ ( "padding-top", "6rem" )
             , ( "font-size", "7em" )
@@ -255,10 +267,11 @@ phaseHeader txt =
         [ text txt ]
 
 
-largeIconColumn : ( Html Msg, String, String ) -> Html Msg
-largeIconColumn ( ico, title, sub ) =
+largeIconColumn : String -> ( Html Msg, String, String ) -> Html Msg
+largeIconColumn classes ( ico, title, sub ) =
     div
-        [ class "column has-text-centered" ]
+        [ class ("column has-text-centered" ++ " " ++ classes)
+        ]
         [ stack [ ico, phaseTitle title, phaseSub sub ]
         ]
 
@@ -301,10 +314,12 @@ phaseCall txt =
         [ text txt ]
 
 
-arrowIcon : Html Msg
-arrowIcon =
+arrowIcon : String -> Html Msg
+arrowIcon classes =
     span
-        [ style [ ( "margin-bottom", "2rem" ) ] ]
+        [ class classes
+        , style [ ( "margin-bottom", "2rem" ) ]
+        ]
         [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
 
 
@@ -351,9 +366,11 @@ userIcon =
 subSpotifyButton : Msg -> Html Msg
 subSpotifyButton msg =
     a
-        -- [ class "button is-rounded is-danger is-large "
-        [ class "button is-info is-large is-rounded"
+        -- [ class "button is-info is-large is-rounded"
+        [ class "button is-info is-large is-rounded animated wow fade-in-pop"
         , onClick msg
+
+        -- , id "call-to-action"
         ]
         [ icon "fab fa-spotify fa-lg"
         , iconText "Connect to Spotify"

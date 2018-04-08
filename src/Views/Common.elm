@@ -20,15 +20,6 @@ onLinkClick msg =
         onWithOptions "click" options (Decode.succeed msg)
 
 
-
--- checkScroll : Wheel.Event -> String -> Msg
--- checkScroll event domId =
---     if event.deltaY > 0 then
---         OnScroll Down domId
---     else
---         OnScroll Up domId
-
-
 siblingScroll : String -> (Wheel.Event -> Msg)
 siblingScroll domId =
     \event ->
@@ -38,33 +29,9 @@ siblingScroll domId =
             OnScroll Down domId
 
 
-
--- onWheelScroll : String -> Attribute Msg
--- onWheelScroll domId =
---     let
---         options =
---             { stopPropagation = False
---             , preventDefault = True
---             }
---     in
---         Wheel.onWithOptions options checkScroll
-
-
 onWheelScroll : String -> Attribute Msg
 onWheelScroll domId =
     Wheel.onWheel (siblingScroll domId)
-
-
-
--- onScroll : (Int -> Msg) -> Attribute Msg
--- onScroll msg =
---     let
---         options =
---             { stopPropagation = False
---             , preventDefault = True
---             }
---     in
---         onWithOptions "wheel" options (Decode.map msg (Decode.at [ "deltaY" ] Decode.int))
 
 
 container : Html Msg -> Html Msg
@@ -173,8 +140,8 @@ stackItem : Html Msg -> Html Msg
 stackItem item =
     div
         [ style
-            [ ( "margin-top", "2rem" )
-            , ( "margin-bottom", "3rem" )
+            [ ( "padding-top", "2rem" )
+            , ( "padding-bottom", "3rem" )
             ]
         ]
         [ item ]
@@ -183,7 +150,7 @@ stackItem item =
 spacer : Html Msg -> Html Msg
 spacer child =
     div
-        [ style [ ( "margin-top", "5rem" ) ] ]
+        [ style [ ( "padding-top", "5rem" ) ] ]
         [ child ]
 
 
