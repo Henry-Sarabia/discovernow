@@ -1,9 +1,6 @@
 port module Ports exposing (..)
 
 
-port scrollIdIntoView : String -> Cmd msg
-
-
 port scrollNextSibling : String -> Cmd msg
 
 

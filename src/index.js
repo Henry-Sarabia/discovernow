@@ -21,10 +21,6 @@ var wow = new WOW(
   );
   wow.init();
 
-elm.ports.scrollIdIntoView.subscribe(function(domId) {
-    document.getElementById(domId).scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
-});
-
 var timeoutLimit = 150;
 
 elm.ports.scrollNextSibling.subscribe(function(domId) {

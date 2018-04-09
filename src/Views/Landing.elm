@@ -45,11 +45,6 @@ heroBannerBody model =
             [ class "container has-text-centered" ]
             [ bannerTitle "Discover Now"
             , bannerSub "Don't wait for Monday. Discover new music now."
-
-            -- , stack
-            --     [ loginButton (spotifyButton) model.login
-            --     , scrollButton "heroPhases"
-            --     ]
             , bannerButtons model
             ]
         ]
@@ -68,8 +63,6 @@ bannerButtons model =
         [ style [ ( "padding-top", "5rem" ) ] ]
         [ stack
             [ loginButton (spotifyButton) model.login
-
-            -- , scrollButton "heroPhases"
             ]
         ]
 
@@ -136,16 +129,6 @@ iconText txt =
             [ ( "padding-left", "0.33em" ) ]
         ]
         [ text txt ]
-
-
-scrollButton : String -> Html Msg
-scrollButton domId =
-    a
-        [ class "button is-medium is-link is-rounded is-inverted is-outlined"
-        , onClick (ScrollToDomId domId)
-        ]
-        [ spanText "Learn more"
-        ]
 
 
 heroFeatures : Html Msg

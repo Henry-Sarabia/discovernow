@@ -54,15 +54,6 @@ update msg model =
         OnFetchPlaylist response ->
             ( { model | discover = response }, Cmd.none )
 
-        ScrollToDomId id ->
-            ( model, scrollIdIntoView id )
-
-        -- OnScroll dir ->
-        --     case dir of
-        --         Up ->
-        --             ( model, scrollIdIntoView "heroBanner" )
-        --         Down ->
-        --             ( model, scrollIdIntoView "heroPhases" )
         OnScroll dir domId ->
             case dir of
                 Up ->
