@@ -113,8 +113,6 @@ spotifyButton : Msg -> Html Msg
 spotifyButton msg =
     a
         [ class "button is-info is-large is-rounded"
-
-        -- , style [ ( "margin-top", "2rem" ) ]
         , onClick msg
         ]
         [ icon "fab fa-spotify fa-lg"
@@ -206,31 +204,25 @@ heroPhases model =
                 [ class "container" ]
                 [ nav
                     [ class "columns" ]
-                    [ largeIconColumn "animated wow fade-right-1"
+                    [ largeIconColumn "pre-anim fade-right-1"
                         ( userIcon
                         , "Connect"
                         , "Connect to your Spotify account using a secure connection provided by Spotify"
                         )
-                    , level [ arrowIcon "animated wow fade-right-2" ]
-                    , largeIconColumn "animated wow fade-right-3"
+                    , level [ arrowIcon "pre-anim fade-right-2" ]
+                    , largeIconColumn "pre-anim fade-right-3"
                         ( dnaIcon
                         , "Analyze"
                         , "Our algorithm will analyze and generate a personal Discover playlist just for you"
                         )
-                    , level [ arrowIcon "animated wow fade-right-4" ]
-                    , largeIconColumn "animated wow fade-right-5"
+                    , level [ arrowIcon "pre-anim fade-right-4" ]
+                    , largeIconColumn "pre-anim fade-right-5"
                         ( largeColorIcon "far fa-play-circle fa-10x fa-fw" "has-text-danger"
                         , "Discover"
                         , "Your personalized Discover playlist is ready for you right on your preferred Spotify player"
                         )
                     ]
                 , loginButton (subSpotifyButton) model.login
-
-                -- , stack
-                --     [ phaseCall "Why wait? Discover now."
-                --     , bouncingIcon "fas fa-chevron-down fa-5x"
-                --     , loginButton (subSpotifyButton) model.login
-                --     ]
                 ]
             ]
         ]
@@ -239,8 +231,7 @@ heroPhases model =
 phaseHeader : String -> Html Msg
 phaseHeader txt =
     h1
-        [ class "title animated wow fade-in"
-        , attribute "data-wow-offset" "6"
+        [ class "title pre-anim fade-in"
         , style
             [ ( "padding-top", "6rem" )
             , ( "font-size", "7em" )
@@ -350,10 +341,8 @@ subSpotifyButton : Msg -> Html Msg
 subSpotifyButton msg =
     a
         -- [ class "button is-info is-large is-rounded"
-        [ class "button is-info is-large is-rounded animated wow fade-in-pop"
+        [ class "button is-info is-large is-rounded pre-anim fade-in-pop"
         , onClick msg
-
-        -- , id "call-to-action"
         ]
         [ icon "fab fa-spotify fa-lg"
         , iconText "Connect to Spotify"
