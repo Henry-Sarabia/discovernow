@@ -5,16 +5,15 @@ import Models exposing (Model, Token, Login)
 import Msgs exposing (Msg(..))
 import Routing exposing (..)
 import Views.Discover as Discover
-import Views.Header exposing (navHeader)
 import Views.Footer exposing (infoFooter)
 import Views.Landing as Landing
 
+
 root : Model -> Html Msg
 root model =
-    div 
+    div
         []
-        [ navHeader
-        , page model
+        [ page model
         , infoFooter
         ]
 
@@ -24,7 +23,7 @@ page model =
     case model.route of
         LandingRoute ->
             landingPage model
- 
+
         AboutRoute ->
             aboutPage model
 
@@ -54,8 +53,9 @@ discoverPage : Model -> Token -> Html Msg
 discoverPage model token =
     div
         []
-        [ Discover.root model token]
- 
+        [ Discover.root model token ]
+
+
 errorPage : Html Msg
 errorPage =
     div
@@ -69,14 +69,16 @@ notFoundPage =
         []
         [ text "404" ]
 
+
 checkResults : Model -> Html Msg
 checkResults model =
     case model.token of
         Nothing ->
             text "you found an error"
-         
+
         Just token ->
             discoverPage model token
+
 
 
 -- playlist : Html Msg

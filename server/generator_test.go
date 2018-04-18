@@ -116,3 +116,34 @@ func TestRecentTracks(t *testing.T) {
 		t.Fatalf("Expected name %s, got %s", expName, actName)
 	}
 }
+
+func TestRecommendation(t *testing.T) {
+	g := generator{
+		client: testClient{},
+	}
+
+	recs, err := g.recommendation(spotify.Seeds{}, 10, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expLength := 10
+	actLength := len(recs)
+	if actLength != expLength {
+		t.Fatalf("Expected length of %d, got %d", expLength, actLength)
+	}
+
+	expName := recs[9].Name
+	actName := "Appalachian Spring: Moderato - Coda"
+	if actName != expName {
+		t.Fatalf("Expected name %s, got %s", expName, actName)
+	}
+}
+
+// func TestUniqueRecommendations(t *testing.T) {
+// 	g := generator{
+// 		client: testClient{},
+// 	}
+//
+// 	recs, err := g.uniqueRecommendations(spotify.Seeds{}, 5, nil, nil)
+// }

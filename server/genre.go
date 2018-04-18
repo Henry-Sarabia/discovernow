@@ -12,6 +12,10 @@ const (
 	maxSeedInput  = 5
 )
 
+var (
+	errInsufficientArtistGenres = errors.New("insufficient artist data for a genre map")
+)
+
 type genre struct {
 	name    string
 	artists map[string]*spotify.FullArtist
@@ -116,23 +120,46 @@ func (gm genreMap) popMaxTrend() *genre {
 	return g
 }
 
-// extractGenres returns a map of genres extracted from the provided full
-// artist page.
-func extractGenres(fap *spotify.FullArtistPage) (genreMap, error) {
-	if len(fap.Artists) < minArtistData {
-		return nil, errors.New("insufficient artist data")
+// // extractGenres returns a map of genres extracted from the provided full
+// // artist page.
+// func extractGenres(fap *spotify.FullArtistPage) (genreMap, error) {
+// 	if len(fap.Artists) < minArtistData {
+// 		return nil, errors.New("insufficient artist data")
+// 	}
+
+// 	gm := make(genreMap)
+// 	for fan, fa := range fap.Artists {
+// 		for _, gs := range fa.Genres {
+// 			if _, ok := gm[gs]; !ok {
+// 				gm[gs] = &genre{
+// 					name:    gs,
+// 					artists: make(map[string]*spotify.FullArtist),
+// 				}
+// 			}
+// 			gm[gs].artists[fa.Name] = &fap.Artists[fan]
+// 		}
+// 	}
+
+// 	return gm, nil
+// }
+
+// extractGenres returns a map of genres extracted from the provided
+// artists.
+func extractGenres(artists []spotify.FullArtist) (genreMap, error) {
+	if len(artists) < minArtistData {
+		return nil, errInsufficientArtistGenres
 	}
 
 	gm := make(genreMap)
-	for fan, fa := range fap.Artists {
-		for _, gs := range fa.Genres {
-			if _, ok := gm[gs]; !ok {
-				gm[gs] = &genre{
-					name:    gs,
+	for i, a := range artists {
+		for _, g := range a.Genres {
+			if _, ok := gm[g]; !ok {
+				gm[g] = &genre{
+					name:    g,
 					artists: make(map[string]*spotify.FullArtist),
 				}
 			}
-			gm[gs].artists[fa.Name] = &fap.Artists[fan]
+			gm[g].artists[a.Name] = &artists[i]
 		}
 	}
 

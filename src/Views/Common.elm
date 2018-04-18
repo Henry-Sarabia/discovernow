@@ -1,20 +1,8 @@
 module Views.Common exposing (..)
 
 import Html exposing (Html, Attribute, div, span, text, a, i)
-import Html.Attributes exposing (class)
-import Html.Events exposing (onWithOptions)
-import Json.Decode as Decode
-import Msgs exposing (Msg)
-
-onLinkClick : Msg -> Attribute Msg
-onLinkClick msg =
-    let
-        options =
-            { stopPropagation = False
-            , preventDefault = True
-            }
-    in
-        onWithOptions "click" options (Decode.succeed msg)
+import Html.Attributes exposing (class, style)
+import Msgs exposing (Msg(..))
 
 
 container : Html Msg -> Html Msg
@@ -34,10 +22,50 @@ icon link =
         ]
 
 
+smallIcon : String -> Html Msg
+smallIcon link =
+    span
+        [ class "icon is-small" ]
+        [ i
+            [ class link ]
+            []
+        ]
+
+
 largeIcon : String -> Html Msg
 largeIcon link =
     span
         [ class "icon is-large" ]
+        [ i
+            [ class link ]
+            []
+        ]
+
+
+largeColorIcon : String -> String -> Html Msg
+largeColorIcon link color =
+    span
+        [ class ("icon " ++ color) ]
+        [ i
+            [ class link ]
+            []
+        ]
+
+
+iconImage : String -> Html Msg
+iconImage link =
+    span
+        [ class "image is-square" ]
+        [ i
+            [ class link ]
+            []
+        ]
+
+
+bouncingIcon : String -> Html Msg
+bouncingIcon link =
+    span
+        [ class "icon is-large bounce" ]
         [ i
             [ class link ]
             []
@@ -50,11 +78,13 @@ spanText txt =
         []
         [ text txt ]
 
+
 wrap : Html Msg -> Html Msg
 wrap child =
-    div 
+    div
         []
         [ child ]
+
 
 level : List (Html Msg) -> Html Msg
 level items =
@@ -68,3 +98,42 @@ levelItem item =
     div
         [ class "level-item" ]
         [ item ]
+
+
+stack : List (Html Msg) -> Html Msg
+stack items =
+    div
+        []
+        (List.map stackItem items)
+
+
+stackItem : Html Msg -> Html Msg
+stackItem item =
+    div
+        [ style
+            [ ( "padding-top", "2rem" )
+            , ( "padding-bottom", "3rem" )
+            ]
+        ]
+        [ item ]
+
+
+spacer : Html Msg -> Html Msg
+spacer child =
+    div
+        [ style [ ( "padding-top", "5rem" ) ] ]
+        [ child ]
+
+
+columns : List (Html Msg) -> Html Msg
+columns children =
+    div
+        [ class "columns" ]
+        (List.map column children)
+
+
+column : Html Msg -> Html Msg
+column child =
+    div
+        [ class "column has-text-centered" ]
+        [ child ]

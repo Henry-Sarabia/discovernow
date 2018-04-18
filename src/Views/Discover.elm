@@ -1,16 +1,20 @@
 module Views.Discover exposing (root)
 
-import Html exposing (Html, Attribute, div, text, h1, h2, nav, section, span, a, i, p, ul, li, img, header, footer, article)
-import Html.Attributes exposing (class, style, src, href, alt, height, width, attribute)
-import Html.Events exposing (onWithOptions, onClick)
-import Models exposing (Model, Token)
+import Html exposing (Html, div, text, span, a)
+import Html.Attributes exposing (class, src, height, width)
+import Html.Events exposing (onClick)
+import Models exposing (Model, Token, Playlist)
 import Msgs exposing (Msg(..))
+import RemoteData exposing (WebData)
+import Utils exposing (..)
+
 
 root : Model -> Token -> Html Msg
 root model token =
     div
         []
-        [ hero [page model token]]
+        [ hero [ page model token ] ]
+
 
 hero : List (Html Msg) -> Html Msg
 hero children =
@@ -26,15 +30,35 @@ page : Model -> Token -> Html Msg
 page model token =
     div
         [ class "container has-text-centered" ]
-        [ discoverButton token ]
+        [ discoverButton token
+        , test model.discover
+        ]
+
 
 discoverButton : Token -> Html Msg
 discoverButton token =
     a
         [ class "button is-large is-success"
-        , onClick (FetchPlaylist token)
+
+        -- , onClick (FetchPlaylist token)
         ]
         [ span
             []
             [ text "Generate Discover" ]
         ]
+
+
+test : WebData Playlist -> Html Msg
+test playlist =
+    case playlist of
+        RemoteData.NotAsked ->
+            text "not asked"
+
+        RemoteData.Loading ->
+            text "loading"
+
+        RemoteData.Success response ->
+            text response.id
+
+        RemoteData.Failure err ->
+            text (errorToString err)

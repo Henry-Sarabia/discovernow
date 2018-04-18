@@ -1,15 +1,18 @@
 module Views.Header exposing (navHeader)
 
 import Html exposing (Html, text, div, img, span, a, nav)
-import Html.Attributes exposing (src, class, href)
+import Html.Attributes exposing (style, src, class, href)
 import Msgs exposing (Msg(..))
 import Routing exposing (..)
 import Views.Common exposing (..)
 
+
 navHeader : Html Msg
 navHeader =
     div
-        [ class "container" ]
+        [ class "container"
+        , style [ ( "background-color", "#F0F0F0" ) ]
+        ]
         [ nav
             [ class "navbar" ]
             [ navBrand logo
@@ -18,9 +21,10 @@ navHeader =
         ]
 
 
+
 -- navBrand : Html Msg
 -- navBrand =
---     div 
+--     div
 --         [ class "navbar-brand" ]
 --         [ a
 --             [ class "navbar-item" ]
@@ -30,19 +34,21 @@ navHeader =
 --                 ]
 --                 []
 --             ]
---         ] 
+--         ]
+
 
 navBrand : Html Msg -> Html Msg
 navBrand child =
     div
         [ class "navbar-brand" ]
         [ a
-            [ class "navbar-item" 
+            [ class "navbar-item"
             , href homePath
             , onLinkClick (ChangeLocation homePath)
             ]
             [ child ]
         ]
+
 
 navMenu : Html Msg
 navMenu =
@@ -57,13 +63,14 @@ navMenu =
 
 
 navItem : String -> String -> Html Msg
-navItem label path = 
+navItem label path =
     a
         [ class "navbar-item"
         , href path
         , onLinkClick (ChangeLocation path)
         ]
         [ text label ]
+
 
 logo : Html Msg
 logo =
