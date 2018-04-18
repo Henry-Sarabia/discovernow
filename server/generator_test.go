@@ -80,13 +80,13 @@ func TestTopArtists(t *testing.T) {
 	}
 
 	expLength := 50
-	actLength := len(ta.Artists)
+	actLength := len(ta)
 	if actLength != expLength {
 		t.Fatalf("Expected length %d, got %d", expLength, actLength)
 	}
 
 	expName := "Radiohead"
-	actName := ta.Artists[0].Name
+	actName := ta[0].Name
 	if actName != expName {
 		t.Fatalf("Expected name %s, got %s", expName, actName)
 	}

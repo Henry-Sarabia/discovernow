@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestExtractGenresNew(t *testing.T) {
+func TestCreateGenreMap(t *testing.T) {
 	g := generator{
 		client: testClient{},
 	}
@@ -14,7 +14,7 @@ func TestExtractGenresNew(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	genres, err := extractGenres(ta.Artists)
+	genres, err := createGenreMap(ta)
 	if err != nil {
 		t.Fatal(err)
 	}

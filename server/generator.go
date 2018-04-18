@@ -93,21 +93,16 @@ func (g *generator) TasteSummary(time string) (*spotify.FullPlaylist, error) {
 		return nil, err
 	}
 
-	if len(ta.Artists) < requiredTopArtists {
+	if len(ta) < requiredTopArtists {
 		return nil, errInsufficientTopArtists
 	}
 
-	gm, err := extractGenres(ta.Artists)
+	genres, err := extractGenres(ta)
 	if err != nil {
 		return nil, err
 	}
 
-	gens, err := processGenres(gm)
-	if err != nil {
-		return nil, err
-	}
-
-	recs, err := g.recommendationsByGenres(gens)
+	recs, err := g.recsByGenre(genres)
 	if err != nil {
 		return nil, err
 	}
@@ -131,38 +126,24 @@ func (g *generator) TasteSummary(time string) (*spotify.FullPlaylist, error) {
 // 		return nil, err
 // 	}
 
-// 	if len(tas.Artists) < requiredTopArtists {
+// 	if len(tas) < requiredTopArtists {
 // 		return nil, errInsufficientTopArtists
 // 	}
 
-// 	gm, err := extractGenres(tas)
+// 	genres, err := extractGenres(tas)
 // 	if err != nil {
 // 		return nil, err
 // 	}
 
-// 	gens, err := processGenres(gm)
+// 	est, err := g.establishedTopArtists()
 // 	if err != nil {
 // 		return nil, err
 // 	}
-
-// 	tam, err := g.topArtists(maxArtists, "medium")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	tal, err := g.topArtists(maxArtists, "long")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	all := append(tal.Artists, tam.Artists...)
-// 	all = append(all, tas.Artists...)
-// 	all = removeDuplicateArtists(all)
 
 // 	visited := visitedArtists(all, nil)
 // 	attr := spotify.NewTrackAttributes().TargetPopularity(targetPopularity)
 
-// 	recs, err := g.uniqueRecsByGenre(gens, attr, visited)
+// 	recs, err := g.uniqueRecsByGenre(genres, attr, visited)
 // 	if err != nil {
 // 		return nil, err
 // 	}
@@ -211,7 +192,7 @@ func (g *generator) discoverTracks() ([]spotify.SimpleTrack, error) {
 	}
 
 	attr := spotify.NewTrackAttributes().TargetPopularity(targetPopularity)
-	recs, err := g.recommendationsByTracks(rt, attr)
+	recs, err := g.recsByTrack(rt, attr)
 	if err != nil {
 		return nil, errors.WithMessage(err, "discoverTracks: cannot retrieve recommendations")
 	}
@@ -232,12 +213,12 @@ func removeDuplicateArtists(old []spotify.FullArtist) []spotify.FullArtist {
 	return new
 }
 
-// uniqueRecommendation returns a list of recommended tracks omitting any
+// uniqueRec returns a list of recommended tracks omitting any
 // which have any of the provided artists.
-func (g *generator) uniqueRecommendations(sd spotify.Seeds, num int, attr *spotify.TrackAttributes, visited map[string]bool) ([]spotify.SimpleTrack, error) {
+func (g *generator) uniqueRec(sd spotify.Seeds, num int, attr *spotify.TrackAttributes, visited map[string]bool) ([]spotify.SimpleTrack, error) {
 	log.Println("starting unique rec")
 	if num < minRequestTracks || num > maxRequestArtists {
-		return nil, fmt.Errorf("uniqueRecommendations: invalid input of %d, expecting input between %d and %d", num, minRequestTracks, maxRequestTracks)
+		return nil, fmt.Errorf("uniqueRec: invalid input of %d, expecting input between %d and %d", num, minRequestTracks, maxRequestTracks)
 	}
 	uniq := make([]spotify.SimpleTrack, 0)
 
@@ -246,11 +227,16 @@ func (g *generator) uniqueRecommendations(sd spotify.Seeds, num int, attr *spoti
 		if i > recRetryLimit {
 			break
 		}
+
+		// request extra tracks in case of duplicates
+		// getBuf
+
 		rec, err := g.recommendation(sd, num, attr)
 		if err != nil {
 			return nil, err
 		}
 
+		// appendRec
 		for _, r := range rec {
 			if ok := visited[r.Artists[0].Name]; !ok {
 				uniq = append(uniq, r)
@@ -262,9 +248,9 @@ func (g *generator) uniqueRecommendations(sd spotify.Seeds, num int, attr *spoti
 	return uniq, nil
 }
 
-// recommendationsByGenre returns a list of about 30 tracks recommended based on the
+// recsByGenre returns a list of about 30 tracks recommended based on the
 // provided genres.
-func (g *generator) recommendationsByGenres(gens []*genre) ([]spotify.SimpleTrack, error) {
+func (g *generator) recsByGenre(gens []*genre) ([]spotify.SimpleTrack, error) {
 	sum := sumScore(gens)
 
 	recs := make([]spotify.SimpleTrack, 0)
@@ -275,7 +261,7 @@ func (g *generator) recommendationsByGenres(gens []*genre) ([]spotify.SimpleTrac
 
 		rec, err := g.recommendation(gen.seed(), int(num), nil)
 		if err != nil {
-			return nil, errors.WithMessage(err, "recommendationsByGenres: cannot retrieve a recommendation")
+			return nil, errors.WithMessage(err, "recsByGenre: cannot retrieve a recommendation")
 		}
 		recs = append(recs, rec...)
 	}
@@ -294,7 +280,7 @@ func (g *generator) recommendationsByGenres(gens []*genre) ([]spotify.SimpleTrac
 // 		tracks := ratio * playlistSize
 // 		num := math.Ceil(tracks)
 
-// 		rec, err := g.uniqueRecommendations(gen.seed(), int(num), attr, visited)
+// 		rec, err := g.uniqueRec(gen.seed(), int(num), attr, visited)
 // 		if err != nil {
 // 			return nil, errors.WithMessage(err, "uniqueRecsByGenre: cannot get recommendation with a track seed")
 // 		}
@@ -305,14 +291,14 @@ func (g *generator) recommendationsByGenres(gens []*genre) ([]spotify.SimpleTrac
 // 	return recs, nil
 // }
 
-// recommendationsByTracks returns a list of about 30 tracks recommended based
+// recsByTrack returns a list of about 30 tracks recommended based
 // on the provided tracks.
-func (g *generator) recommendationsByTracks(tracks []spotify.SimpleTrack, attr *spotify.TrackAttributes) ([]spotify.SimpleTrack, error) {
+func (g *generator) recsByTrack(tracks []spotify.SimpleTrack, attr *spotify.TrackAttributes) ([]spotify.SimpleTrack, error) {
 	sds := trackSeeds(shuffleTracks(tracks))
 
 	ta, err := g.allTopArtists()
 	if err != nil {
-		return nil, errors.WithMessage(err, "recommendationsByTracks: cannot retrieve all top artists")
+		return nil, errors.WithMessage(err, "recsByTrack: cannot retrieve all top artists")
 	}
 
 	visited := visitedArtists(ta, tracks)
@@ -321,9 +307,9 @@ func (g *generator) recommendationsByTracks(tracks []spotify.SimpleTrack, attr *
 	recs := make([]spotify.SimpleTrack, 0)
 	num := playlistSize / len(sds)
 	for _, sd := range sds {
-		rec, err := g.uniqueRecommendations(sd, num, attr, visited)
+		rec, err := g.uniqueRec(sd, num, attr, visited)
 		if err != nil {
-			return nil, errors.WithMessage(err, "recommendationsByTracks: cannot get recommendation with a track seed")
+			return nil, errors.WithMessage(err, "recsByTrack: cannot get recommendation with a track seed")
 		}
 		recs = append(recs, rec...)
 		log.Println(len(visited))

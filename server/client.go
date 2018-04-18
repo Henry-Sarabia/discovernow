@@ -56,7 +56,7 @@ func (g *generator) recentTracks(num int) ([]spotify.SimpleTrack, error) {
 
 // topArtists returns a list of the user's top artists from the provided
 // time-frame.
-func (g *generator) topArtists(num int, time string) (*spotify.FullArtistPage, error) {
+func (g *generator) topArtists(num int, time string) ([]spotify.FullArtist, error) {
 	opt := spotify.Options{
 		Limit:     &num,
 		Timerange: &time,
@@ -70,7 +70,24 @@ func (g *generator) topArtists(num int, time string) (*spotify.FullArtistPage, e
 		return nil, errNoTopArtists
 	}
 
-	return top, nil
+	return top.Artists, nil
+}
+
+func (g *generator) establishedTopArtists() ([]spotify.FullArtist, error) {
+	m, err := g.topArtists(maxRequestArtists, "medium")
+	if err != nil {
+		return nil, err
+	}
+
+	l, err := g.topArtists(maxRequestArtists, "long")
+	if err != nil {
+		return nil, err
+	}
+
+	est := append(l, m...)
+	est = removeDuplicateArtists(est)
+
+	return est, nil
 }
 
 // allTopArtists returns a list of the user's top artists from every available
@@ -91,8 +108,8 @@ func (g *generator) allTopArtists() ([]spotify.FullArtist, error) {
 		return nil, err
 	}
 
-	all := append(l.Artists, m.Artists...)
-	all = append(all, s.Artists...)
+	all := append(l, m...)
+	all = append(all, s...)
 	all = removeDuplicateArtists(all)
 
 	return all, nil
