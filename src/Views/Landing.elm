@@ -6,6 +6,7 @@ import Html.Events exposing (onClick)
 import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
+import Utils exposing (..)
 import Views.Common exposing (..)
 
 
@@ -191,7 +192,7 @@ featureSub txt =
 heroPhases : Model -> Html Msg
 heroPhases model =
     section
-        [ class "hero is-link is-fullheight"
+        [ class "hero is-link is-fullheight is-bold"
         , id "heroPhases"
         , onWheelScroll "heroPhases"
         ]
@@ -343,6 +344,8 @@ subSpotifyButton msg =
         -- [ class "button is-info is-large is-rounded"
         [ class "button is-info is-large is-rounded pre-anim fade-in-pop"
         , onClick msg
+
+        -- , style [ ( "border", "2px solid #345765" ) ]
         ]
         [ icon "fab fa-spotify fa-lg"
         , iconText "Connect to Spotify"

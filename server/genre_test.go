@@ -4,17 +4,17 @@ import (
 	"testing"
 )
 
-func TestExtractGenres(t *testing.T) {
+func TestExtractGenresNew(t *testing.T) {
 	g := generator{
 		client: testClient{},
 	}
 
-	art, err := g.topArtists(50, "long")
+	ta, err := g.topArtists(50, "long")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	genres, err := extractGenres(art)
+	genres, err := extractGenres(ta.Artists)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -5,7 +5,10 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Models exposing (Login, Token, Playlist)
 import Msgs exposing (Msg(..))
-import RemoteData
+import RemoteData exposing (WebData)
+
+
+-- import Utils exposing (errorToString)
 
 
 fetchLoginCmd : Cmd Msg
@@ -18,10 +21,6 @@ fetchLoginCmd =
 fetchLoginUrl : String
 fetchLoginUrl =
     "http://localhost:8080/login"
-
-
-
--- "https://nameless-thicket-99291.herokuapp.com/login"
 
 
 loginDecoder : Decode.Decoder Login
@@ -37,9 +36,9 @@ forceFetchLoginCmd =
         |> Cmd.map OnForceFetchLogin
 
 
-fetchDiscoverCmd : Token -> Cmd Msg
-fetchDiscoverCmd token =
-    Http.get (fetchDiscoverUrl ++ createTokenUrl token) playlistDecoder
+fetchPlaylistCmd : Token -> Cmd Msg
+fetchPlaylistCmd token =
+    Http.get (fetchPlaylistUrl ++ createTokenUrl token) playlistDecoder
         |> RemoteData.sendRequest
         |> Cmd.map OnFetchPlaylist
 
@@ -49,24 +48,43 @@ createTokenUrl token =
     "?code=" ++ token.code ++ "&state=" ++ token.state
 
 
-fetchDiscoverUrl : String
-fetchDiscoverUrl =
-    "http://localhost:8080/discover"
+
+-- TODO: change to /api/ endpoint
 
 
-fetchSummaryUrl : String
-fetchSummaryUrl =
-    "http://localhost:8080/summary"
-
-
-fetchSummaryCmd : Token -> Cmd Msg
-fetchSummaryCmd token =
-    Http.get (fetchSummaryUrl ++ createTokenUrl token ++ "&timerange=long") playlistDecoder
-        |> RemoteData.sendRequest
-        |> Cmd.map OnFetchPlaylist
+fetchPlaylistUrl : String
+fetchPlaylistUrl =
+    "http://localhost:8080/playlist"
 
 
 playlistDecoder : Decode.Decoder Playlist
 playlistDecoder =
     decode Playlist
         |> required "id" Decode.string
+
+
+
+-- checkForRefetchCmd : WebData a -> Maybe Token -> Cmd Msg
+-- checkForRefetchCmd msg token =
+--     case msg of
+--         RemoteData.NotAsked ->
+--             Cmd.none
+--         RemoteData.Loading ->
+--             Cmd.none
+--         RemoteData.Success _ ->
+--             Cmd.none
+--         RemoteData.Failure err ->
+--             case err of
+--                 Http.BadUrl _ ->
+--                     Cmd.none
+--                 Http.Timeout ->
+--                     Cmd.none
+--                 Http.NetworkError ->
+--                     Cmd.none
+--                 Http.BadStatus resp ->
+--                     if resp.status.code == 503 then
+--                         fetchSummaryCmd token
+--                     else
+--                         Cmd.none
+--                 Http.BadPayload _ _ ->
+--                     Cmd.none

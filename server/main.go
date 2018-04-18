@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -35,6 +36,9 @@ type Login struct {
 // Playlist contains the ID to a user's playlist
 type Playlist struct {
 	ID string `json:"id"`
+	// Type string `json:"type"`
+	// Fallback bool   `json:"fallback"`
+	// Error    string `json:"error"`
 }
 
 func main() {
@@ -45,7 +49,7 @@ func main() {
 
 	r.Get("/login", httpLoginURL)
 	r.Get("/summary", httpSummary)
-	r.Get("/discover", httpDiscover)
+	r.Get("/playlist", httpPlaylist)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -67,7 +71,11 @@ func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 
 // httpSummary
 func httpSummary(w http.ResponseWriter, r *http.Request) {
-	g := completeAuth(w, r)
+	g, err := completeAuth(w, r)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
 	var time string
 	if time = r.FormValue("timerange"); !isValidRange(time) {
@@ -86,37 +94,43 @@ func httpSummary(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, payload)
 }
 
-func httpDiscover(w http.ResponseWriter, r *http.Request) {
-	g := completeAuth(w, r)
-
-	pl, err := g.Discover()
+// TODO: Add error checking to completeAuth
+func httpPlaylist(w http.ResponseWriter, r *http.Request) {
+	g, err := completeAuth(w, r)
 	if err != nil {
-		log.Print(err)
+		log.Println(err)
+		return
+	}
+
+	pl, err := g.MostRelevantPlaylist()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "cannot create playlist", http.StatusInternalServerError)
 		return
 	}
 
 	payload := Playlist{ID: string(pl.URI)}
 	render.JSON(w, r, payload)
+	return
 }
 
 // TODO: Figure out if those http.Errors should instead just return normal errors
-func completeAuth(w http.ResponseWriter, r *http.Request) *generator {
+func completeAuth(w http.ResponseWriter, r *http.Request) (*generator, error) {
 	tok, err := auth.Token(state, r)
 	if err != nil {
 		http.Error(w, "Couldn't get token", http.StatusForbidden)
-		log.Print(err)
-		return nil
+		return nil, err
 	}
 
 	if st := r.FormValue("state"); st != state {
 		http.NotFound(w, r)
 		log.Printf("State mismatch: %s != %s\n", st, state)
-		return nil
+		return nil, errors.New("state mistmatch")
 	}
 
 	c := auth.NewClient(tok)
 	c.AutoRetry = true
-	return &generator{client: &c}
+	return &generator{client: &c}, nil
 }
 
 func isValidRange(r string) bool {

@@ -1,6 +1,6 @@
 module Init exposing (..)
 
-import Commands exposing (fetchLoginCmd)
+import Commands exposing (..)
 import Models exposing (Model, Token)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
@@ -62,8 +62,20 @@ initialCommands route =
         AboutRoute ->
             fetchLoginCmd
 
-        ResultsRoute _ _ ->
-            Cmd.none
+        ResultsRoute maybeCode maybeState ->
+            case ( maybeCode, maybeState ) of
+                ( Just newCode, Just newState ) ->
+                    let
+                        newToken =
+                            Token newCode newState
+                    in
+                        fetchPlaylistCmd newToken
+
+                ( Nothing, _ ) ->
+                    Cmd.none
+
+                ( _, Nothing ) ->
+                    Cmd.none
 
         ErrorRoute ->
             Cmd.none

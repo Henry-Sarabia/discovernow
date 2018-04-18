@@ -1,9 +1,15 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/zmb3/spotify"
+)
+
+var (
+	errNoRecentTracks = errors.New("recentTracks: there are no recent tracks to return")
+	errNoTopArtists   = errors.New("topArtists: there are no top artists to return")
 )
 
 // playlist creates and returns a playlist with the provided name and
@@ -27,8 +33,6 @@ func (g *generator) playlist(name string, IDs []spotify.ID) (*spotify.FullPlayli
 	return pl, nil
 }
 
-// TODO: CHECK FOR NUMBER OF TRACKS RETURNED. IF USER HAS NOT LISTENED TO TRACKS RECENTLY,
-// PLAYERRECENTLYPLAYEDOPT WILL RETURN 0 TRACKS
 // recentTracks returns a list of the user's recently played tracks.
 func (g *generator) recentTracks(num int) ([]spotify.SimpleTrack, error) {
 	opt := spotify.RecentlyPlayedOptions{
@@ -38,8 +42,8 @@ func (g *generator) recentTracks(num int) ([]spotify.SimpleTrack, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(rp) < num {
-		return nil, fmt.Errorf("recentTracks: %d tracks not returned, instead returned %d", num, len(rp))
+	if len(rp) == 0 {
+		return nil, errNoRecentTracks
 	}
 
 	tracks := make([]spotify.SimpleTrack, 0)
@@ -60,6 +64,10 @@ func (g *generator) topArtists(num int, time string) (*spotify.FullArtistPage, e
 	top, err := g.client.CurrentUsersTopArtistsOpt(&opt)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(top.Artists) == 0 {
+		return nil, errNoTopArtists
 	}
 
 	return top, nil

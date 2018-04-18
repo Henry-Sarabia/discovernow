@@ -49,7 +49,7 @@ update msg model =
                     ( { model | login = response }, Navigation.newUrl "/error" )
 
         FetchPlaylist token ->
-            ( { model | discover = RemoteData.Loading }, fetchDiscoverCmd token )
+            ( { model | discover = RemoteData.Loading }, fetchPlaylistCmd token )
 
         OnFetchPlaylist response ->
             ( { model | discover = response }, Cmd.none )
