@@ -5,11 +5,9 @@ import (
 )
 
 func TestCreateGenreMap(t *testing.T) {
-	g := generator{
-		client: testClient{},
-	}
+	c := newTestClient()
 
-	ta, err := g.topArtists(50, "long")
+	ta, err := c.TopArtists(50, "long")
 	if err != nil {
 		t.Fatal(err)
 	}

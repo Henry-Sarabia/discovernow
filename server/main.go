@@ -128,9 +128,9 @@ func completeAuth(w http.ResponseWriter, r *http.Request) (*generator, error) {
 		return nil, errors.New("state mistmatch")
 	}
 
-	c := auth.NewClient(tok)
-	c.AutoRetry = true
-	return &generator{client: &c}, nil
+	client := auth.NewClient(tok)
+	client.AutoRetry = true
+	return &generator{c: spotClient{c: &client}}, nil
 }
 
 func isValidRange(r string) bool {
