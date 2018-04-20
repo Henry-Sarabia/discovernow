@@ -130,7 +130,8 @@ func completeAuth(w http.ResponseWriter, r *http.Request) (*generator, error) {
 
 	client := auth.NewClient(tok)
 	client.AutoRetry = true
-	return &generator{c: spotClient{c: &client}}, nil
+	// return &generator{c: spotClient{c: &client}}, nil
+	return newGenerator(&client), nil
 }
 
 func isValidRange(r string) bool {

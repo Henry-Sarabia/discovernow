@@ -7,17 +7,11 @@ import (
 	"github.com/zmb3/spotify"
 )
 
-// visitedArtists returns a map of artists marked as visited derived from the
-// provided list of artists and the artists from the provided list of tracks.
-func visitedArtists(arts []spotify.FullArtist, tracks []spotify.SimpleTrack) map[string]bool {
-	visited := make(map[string]bool)
-	for _, a := range arts {
-		visited[a.Name] = true
+func boundedInt(num int, max int) int {
+	if num > max {
+		return max
 	}
-	for _, t := range tracks {
-		visited[t.Artists[0].Name] = true
-	}
-	return visited
+	return num
 }
 
 // shuffleTracks returns returns a shuffled list of the provided tracks.
@@ -29,6 +23,17 @@ func shuffleTracks(old []spotify.SimpleTrack) []spotify.SimpleTrack {
 		new[i] = old[j]
 	}
 	return new
+}
+
+// extractArtistIDs returns a list of IDs corresponding to the artists of the
+// provided tracks.
+func extractArtistIDs(tracks []spotify.SimpleTrack) []spotify.ID {
+	IDs := make([]spotify.ID, 0)
+	for _, t := range tracks {
+		IDs = append(IDs, t.Artists[0].ID)
+	}
+
+	return IDs
 }
 
 // extractTrackIDs returns a list of IDs corresponding to the provided tracks.

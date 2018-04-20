@@ -6,6 +6,7 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/pkg/errors"
 
 	"github.com/zmb3/spotify"
@@ -16,10 +17,11 @@ const (
 	maxRequestTracks     = 50
 	minRequestTracks     = 1
 	maxRequestArtists    = 50
+	minRecommendations   = 1
+	maxRecommendations   = 100
 	requiredRecentTracks = 30
 	requiredTopArtists   = 30
 	publicPlaylist       = true
-	targetPopularity     = 40
 	recRetryLimit        = 2
 )
 
@@ -31,7 +33,15 @@ var (
 )
 
 type generator struct {
-	c spotClient
+	c              *spotClient
+	invalidArtists map[string]bool
+}
+
+func newGenerator(client clienter) *generator {
+	return &generator{
+		c:              &spotClient{c: client},
+		invalidArtists: make(map[string]bool),
+	}
 }
 
 func (g *generator) MostRelevantPlaylist() (*spotify.FullPlaylist, error) {
@@ -41,9 +51,9 @@ func (g *generator) MostRelevantPlaylist() (*spotify.FullPlaylist, error) {
 		return pl, nil
 	}
 
-	// pl, err := g.UniqueDiscover()
+	// pl, err := g.GenreDiscover()
 	// if err == nil {
-	// 	log.Println("MostRelevantPlaylist: Unique Discover")
+	// 	log.Println("MostRelevantPlaylist: Genre Discover")
 	// 	return pl, nil
 	// }
 	// if err != nil {
@@ -105,9 +115,34 @@ func (g *generator) TasteSummary(time string) (*spotify.FullPlaylist, error) {
 	return pl, nil
 }
 
-// func (g *generator) UniqueDiscover() (*spotify.FullPlaylist, error) {
+func (g *generator) GenreDiscover() (*spotify.FullPlaylist, error) {
+	fmt.Println("Starting GenreDiscover")
+	artists, err := g.c.RecentArtists()
+	if err != nil {
+		return nil, err
+	}
 
-// }
+	genres, err := extractGenres(artists)
+	if err != nil {
+		return nil, err
+	}
+	sps := spew.ConfigState{SortKeys: true, MaxDepth: 3}
+	sps.Dump(genres)
+
+	recs, err := g.recsByGenre(genres)
+	if err != nil {
+		return nil, err
+	}
+
+	IDs := extractTrackIDs(shuffleTracks(recs))
+	pl, err := g.c.Playlist("Genre Discover", IDs)
+	if err != nil {
+		return nil, errors.WithMessage(err, "GenreDiscover: cannot create playlist")
+	}
+
+	log.Println("GenreDiscover complete.")
+	return pl, nil
+}
 
 // Discover returns a playlist based on the analysis of a user's recently
 // played tracks.
@@ -163,35 +198,26 @@ func removeDuplicateArtists(old []spotify.FullArtist) []spotify.FullArtist {
 	return new
 }
 
-// uniqueRec returns a list of recommended tracks omitting any
-// which have any of the provided artists.
-func (g *generator) uniqueRec(sd spotify.Seeds, num int, visited map[string]bool) ([]spotify.SimpleTrack, error) {
-	log.Println("starting unique rec")
-	if num < minRequestTracks || num > maxRequestArtists {
-		return nil, fmt.Errorf("uniqueRec: invalid input of %d, expecting input between %d and %d", num, minRequestTracks, maxRequestTracks)
-	}
+func (g *generator) Recommendations(num int, sd spotify.Seeds) ([]spotify.SimpleTrack, error) {
+	log.Println("Starting newRec")
 	uniq := make([]spotify.SimpleTrack, 0)
 
-	for i := 0; len(uniq) < num; {
-		log.Println("starting unique loop")
-		if i > recRetryLimit {
+	buf := boundedInt(num*3, maxRecommendations)
+
+	recs, err := g.c.Recommendation(sd, buf)
+	if err != nil {
+		return nil, err
+	}
+
+	i := 0
+	for _, r := range recs {
+		if i >= num {
 			break
 		}
-
-		// request extra tracks in case of duplicates
-		// getBuf
-
-		rec, err := g.c.Recommendation(sd, num)
-		if err != nil {
-			return nil, err
-		}
-
-		// appendRec
-		for _, r := range rec {
-			if ok := visited[r.Artists[0].Name]; !ok {
-				uniq = append(uniq, r)
-			}
-			visited[r.Artists[0].Name] = true
+		if g.isValidArtist(r.Artists[0].Name) {
+			uniq = append(uniq, r)
+			g.invalidateArtist(r.Artists[0].Name)
+			i++
 		}
 	}
 
@@ -203,13 +229,22 @@ func (g *generator) uniqueRec(sd spotify.Seeds, num int, visited map[string]bool
 func (g *generator) recsByGenre(gens []*genre) ([]spotify.SimpleTrack, error) {
 	sum := sumScore(gens)
 
+	ta, err := g.c.TopArtistsVar(maxRequestArtists, "short", "medium", "long")
+	if err != nil {
+		return nil, err
+	}
+
+	for _, a := range ta {
+		g.invalidateArtist(a.Name)
+	}
+
 	recs := make([]spotify.SimpleTrack, 0)
 	for _, gen := range gens {
 		ratio := float64(gen.score()) / float64(sum)
 		tracks := ratio * playlistSize
 		num := math.Ceil(tracks)
 
-		rec, err := g.c.Recommendation(gen.seed(), int(num))
+		rec, err := g.Recommendations(int(num), gen.seed())
 		if err != nil {
 			return nil, errors.WithMessage(err, "recsByGenre: cannot retrieve a recommendation")
 		}
@@ -219,12 +254,6 @@ func (g *generator) recsByGenre(gens []*genre) ([]spotify.SimpleTrack, error) {
 	return recs, nil
 }
 
-// func (g *generator) uniqueRecsByGenre(gens []*genre, attr *spotify.TrackAttributes, visited map[string]bool) ([]spotify.SimpleTrack, error) {
-
-// }
-
-// recsByTrack returns a list of about 30 tracks recommended based
-// on the provided tracks.
 func (g *generator) recsByTrack(tracks []spotify.SimpleTrack, attr *spotify.TrackAttributes) ([]spotify.SimpleTrack, error) {
 	sds := trackSeeds(shuffleTracks(tracks))
 
@@ -233,19 +262,38 @@ func (g *generator) recsByTrack(tracks []spotify.SimpleTrack, attr *spotify.Trac
 		return nil, errors.WithMessage(err, "recsByTrack: cannot retrieve all top artists")
 	}
 
-	visited := visitedArtists(ta, tracks)
-	log.Println(len(visited))
+	for _, a := range ta {
+		g.invalidateArtist(a.Name)
+	}
+	log.Println(len(g.invalidArtists))
 
 	recs := make([]spotify.SimpleTrack, 0)
 	num := playlistSize / len(sds)
 	for _, sd := range sds {
-		rec, err := g.uniqueRec(sd, num, visited)
+		rec, err := g.Recommendations(num, sd)
 		if err != nil {
 			return nil, errors.WithMessage(err, "recsByTrack: cannot get recommendation with a track seed")
 		}
 		recs = append(recs, rec...)
-		log.Println(len(visited))
+		log.Println(len(g.invalidArtists))
 	}
 
 	return recs, nil
+}
+
+func (g *generator) invalidateArtists(artists ...string) {
+	for _, a := range artists {
+		g.invalidateArtist(a)
+	}
+	return
+}
+
+func (g *generator) invalidateArtist(a string) {
+	g.invalidArtists[a] = true
+	return
+}
+
+func (g *generator) isValidArtist(a string) bool {
+	ok := g.invalidArtists[a]
+	return !ok
 }

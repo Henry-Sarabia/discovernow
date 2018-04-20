@@ -31,6 +31,10 @@ func (ts testClient) CurrentUsersTopArtistsOpt(opt *spotify.Options) (*spotify.F
 	return &a, nil
 }
 
+func (ts testClient) CurrentUsersTopTracksOpt(opt *spotify.Options) (*spotify.FullTrackPage, error) {
+	return nil, nil
+}
+
 func (ts testClient) PlayerRecentlyPlayedOpt(opt *spotify.RecentlyPlayedOptions) ([]spotify.RecentlyPlayedItem, error) {
 	rp := spotify.RecentlyPlayedResult{}
 	err := loadFile("test_data/player_recently_played.json", &rp)
@@ -55,6 +59,10 @@ func (ts testClient) CreatePlaylistForUser(string, string, bool) (*spotify.FullP
 
 func (ts testClient) AddTracksToPlaylist(string, spotify.ID, ...spotify.ID) (string, error) {
 	return "", nil
+}
+
+func (ts testClient) GetArtists(...spotify.ID) ([]*spotify.FullArtist, error) {
+	return nil, nil
 }
 
 func loadFile(name string, dest interface{}) error {
