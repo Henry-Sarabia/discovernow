@@ -7,6 +7,26 @@ import (
 	"github.com/zmb3/spotify"
 )
 
+// TODO: use type alias for simpleTrack, fullTrack to make ID method and accept interface instead
+// func (t spotify.FullTrack) ID() spotify.ID {
+// 	return t.ID
+// }
+
+// simpleToFull returns a list of simple tracks corresponding to the provided
+// full tracks.
+func simpleToFull(full ...spotify.FullTrack) []spotify.SimpleTrack {
+	simple := make([]spotify.SimpleTrack, 0)
+	for _, f := range full {
+		new := spotify.SimpleTrack{
+			Artists: f.Artists,
+			ID:      f.ID,
+			Name:    f.Name,
+		}
+		simple = append(simple, new)
+	}
+	return simple
+}
+
 func boundedInt(num int, max int) int {
 	if num > max {
 		return max
@@ -77,17 +97,45 @@ func trackSeeds(tracks []spotify.SimpleTrack) []spotify.Seeds {
 	return sds
 }
 
+func trackSeedNew(IDs []spotify.ID) spotify.Seeds {
+	sd := spotify.Seeds{}
+
+	for _, ID := range IDs {
+		if len(sd.Tracks) > maxSeedInput {
+			break
+		}
+		sd.Tracks = append(sd.Tracks, ID)
+	}
+
+	return sd
+}
+
+func trackSeedsNew(IDs []spotify.ID) []spotify.Seeds {
+	sds := make([]spotify.Seeds, 0)
+
+	i := 0
+	for i <= len(IDs)-maxSeedInput {
+		sds = append(sds, trackSeedNew(IDs[i:i+maxSeedInput]))
+		i += maxSeedInput
+	}
+	if i < len(IDs) {
+		sds = append(sds, trackSeedNew(IDs[i:len(IDs)]))
+	}
+
+	return sds
+}
+
 // playlistName returns the name to be given to a playlist based on the
 // provided time range.
 func playlistName(t string) string {
 	switch t {
 	case "short":
-		return "Discover - Recent Weeks"
+		return "New Interests"
 	case "medium":
-		return "Discover - Recent Months"
+		return "Common Trends"
 	case "long":
-		return "Discover - Recent Years"
+		return "Core Taste"
 	default:
-		return "Discover Now Playlist"
+		return "default"
 	}
 }

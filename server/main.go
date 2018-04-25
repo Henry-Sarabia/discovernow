@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	redirectURI = "http://localhost:3000/results"
+	// redirectURI = "http://localhost:3000/results"
+	redirectURI = "https://discover-test-69db3.firebaseapp.com/results"
 )
 
 var (
@@ -42,7 +43,8 @@ type Playlist struct {
 }
 
 func main() {
-	os.Setenv("PORT", "8080")
+	// remove if deploying to heroku
+	// os.Setenv("PORT", "8080")
 	r := chi.NewRouter()
 
 	r.Use(cors.Default().Handler)
@@ -50,12 +52,17 @@ func main() {
 	r.Get("/login", httpLoginURL)
 	r.Get("/summary", httpSummary)
 	r.Get("/playlist", httpPlaylist)
+	r.Get("/test", httpTest)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
 	http.ListenAndServe(":"+port, r)
+}
+
+func httpTest(w http.ResponseWriter, r *http.Request) {
+	render.PlainText(w, r, "testing testing")
 }
 
 func httpLoginURL(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +91,7 @@ func httpSummary(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pl, err := g.TasteSummary(time)
+	pl, err := g.ArtistSummary(time)
 	if err != nil {
 		log.Print(err)
 		return
@@ -102,7 +109,8 @@ func httpPlaylist(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pl, err := g.MostRelevantPlaylist()
+	// pl, err := g.MostRelevantPlaylist()
+	pl, err := g.ABTest()
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "cannot create playlist", http.StatusInternalServerError)

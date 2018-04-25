@@ -19,7 +19,7 @@ root model token =
 hero : List (Html Msg) -> Html Msg
 hero children =
     div
-        [ class "hero is-large is-light" ]
+        [ class "hero is-fullheight  is-light" ]
         [ div
             [ class "hero-body" ]
             children
@@ -30,9 +30,14 @@ page : Model -> Token -> Html Msg
 page model token =
     div
         [ class "container has-text-centered" ]
-        [ discoverButton token
-        , test model.discover
+        [ text "good job buddy"
         ]
+
+
+
+-- [ discoverButton token
+-- , test model.discover
+-- ]
 
 
 discoverButton : Token -> Html Msg
