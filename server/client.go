@@ -8,16 +8,19 @@ import (
 )
 
 const (
-	targetPopularity = 40
-	maxPopularity    = 50
+	targetPopularity  = 40
+	maxPopularity     = 50
+	minRequestArtists = 1
+	minPlaylistTracks = 1
 )
 
 var (
-	errRecentTracksMissing = errors.New("recentTracks: there are no recent tracks to return")
-	errTopArtistsMissing   = errors.New("topArtists: there are no top artists to return")
-	errNumRange            = errors.New("input is out of range")
-	errTimeMissing         = errors.New("TopArtistsVar: missing time range")
-	errTimeInvalid         = errors.New("TopArtists: invalid time range")
+	errRecentTracksMissing   = errors.New("recentTracks: there are no recent tracks to return")
+	errTopArtistsMissing     = errors.New("topArtists: there are no top artists to return")
+	errNumRange              = errors.New("input is out of range")
+	errTimeMissing           = errors.New("TopArtistsVar: missing time range")
+	errTimeInvalid           = errors.New("TopArtists: invalid time range")
+	errPlaylistTracksMissing = errors.New("Playlist: missing playlist tracks")
 )
 
 // clienter is implemented by any type that has certain Spotify functions.
@@ -85,6 +88,10 @@ func (sc *spotClient) TopArtistsVar(num int, time ...string) ([]spotify.FullArti
 // TopArtists returns a list of the num top artists from the provided time
 // range for the current user.
 func (sc *spotClient) TopArtists(num int, time string) ([]spotify.FullArtist, error) {
+	if num < minRequestArtists || num > maxRequestArtists {
+		return nil, errNumRange
+	}
+
 	opt := &spotify.Options{Limit: &num, Timerange: &time}
 	switch time {
 	case "short":
@@ -159,6 +166,10 @@ func (sc *spotClient) TopTracksVar(num int, time ...string) ([]spotify.FullTrack
 // TopTracks returns a list of the num top tracks from the provided time range
 // for the current user.
 func (sc *spotClient) TopTracks(num int, time string) ([]spotify.FullTrack, error) {
+	if num < minRequestTracks || num > maxRequestTracks {
+		return nil, errNumRange
+	}
+
 	opt := &spotify.Options{Limit: &num, Timerange: &time}
 	switch time {
 	case "short":
@@ -237,12 +248,16 @@ func (sc *spotClient) RecentTracks(num int) ([]spotify.SimpleTrack, error) {
 
 // RecentArtists returns a list of the most recently played artists for the
 // current user.
-func (sc *spotClient) RecentArtists() ([]spotify.FullArtist, error) {
+func (sc *spotClient) RecentArtists(num int) ([]spotify.FullArtist, error) {
+	if num < minRequestArtists || num > maxRequestArtists {
+		return nil, errNumRange
+	}
+
 	if sc.recentArtists != nil {
 		return sc.recentArtists, nil
 	}
 
-	tracks, err := sc.RecentTracks(maxRequestTracks)
+	tracks, err := sc.RecentTracks(num)
 	sc.requests++
 	if err != nil {
 		return nil, err
@@ -283,6 +298,10 @@ func (sc *spotClient) Recommendation(sd spotify.Seeds, num int) ([]spotify.Simpl
 // Playlist creates and returns a playlist with the provided name and track IDs
 // for the current user.
 func (sc *spotClient) Playlist(name string, IDs []spotify.ID) (*spotify.FullPlaylist, error) {
+	if len(IDs) < minPlaylistTracks {
+		return nil, errPlaylistTracksMissing
+	}
+
 	u, err := sc.User()
 	if err != nil {
 		return nil, err
