@@ -1,7 +1,7 @@
 module Views.Landing exposing (root)
 
-import Html exposing (Html, div, text, h1, h2, nav, section, span, a, p, i)
-import Html.Attributes exposing (class, style, alt, id, attribute)
+import Html exposing (Html, div, text, h1, h2, nav, section, span, a, p, i, hr)
+import Html.Attributes exposing (class, style, alt, id, attribute, href)
 import Html.Events exposing (onClick)
 import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
@@ -33,8 +33,74 @@ heroBanner model =
             ]
         , onWheelScroll "heroBanner"
         ]
-        [ heroBannerBody model
+        [ heroBannerHeader
+        , heroBannerBody model
         , heroBannerFoot
+        ]
+
+
+heroBannerHeader : Html Msg
+heroBannerHeader =
+    div
+        [ class "hero-head"
+        , style [ ( "box-shadow", "0 1px 0 hsla(0,0%,100%,.2)" ) ]
+        ]
+        [ nav
+            [ class "navbar container" ]
+            [ div
+                [ class "navbar-brand" ]
+                [ div
+                    [ class "navbar-item" ]
+                    [ a
+                        [ href "http://localhost:3000/" ]
+                        [ logo ]
+                    ]
+                ]
+            , div
+                [ class "navbar-menu" ]
+                [ div
+                    [ class "navbar-end" ]
+                    [ div
+                        [ class "navbar-item" ]
+                        [ a
+                            [ class "button is-dark is-medium  is-inverted" ]
+                            [ icon "fab fa-github fa-lg"
+                            , iconText "GitHub"
+                            ]
+                        ]
+                    , div
+                        [ class "navbar-item" ]
+                        [ a
+                            [ class "button is-info is-medium "
+                            ]
+                            [ icon "fab fa-spotify fa-lg"
+                            , iconText "Connect"
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+
+
+logo : Html Msg
+logo =
+    span
+        [ class "icon is-large fa-fw fa-3x has-text-info" ]
+        [ span
+            [ class "fa-layers fa-fw" ]
+            [ i
+                [ class "far fa-circle"
+
+                -- , attribute "data-fa-transform" "left-0"
+                ]
+                []
+            , i
+                [ class "fas fa-dna"
+                , attribute "data-fa-transform" "shrink-7"
+                ]
+                []
+            ]
         ]
 
 

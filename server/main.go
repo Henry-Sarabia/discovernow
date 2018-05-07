@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	// redirectURI = "http://localhost:3000/results"
-	redirectURI = "https://discover-test-69db3.firebaseapp.com/results"
+	redirectURI = "http://localhost:3000/results"
+	// redirectURI = "https://discover-test-69db3.firebaseapp.com/results"
 )
 
 var (
@@ -44,7 +44,7 @@ type Playlist struct {
 
 func main() {
 	// remove if deploying to heroku
-	// os.Setenv("PORT", "8080")
+	os.Setenv("PORT", "8080")
 	r := chi.NewRouter()
 
 	r.Use(cors.Default().Handler)
@@ -67,11 +67,9 @@ func httpTest(w http.ResponseWriter, r *http.Request) {
 
 func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 	log.Println("Got request for: ", r.URL.String())
-	// time.Sleep(2 * time.Second)
 	log.Println("Replied.")
 
 	url := auth.AuthURL(state)
-	// send this state to elm app through login
 	login := Login{URL: url}
 	render.JSON(w, r, login)
 }
@@ -109,8 +107,8 @@ func httpPlaylist(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// pl, err := g.MostRelevantPlaylist()
-	pl, err := g.ABTest()
+	pl, err := g.MostRelevantPlaylist()
+	// pl, err := g.ABTest()
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "cannot create playlist", http.StatusInternalServerError)
