@@ -61,3 +61,6 @@ update msg model =
 
                 Down ->
                     ( model, scrollPrevSibling domId )
+
+        ToggleModal domId ->
+            ( model, toggleModal domId )

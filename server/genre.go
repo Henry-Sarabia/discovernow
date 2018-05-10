@@ -120,32 +120,25 @@ func (gm genreMap) popMaxTrend() *genre {
 	return g
 }
 
-// // extractGenres returns a map of genres extracted from the provided full
-// // artist page.
-// func extractGenres(fap *spotify.FullArtistPage) (genreMap, error) {
-// 	if len(fap.Artists) < minArtistData {
-// 		return nil, errors.New("insufficient artist data")
-// 	}
+// extractGenres returns the list of genres from the provided list of artists
+// ordered from highest to lowest score.
+func extractGenres(artists []spotify.FullArtist) ([]*genre, error) {
+	gm, err := createGenreMap(artists)
+	if err != nil {
+		return nil, err
+	}
 
-// 	gm := make(genreMap)
-// 	for fan, fa := range fap.Artists {
-// 		for _, gs := range fa.Genres {
-// 			if _, ok := gm[gs]; !ok {
-// 				gm[gs] = &genre{
-// 					name:    gs,
-// 					artists: make(map[string]*spotify.FullArtist),
-// 				}
-// 			}
-// 			gm[gs].artists[fa.Name] = &fap.Artists[fan]
-// 		}
-// 	}
+	genres, err := processGenres(gm)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return gm, nil
-// }
+	return genres, nil
+}
 
-// extractGenres returns a map of genres extracted from the provided
+// createGenreMap returns a map of genres extracted from the provided
 // artists.
-func extractGenres(artists []spotify.FullArtist) (genreMap, error) {
+func createGenreMap(artists []spotify.FullArtist) (genreMap, error) {
 	if len(artists) < minArtistData {
 		return nil, errInsufficientArtistGenres
 	}

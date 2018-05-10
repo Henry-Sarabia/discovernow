@@ -26,8 +26,8 @@ initialModel route =
                         { route = route
                         , changes = 0
                         , token = newToken
-                        , login = RemoteData.Loading
-                        , discover = RemoteData.NotAsked
+                        , login = RemoteData.NotAsked
+                        , discover = RemoteData.Loading
                         }
 
                 ( Nothing, _ ) ->

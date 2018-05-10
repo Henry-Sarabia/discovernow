@@ -20,6 +20,7 @@ fetchLoginCmd =
 
 fetchLoginUrl : String
 fetchLoginUrl =
+    -- "https://nameless-thicket-99291.herokuapp.com/login"
     "http://localhost:8080/login"
 
 
@@ -54,6 +55,7 @@ createTokenUrl token =
 
 fetchPlaylistUrl : String
 fetchPlaylistUrl =
+    -- "https://nameless-thicket-99291.herokuapp.com/playlist"
     "http://localhost:8080/playlist"
 
 

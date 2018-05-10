@@ -5,7 +5,10 @@ import Models exposing (Model, Token, Login)
 import Msgs exposing (Msg(..))
 import Routing exposing (..)
 import Views.Discover as Discover
-import Views.Footer exposing (infoFooter)
+
+
+-- import Views.Footer exposing (infoFooter)
+
 import Views.Landing as Landing
 
 
@@ -14,7 +17,8 @@ root model =
     div
         []
         [ page model
-        , infoFooter
+
+        -- , infoFooter
         ]
 
 
@@ -78,17 +82,3 @@ checkResults model =
 
         Just token ->
             discoverPage model token
-
-
-
--- playlist : Html Msg
--- playlist =
---     div
---         []
---         [ iframe
---             [ src "https://open.spotify.com/embed?uri=spotify%3Auser%3Aspotify%3Aplaylist%3A2PXdUld4Ueio2pHcB6sM8j"
---             , width 600
---             , height 700
---             ]
---             []
---         ]

@@ -6,7 +6,7 @@ function waypointInit() {
                 handler: function() {
                     console.log('Basic waypoint triggered');
                     document.getElementById("heroPhases").classList.add("animated");
-                    this.destroy();
+                    // this.destroy();
                 }
             });
         } else {

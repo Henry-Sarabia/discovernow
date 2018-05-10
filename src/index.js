@@ -32,4 +32,10 @@ elm.ports.scrollPrevSibling.subscribe(function(domId) {
      }, timeoutLimit);
 });
 
+elm.ports.toggleModal.subscribe(function(domId) {
+    requestAnimationFrame(function() {
+        document.getElementById(domId).classList.toggle("is-active");
+    })
+});
+
 registerServiceWorker();

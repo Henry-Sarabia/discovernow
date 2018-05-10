@@ -14,6 +14,7 @@ import (
 
 const (
 	redirectURI = "http://localhost:3000/results"
+	// redirectURI = "https://discover-test-69db3.firebaseapp.com/results"
 )
 
 var (
@@ -42,6 +43,7 @@ type Playlist struct {
 }
 
 func main() {
+	// remove if deploying to heroku
 	os.Setenv("PORT", "8080")
 	r := chi.NewRouter()
 
@@ -50,6 +52,7 @@ func main() {
 	r.Get("/login", httpLoginURL)
 	r.Get("/summary", httpSummary)
 	r.Get("/playlist", httpPlaylist)
+	r.Get("/test", httpTest)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -58,13 +61,15 @@ func main() {
 	http.ListenAndServe(":"+port, r)
 }
 
+func httpTest(w http.ResponseWriter, r *http.Request) {
+	render.PlainText(w, r, "testing testing")
+}
+
 func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 	log.Println("Got request for: ", r.URL.String())
-	// time.Sleep(2 * time.Second)
 	log.Println("Replied.")
 
 	url := auth.AuthURL(state)
-	// send this state to elm app through login
 	login := Login{URL: url}
 	render.JSON(w, r, login)
 }
@@ -84,7 +89,7 @@ func httpSummary(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pl, err := g.TasteSummary(time)
+	pl, err := g.ArtistSummary(time)
 	if err != nil {
 		log.Print(err)
 		return
@@ -103,6 +108,7 @@ func httpPlaylist(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pl, err := g.MostRelevantPlaylist()
+	// pl, err := g.ABTest()
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "cannot create playlist", http.StatusInternalServerError)
@@ -128,9 +134,10 @@ func completeAuth(w http.ResponseWriter, r *http.Request) (*generator, error) {
 		return nil, errors.New("state mistmatch")
 	}
 
-	c := auth.NewClient(tok)
-	c.AutoRetry = true
-	return &generator{client: &c}, nil
+	client := auth.NewClient(tok)
+	client.AutoRetry = true
+	// return &generator{c: spotClient{c: &client}}, nil
+	return newGenerator(&client), nil
 }
 
 func isValidRange(r string) bool {
