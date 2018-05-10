@@ -69,11 +69,9 @@ bannerButtons model =
 bannerTitle : String -> Html Msg
 bannerTitle title =
     h1
-        -- [ class "title is-size-1 is-spaced has-text-light has-text-weight-normal" ]
-        [ class "title has-text-light is-spaced"
+        [ class "title has-text-light is-spaced has-text-weight-light"
         , style
-            [ ( "font-size", "8em" )
-            , ( "font-weight", "200" )
+            [ ( "font-size", "6rem" )
             , ( "font-family", "Quicksand" )
             ]
         ]
@@ -83,15 +81,7 @@ bannerTitle title =
 bannerSub : String -> Html Msg
 bannerSub sub =
     h2
-        -- [ class "subtitle is-size-3 has-text-light has-text-weight-light" ]
-        [ class "subtitle has-text-light"
-        , style
-            [ ( "font-size", "3em" )
-            , ( "font-weight", "200" )
-
-            -- , ( "font-family", "Quicksand" )
-            ]
-        ]
+        [ class "subtitle is-size-1 has-text-light has-text-weight-light" ]
         [ text sub ]
 
 
@@ -166,11 +156,10 @@ heroPhases model =
 phaseHeader : String -> Html Msg
 phaseHeader txt =
     h1
-        [ class "title pre-anim fade-in"
+        [ class "title pre-anim fade-in has-text-weight-light"
         , style
             [ ( "padding-top", "6rem" )
-            , ( "font-size", "7em" )
-            , ( "font-weight", "200" )
+            , ( "font-size", "6rem" )
             , ( "font-family", "Quicksand" )
             ]
         ]
@@ -180,10 +169,7 @@ phaseHeader txt =
 largeIconColumn : String -> ( Html Msg, String, String ) -> Html Msg
 largeIconColumn classes ( ico, title, sub ) =
     div
-        [ class ("column has-text-centered" ++ " " ++ classes)
-
-        -- , style [ ( "font-family", "Quicksand" ) ]
-        ]
+        [ class ("column has-text-centered" ++ " " ++ classes) ]
         [ stack [ ico, phaseTitle title, phaseSub sub ]
         ]
 
@@ -191,11 +177,9 @@ largeIconColumn classes ( ico, title, sub ) =
 phaseTitle : String -> Html Msg
 phaseTitle txt =
     p
-        -- [ class "title is-size-1 is-spaced has-text-weight-bold" ]
         [ class "title is-spaced is-paddingless"
         , style
             [ ( "font-size", "4em" )
-            , ( "font-weight", "300" )
             , ( "font-family", "Quicksand" )
             ]
         ]
@@ -205,25 +189,9 @@ phaseTitle txt =
 phaseSub : String -> Html Msg
 phaseSub txt =
     p
-        -- [ class "subtitle is-size-3 has-text-weight-light" ]
-        [ class "subtitle"
+        [ class "subtitle has-text-weight-semibold"
         , style
             [ ( "font-size", "2em" )
-            , ( "font-weight", "300" )
-
-            -- , ( "font-family", "Quicksand" )
-            ]
-        ]
-        [ text txt ]
-
-
-phaseCall : String -> Html Msg
-phaseCall txt =
-    h2
-        [ class "title"
-        , style
-            [ ( "font-size", "2.5em" )
-            , ( "font-weight", "300" )
             ]
         ]
         [ text txt ]
@@ -316,7 +284,7 @@ heroFeatures model =
                     , iconColumn "fas fa-unlock-alt fa-5x fa-fw has-text-danger" "Forever Free" "No ads, no analytics, no subscription - simply share and enjoy"
                     , iconColumn "fas fa-mobile-alt fa-5x fa-fw has-text-black-bis" "Responsive Design" "Designed for both desktop and mobile - for when you need new music on the go"
                     ]
-                , loginButton (outlinedSpotifyButton) model.login
+                , loginButton (spotifyButton) model.login
                 ]
             ]
         , heroFooter
@@ -336,11 +304,10 @@ iconColumn link title sub =
 featureHeader : String -> Html Msg
 featureHeader txt =
     h1
-        [ class "title"
+        [ class "title has-text-weight-light"
         , style
             [ ( "padding-top", "6rem" )
             , ( "font-size", "7em" )
-            , ( "font-weight", "200" )
             , ( "font-family", "Quicksand" )
             ]
         ]
@@ -351,12 +318,9 @@ featureTitle : String -> Html Msg
 featureTitle txt =
     p
         -- [ class "title is-size-4 is-spaced" ]
-        [ class "title is-spaced"
+        [ class "title is-spaced is-size-3 has-text-weight-bold"
         , style
-            [ ( "font-size", "2em" )
-            , ( "font-weight", "bold" )
-            , ( "font-family", "Quicksand" )
-            ]
+            [ ( "font-family", "Quicksand" ) ]
         ]
         [ text txt ]
 
@@ -364,7 +328,7 @@ featureTitle txt =
 featureSub : String -> Html Msg
 featureSub txt =
     p
-        [ class "subtitle"
+        [ class "subtitle is-size-4 has-text-weight-semibold"
 
         --"is-5"
         , style
@@ -372,15 +336,3 @@ featureSub txt =
             ]
         ]
         [ text txt ]
-
-
-outlinedSpotifyButton : Msg -> Html Msg
-outlinedSpotifyButton msg =
-    a
-        [ class "button is-primary is-large is-rounded"
-        , style [ ( "border", "2px" ) ]
-        , onClick msg
-        ]
-        [ icon "fab fa-spotify fa-lg"
-        , iconText "Connect to Spotify"
-        ]
