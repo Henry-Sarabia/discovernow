@@ -50,7 +50,7 @@ heroBody model =
 previewButton : String -> Html Msg
 previewButton domId =
     a
-        [ class "button is-primary is-rounded"
+        [ class "button is-link is-rounded"
         , onClick (ToggleModal domId)
         ]
         [ icon "far fa-play-circle fa-lg"

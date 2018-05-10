@@ -1,5 +1,4 @@
 function waypointInit() {
-    
     requestAnimationFrame(function() {
         if (document.getElementById("heroPhases")) {
             var waypoint = new Waypoint({
@@ -7,7 +6,7 @@ function waypointInit() {
                 handler: function() {
                     console.log('Basic waypoint triggered');
                     document.getElementById("heroPhases").classList.add("animated");
-                    this.destroy();
+                    // this.destroy();
                 }
             });
         } else {
@@ -16,5 +15,4 @@ function waypointInit() {
     })
 };
 
-window.setTimeout(waypointInit, 200);
-// waypointInit();
+waypointInit();

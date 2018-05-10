@@ -158,8 +158,6 @@ photoBackgroundStyle url alpha =
             "rgba(0, 0, 0, " ++ toString (alpha) ++ ")"
     in
         style
-            -- [ ( "background-image", "linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), " ++ location )
-            -- [ ( "background-image", "linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), " ++ location )
             [ ( "background-image", "linear-gradient(" ++ rgba ++ "," ++ rgba ++ "), " ++ location )
             , ( "background-position", "center" )
             , ( "background-repeat", "no-repeat" )

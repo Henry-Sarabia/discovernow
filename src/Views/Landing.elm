@@ -18,7 +18,7 @@ root model =
         [ id "landing" ]
         [ heroBanner model
         , heroPhases model
-        , heroFeatures
+        , heroFeatures model
         ]
 
 
@@ -39,7 +39,7 @@ heroBanner model =
 heroBannerBody : Model -> Html Msg
 heroBannerBody model =
     div
-        [ class "hero-body" ]
+        [ class "hero-body has-text-light" ]
         [ div
             [ class "container has-text-centered" ]
             [ bannerTitle "Discover Now"
@@ -114,7 +114,7 @@ loginButton base login =
 spotifyButton : Msg -> Html Msg
 spotifyButton msg =
     a
-        [ class "button is-info is-large is-rounded"
+        [ class "button is-primary is-large is-rounded"
         , onClick msg
         ]
         [ icon "fab fa-spotify fa-lg"
@@ -122,71 +122,10 @@ spotifyButton msg =
         ]
 
 
-heroFeatures : Html Msg
-heroFeatures =
-    section
-        [ class "hero is-warning is-medium"
-        , id "heroFeatures"
-        , onWheelScroll "heroFeatures"
-        ]
-        [ div
-            [ class "hero-body" ]
-            [ div
-                [ class "container" ]
-                [ nav
-                    [ class "columns" ]
-                    [ iconColumn "fab fa-github fa-5x fa-fw" "Open Source" "Honest code for honest users. Contributions are always appreciated - explore on GitHub"
-                    , iconColumn "fab fa-spotify fa-5x fa-fw" "Simple Login" "You have enough accounts to worry about - connect to your existing Spotify account to log in"
-                    , iconColumn "fas fa-unlock-alt fa-5x fa-fw" "Forever Free" "No ads, no analytics, no subscription - simply share and enjoy"
-                    , iconColumn "fas fa-mobile-alt fa-5x fa-fw" "Responsive Design" "Designed for both desktop and mobile - for when you need new music on the go"
-                    ]
-                ]
-            ]
-        , heroFooter
-        ]
-
-
-iconColumn : String -> String -> String -> Html Msg
-iconColumn link title sub =
-    div
-        [ class "column has-text-centered" ]
-        [ largeIcon link
-        , featureTitle title
-        , featureSub sub
-        ]
-
-
-featureTitle : String -> Html Msg
-featureTitle txt =
-    p
-        -- [ class "title is-size-4 is-spaced" ]
-        [ class "title is-spaced"
-        , style
-            [ ( "font-size", "2em" )
-            , ( "font-weight", "bold" )
-            , ( "font-family", "Quicksand" )
-            ]
-        ]
-        [ text txt ]
-
-
-featureSub : String -> Html Msg
-featureSub txt =
-    p
-        [ class "subtitle"
-
-        --"is-5"
-        , style
-            [ ( "line-height", "1.6" )
-            ]
-        ]
-        [ text txt ]
-
-
 heroPhases : Model -> Html Msg
 heroPhases model =
     section
-        [ class "hero is-link is-fullheight is-bold"
+        [ class "hero is-dark is-fullheight"
         , id "heroPhases"
         , photoBackgroundStyle "images/lights.jpg" 0.3
         , onWheelScroll "heroPhases"
@@ -198,7 +137,7 @@ heroPhases model =
             [ class "hero-body has-text-centered" ]
             [ div
                 [ class "container" ]
-                [ nav
+                [ div
                     [ class "columns" ]
                     [ largeIconColumn "pre-anim fade-right-1"
                         ( userIcon
@@ -213,7 +152,7 @@ heroPhases model =
                         )
                     , level [ arrowIcon "pre-anim fade-right-4" ]
                     , largeIconColumn "pre-anim fade-right-5"
-                        ( largeColorIcon "far fa-play-circle fa-10x fa-fw" "has-text-danger"
+                        ( playIcon
                         , "Discover"
                         , "Your personalized Discover playlist is ready for you right on your preferred Spotify player"
                         )
@@ -299,30 +238,10 @@ arrowIcon classes =
         [ largeIcon "fas fa-arrow-right fa-5x fa-fw" ]
 
 
-dnaIcon : Html Msg
-dnaIcon =
-    span
-        [ class "icon fa-fw fa-10x has-text-danger" ]
-        [ span
-            [ class "fa-layers fa-fw" ]
-            [ i
-                [ class "far fa-circle"
-                , attribute "data-fa-transform" "left-7"
-                ]
-                []
-            , i
-                [ class "fas fa-dna"
-                , attribute "data-fa-transform" "shrink-7 left-6"
-                ]
-                []
-            ]
-        ]
-
-
 userIcon : Html Msg
 userIcon =
     span
-        [ class "icon fa-fw fa-10x has-text-danger" ]
+        [ class "icon fa-fw fa-10x has-text-primary" ]
         [ span
             [ class "fa-layers fa-fw" ]
             [ i
@@ -339,14 +258,128 @@ userIcon =
         ]
 
 
+dnaIcon : Html Msg
+dnaIcon =
+    span
+        [ class "icon fa-fw fa-10x has-text-primary" ]
+        [ span
+            [ class "fa-layers fa-fw" ]
+            [ i
+                [ class "far fa-circle"
+                , attribute "data-fa-transform" "left-7"
+                ]
+                []
+            , i
+                [ class "fas fa-dna"
+                , attribute "data-fa-transform" "shrink-7 left-6"
+                ]
+                []
+            ]
+        ]
+
+
+playIcon : Html Msg
+playIcon =
+    icon ("far fa-play-circle fa-10x fa-fw " ++ "has-text-primary")
+
+
 subSpotifyButton : Msg -> Html Msg
 subSpotifyButton msg =
     a
-        -- [ class "button is-info is-large is-rounded"
-        [ class "button is-info is-large is-rounded pre-anim fade-in-pop"
+        [ class "button is-primary is-large is-rounded pre-anim fade-in-pop"
         , onClick msg
+        ]
+        [ icon "fab fa-spotify fa-lg"
+        , iconText "Connect to Spotify"
+        ]
 
-        -- , style [ ( "border", "2px solid #345765" ) ]
+
+heroFeatures : Model -> Html Msg
+heroFeatures model =
+    section
+        [ class "hero is-danger is-fullheight has-text-centered"
+        , id "heroFeatures"
+        , photoBackgroundStyle "images/city.jpg" 0.55
+        , onWheelScroll "heroFeatures"
+        ]
+        [ div
+            [ class "hero-head" ]
+            [ featureHeader "What's not to love?" ]
+        , div
+            [ class "hero-body" ]
+            [ div
+                [ class "container" ]
+                [ div
+                    [ class "columns" ]
+                    [ iconColumn "fab fa-github fa-5x fa-fw has-text-black-ter" "Open Source" "Honest code for honest users. Contributions are always appreciated - explore on GitHub"
+                    , iconColumn "fab fa-spotify fa-5x fa-fw has-text-success" "Simple Login" "You have enough accounts to worry about - connect to your existing Spotify account to log in"
+                    , iconColumn "fas fa-unlock-alt fa-5x fa-fw has-text-danger" "Forever Free" "No ads, no analytics, no subscription - simply share and enjoy"
+                    , iconColumn "fas fa-mobile-alt fa-5x fa-fw has-text-black-bis" "Responsive Design" "Designed for both desktop and mobile - for when you need new music on the go"
+                    ]
+                , loginButton (outlinedSpotifyButton) model.login
+                ]
+            ]
+        , heroFooter
+        ]
+
+
+iconColumn : String -> String -> String -> Html Msg
+iconColumn link title sub =
+    div
+        [ class "column has-text-centered" ]
+        [ largeIcon link
+        , featureTitle title
+        , featureSub sub
+        ]
+
+
+featureHeader : String -> Html Msg
+featureHeader txt =
+    h1
+        [ class "title"
+        , style
+            [ ( "padding-top", "6rem" )
+            , ( "font-size", "7em" )
+            , ( "font-weight", "200" )
+            , ( "font-family", "Quicksand" )
+            ]
+        ]
+        [ text txt ]
+
+
+featureTitle : String -> Html Msg
+featureTitle txt =
+    p
+        -- [ class "title is-size-4 is-spaced" ]
+        [ class "title is-spaced"
+        , style
+            [ ( "font-size", "2em" )
+            , ( "font-weight", "bold" )
+            , ( "font-family", "Quicksand" )
+            ]
+        ]
+        [ text txt ]
+
+
+featureSub : String -> Html Msg
+featureSub txt =
+    p
+        [ class "subtitle"
+
+        --"is-5"
+        , style
+            [ ( "line-height", "1.6" )
+            ]
+        ]
+        [ text txt ]
+
+
+outlinedSpotifyButton : Msg -> Html Msg
+outlinedSpotifyButton msg =
+    a
+        [ class "button is-primary is-large is-rounded"
+        , style [ ( "border", "2px" ) ]
+        , onClick msg
         ]
         [ icon "fab fa-spotify fa-lg"
         , iconText "Connect to Spotify"

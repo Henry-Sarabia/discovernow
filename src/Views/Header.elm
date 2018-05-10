@@ -58,7 +58,7 @@ navbarBrand =
 logo : Html Msg
 logo =
     span
-        [ class "icon is-large fa-fw fa-3x has-text-info" ]
+        [ class "icon is-large fa-fw fa-3x has-text-primary" ]
         [ span
             [ class "fa-layers fa-fw" ]
             [ i
@@ -86,7 +86,7 @@ navbarItem item =
 spotifyButton : Html Msg
 spotifyButton =
     a
-        [ class "button is-info"
+        [ class "button is-primary"
         ]
         [ icon "fab fa-spotify fa-lg"
         , iconText "Connect"
