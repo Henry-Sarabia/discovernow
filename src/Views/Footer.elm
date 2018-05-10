@@ -1,9 +1,32 @@
-module Views.Footer exposing (infoFooter)
+module Views.Footer exposing (infoFooter, heroFooter)
 
 import Html exposing (Html, div, text, span, a, img, footer)
 import Html.Attributes exposing (class, style, src, href, alt, height, width, attribute)
 import Msgs exposing (Msg(..))
 import Views.Common exposing (..)
+
+
+heroFooter : Html Msg
+heroFooter =
+    footer
+        [ class "hero-foot"
+        , style
+            [ ( "padding", "2rem 1.5rem" )
+            , ( "box-shadow", "0 -1px 0 hsla(0,0%,100%,.2)" )
+            ]
+
+        -- , style [ ( "background-color", "#F0F0F0" ) ]
+        ]
+        [ div
+            [ class "container" ]
+            [ div
+                [ class "columns" ]
+                [ footerItem githubInfo
+                , footerItem authorInfo
+                , footerItem creditInfo
+                ]
+            ]
+        ]
 
 
 infoFooter : Html Msg

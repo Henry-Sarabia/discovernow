@@ -1,4 +1,5 @@
 function waypointInit() {
+    
     requestAnimationFrame(function() {
         if (document.getElementById("heroPhases")) {
             var waypoint = new Waypoint({
@@ -15,4 +16,5 @@ function waypointInit() {
     })
 };
 
-waypointInit();
+window.setTimeout(waypointInit, 200);
+// waypointInit();

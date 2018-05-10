@@ -72,6 +72,15 @@ bouncingIcon link =
         ]
 
 
+iconText : String -> Html Msg
+iconText txt =
+    span
+        [ style
+            [ ( "padding-left", "0.33em" ) ]
+        ]
+        [ text txt ]
+
+
 spanText : String -> Html Msg
 spanText txt =
     span
@@ -137,3 +146,22 @@ column child =
     div
         [ class "column has-text-centered" ]
         [ child ]
+
+
+photoBackgroundStyle : String -> Float -> Html.Attribute msg
+photoBackgroundStyle url alpha =
+    let
+        location =
+            "url(" ++ url ++ ")"
+
+        rgba =
+            "rgba(0, 0, 0, " ++ toString (alpha) ++ ")"
+    in
+        style
+            -- [ ( "background-image", "linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), " ++ location )
+            -- [ ( "background-image", "linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), " ++ location )
+            [ ( "background-image", "linear-gradient(" ++ rgba ++ "," ++ rgba ++ "), " ++ location )
+            , ( "background-position", "center" )
+            , ( "background-repeat", "no-repeat" )
+            , ( "background-size", "cover" )
+            ]

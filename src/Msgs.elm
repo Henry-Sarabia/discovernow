@@ -16,3 +16,4 @@ type Msg
     | FetchPlaylist Token
     | OnFetchPlaylist (WebData Playlist)
     | OnScroll Direction String
+    | ToggleModal String

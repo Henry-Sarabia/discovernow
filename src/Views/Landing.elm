@@ -8,6 +8,8 @@ import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
 import Utils exposing (..)
 import Views.Common exposing (..)
+import Views.Header exposing (heroNavbar)
+import Views.Footer exposing (heroFooter)
 
 
 root : Model -> Html Msg
@@ -25,82 +27,12 @@ heroBanner model =
     section
         [ class "hero is-fullheight"
         , id "heroBanner"
-        , style
-            [ ( "background-image", "linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url(herobg2.jpg)" )
-            , ( "background-position", "center" )
-            , ( "background-repeat", "no-repeat" )
-            , ( "background-size", "cover" )
-            ]
+        , photoBackgroundStyle "images/record.jpg" 0.35
         , onWheelScroll "heroBanner"
         ]
-        [ heroBannerHeader
+        [ heroNavbar
         , heroBannerBody model
         , heroBannerFoot
-        ]
-
-
-heroBannerHeader : Html Msg
-heroBannerHeader =
-    div
-        [ class "hero-head"
-        , style [ ( "box-shadow", "0 1px 0 hsla(0,0%,100%,.2)" ) ]
-        ]
-        [ nav
-            [ class "navbar container" ]
-            [ div
-                [ class "navbar-brand" ]
-                [ div
-                    [ class "navbar-item" ]
-                    [ a
-                        [ href "http://localhost:3000/" ]
-                        [ logo ]
-                    ]
-                ]
-            , div
-                [ class "navbar-menu" ]
-                [ div
-                    [ class "navbar-end" ]
-                    [ div
-                        [ class "navbar-item" ]
-                        [ a
-                            [ class "button is-dark is-medium  is-inverted" ]
-                            [ icon "fab fa-github fa-lg"
-                            , iconText "GitHub"
-                            ]
-                        ]
-                    , div
-                        [ class "navbar-item" ]
-                        [ a
-                            [ class "button is-info is-medium "
-                            ]
-                            [ icon "fab fa-spotify fa-lg"
-                            , iconText "Connect"
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ]
-
-
-logo : Html Msg
-logo =
-    span
-        [ class "icon is-large fa-fw fa-3x has-text-info" ]
-        [ span
-            [ class "fa-layers fa-fw" ]
-            [ i
-                [ class "far fa-circle"
-
-                -- , attribute "data-fa-transform" "left-0"
-                ]
-                []
-            , i
-                [ class "fas fa-dna"
-                , attribute "data-fa-transform" "shrink-7"
-                ]
-                []
-            ]
         ]
 
 
@@ -142,6 +74,7 @@ bannerTitle title =
         , style
             [ ( "font-size", "8em" )
             , ( "font-weight", "200" )
+            , ( "font-family", "Quicksand" )
             ]
         ]
         [ text title ]
@@ -155,6 +88,8 @@ bannerSub sub =
         , style
             [ ( "font-size", "3em" )
             , ( "font-weight", "200" )
+
+            -- , ( "font-family", "Quicksand" )
             ]
         ]
         [ text sub ]
@@ -187,15 +122,6 @@ spotifyButton msg =
         ]
 
 
-iconText : String -> Html Msg
-iconText txt =
-    span
-        [ style
-            [ ( "padding-left", "0.33em" ) ]
-        ]
-        [ text txt ]
-
-
 heroFeatures : Html Msg
 heroFeatures =
     section
@@ -216,6 +142,7 @@ heroFeatures =
                     ]
                 ]
             ]
+        , heroFooter
         ]
 
 
@@ -236,7 +163,8 @@ featureTitle txt =
         [ class "title is-spaced"
         , style
             [ ( "font-size", "2em" )
-            , ( "font-weight", "400" )
+            , ( "font-weight", "bold" )
+            , ( "font-family", "Quicksand" )
             ]
         ]
         [ text txt ]
@@ -260,6 +188,7 @@ heroPhases model =
     section
         [ class "hero is-link is-fullheight is-bold"
         , id "heroPhases"
+        , photoBackgroundStyle "images/lights.jpg" 0.3
         , onWheelScroll "heroPhases"
         ]
         [ div
@@ -303,6 +232,7 @@ phaseHeader txt =
             [ ( "padding-top", "6rem" )
             , ( "font-size", "7em" )
             , ( "font-weight", "200" )
+            , ( "font-family", "Quicksand" )
             ]
         ]
         [ text txt ]
@@ -312,6 +242,8 @@ largeIconColumn : String -> ( Html Msg, String, String ) -> Html Msg
 largeIconColumn classes ( ico, title, sub ) =
     div
         [ class ("column has-text-centered" ++ " " ++ classes)
+
+        -- , style [ ( "font-family", "Quicksand" ) ]
         ]
         [ stack [ ico, phaseTitle title, phaseSub sub ]
         ]
@@ -325,6 +257,7 @@ phaseTitle txt =
         , style
             [ ( "font-size", "4em" )
             , ( "font-weight", "300" )
+            , ( "font-family", "Quicksand" )
             ]
         ]
         [ text txt ]
@@ -338,6 +271,8 @@ phaseSub txt =
         , style
             [ ( "font-size", "2em" )
             , ( "font-weight", "300" )
+
+            -- , ( "font-family", "Quicksand" )
             ]
         ]
         [ text txt ]
