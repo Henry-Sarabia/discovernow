@@ -1,4 +1,4 @@
-module Views.Header exposing (heroNavbar)
+module Views.Header exposing (heroNavbar, navbar)
 
 import Html exposing (Html, text, div, img, span, a, nav, i)
 import Html.Attributes exposing (style, src, class, href, attribute)
@@ -19,6 +19,25 @@ import Views.Common exposing (..)
 --                 []
 --             ]
 --         ]
+
+
+navbar : Html Msg
+navbar =
+    nav
+        [ class "navbar is-light" ]
+        [ div
+            [ class "container" ]
+            [ navbarBrand
+            , div
+                [ class "navbar-menu" ]
+                [ div
+                    [ class "navbar-end" ]
+                    [ navbarItem githubButton
+                    , navbarItem spotifyButton
+                    ]
+                ]
+            ]
+        ]
 
 
 heroNavbar : Html Msg
@@ -96,7 +115,8 @@ spotifyButton =
 githubButton : Html Msg
 githubButton =
     a
-        [ class "button is-dark is-inverted is outlined" ]
+        -- [ class "button is-dark is-inverted is outlined" ]
+        [ class "button is-dark is-outlined" ]
         [ icon "fab fa-github fa-lg"
-        , iconText "GitHub"
+        , iconText "Explore"
         ]

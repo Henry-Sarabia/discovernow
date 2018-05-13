@@ -12,14 +12,18 @@ import Views.Discover as Discover
 import Views.Landing as Landing
 
 
+-- root : Model -> Html Msg
+-- root model =
+--     div
+--         []
+--         [ page model
+--         -- , infoFooter
+--         ]
+
+
 root : Model -> Html Msg
 root model =
-    div
-        []
-        [ page model
-
-        -- , infoFooter
-        ]
+    page model
 
 
 page : Model -> Html Msg
@@ -41,11 +45,17 @@ page model =
             notFoundPage
 
 
+
+-- landingPage : Model -> Html Msg
+-- landingPage model =
+--     div
+--         []
+--         [ Landing.root model ]
+
+
 landingPage : Model -> Html Msg
 landingPage model =
-    div
-        []
-        [ Landing.root model ]
+    Landing.root model
 
 
 aboutPage : Model -> Html Msg

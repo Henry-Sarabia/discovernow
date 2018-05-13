@@ -76,7 +76,7 @@ iconText : String -> Html Msg
 iconText txt =
     span
         [ style
-            [ ( "padding-left", "0.33em" ) ]
+            [ ( "padding-left", "0.33em" ), ( "font-family", "Roboto" ) ]
         ]
         [ text txt ]
 
@@ -159,6 +159,8 @@ photoBackgroundStyle url alpha =
     in
         style
             [ ( "background-image", "linear-gradient(" ++ rgba ++ "," ++ rgba ++ "), " ++ location )
+
+            -- [ ( "background-image", "linear-gradient(to right, rgba(60,165,92, 0.5), rgba(181,172,73, 0.5)), " ++ location )
             , ( "background-position", "center" )
             , ( "background-repeat", "no-repeat" )
             , ( "background-size", "cover" )
