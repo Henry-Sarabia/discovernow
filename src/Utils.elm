@@ -4,9 +4,7 @@ import Http
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions)
 import Json.Decode as Decode
-import Models exposing (Direction(..))
 import Msgs exposing (Msg(..))
-import Wheel
 
 
 onLinkClick : Msg -> Attribute Msg
@@ -18,20 +16,6 @@ onLinkClick msg =
             }
     in
         onWithOptions "click" options (Decode.succeed msg)
-
-
-siblingScroll : String -> (Wheel.Event -> Msg)
-siblingScroll domId =
-    \event ->
-        if event.deltaY > 0 then
-            OnScroll Up domId
-        else
-            OnScroll Down domId
-
-
-onWheelScroll : String -> Attribute Msg
-onWheelScroll domId =
-    Wheel.onWheel (siblingScroll domId)
 
 
 errorToString : Http.Error -> String

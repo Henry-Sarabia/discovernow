@@ -147,7 +147,9 @@ githubButton : Html Msg
 githubButton =
     a
         -- [ class "button is-dark is-inverted is outlined" ]
-        [ class "button is-medium is-dark is-outlined" ]
+        [ class "button is-medium is-dark is-outlined"
+        , href "https://github.com/Henry-Sarabia/myfy"
+        ]
         [ icon "fab fa-github fa-lg"
         , iconText "Explore"
         ]

@@ -1,6 +1,6 @@
 module Msgs exposing (..)
 
-import Models exposing (Login, Token, Playlist, Direction(..))
+import Models exposing (Login, Token, Playlist)
 import Navigation
 import RemoteData exposing (WebData)
 
@@ -15,6 +15,5 @@ type Msg
     | OnForceFetchLogin (WebData Login)
     | FetchPlaylist Token
     | OnFetchPlaylist (WebData Playlist)
-    | OnScroll Direction String
     | ToggleModal String
     | ScrollToDomId String

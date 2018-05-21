@@ -19,11 +19,6 @@ type Range
     | Long
 
 
-type Direction
-    = Up
-    | Down
-
-
 type alias Login =
     { url : String }
 
