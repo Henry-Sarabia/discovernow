@@ -4,11 +4,8 @@ import Html exposing (Html, text, div)
 import Models exposing (Model, Token, Login)
 import Msgs exposing (Msg(..))
 import Routing exposing (..)
+import Views.About as About
 import Views.Discover as Discover
-
-
--- import Views.Footer exposing (infoFooter)
-
 import Views.Landing as Landing
 
 
@@ -60,7 +57,8 @@ landingPage model =
 
 aboutPage : Model -> Html Msg
 aboutPage model =
-    text "about me"
+    -- text "about me"
+    About.root model
 
 
 discoverPage : Model -> Token -> Html Msg

@@ -7,6 +7,10 @@ var elm = Main.embed(document.getElementById('root'));
 
 var timeoutLimit = 150;
 
+elm.ports.scrollIdIntoView.subscribe(function(domId) {
+    document.getElementById(domId).scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
+});
+
 // TODO: add requestAnimationFrame
 elm.ports.scrollNextSibling.subscribe(function(domId) {
     setTimeout(function() {

@@ -64,3 +64,6 @@ update msg model =
 
         ToggleModal domId ->
             ( model, toggleModal domId )
+
+        ScrollToDomId id ->
+            ( model, scrollIdIntoView id )

@@ -17,3 +17,4 @@ type Msg
     | OnFetchPlaylist (WebData Playlist)
     | OnScroll Direction String
     | ToggleModal String
+    | ScrollToDomId String

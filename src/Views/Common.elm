@@ -5,11 +5,34 @@ import Html.Attributes exposing (class, style)
 import Msgs exposing (Msg(..))
 
 
-container : Html Msg -> Html Msg
-container child =
-    div
-        [ class "container" ]
-        [ child ]
+green : String
+green =
+    "#5ed587"
+
+
+blue : String
+blue =
+    "#5f9fb9"
+
+
+yellow : String
+yellow =
+    "#ffe88f"
+
+
+red : String
+red =
+    "#f58287"
+
+
+grey : String
+grey =
+    "#7f807f"
+
+
+pink : String
+pink =
+    "#ffb8c9"
 
 
 icon : String -> Html Msg
@@ -144,7 +167,7 @@ columns children =
 column : Html Msg -> Html Msg
 column child =
     div
-        [ class "column has-text-centered" ]
+        [ class "column" ]
         [ child ]
 
 
@@ -159,9 +182,29 @@ photoBackgroundStyle url alpha =
     in
         style
             [ ( "background-image", "linear-gradient(" ++ rgba ++ "," ++ rgba ++ "), " ++ location )
-
-            -- [ ( "background-image", "linear-gradient(to right, rgba(60,165,92, 0.5), rgba(181,172,73, 0.5)), " ++ location )
             , ( "background-position", "center" )
             , ( "background-repeat", "no-repeat" )
             , ( "background-size", "cover" )
             ]
+
+
+boxShadowStyle : Html.Attribute msg
+boxShadowStyle =
+    style
+        [ ( "box-shadow", "0 15px 35px rgba(50, 50, 93, .1)" )
+        , ( "box-shadow", "0 5px 15px rgba(0, 0, 0, .07)" )
+        ]
+
+
+accentBorderStyle : String -> String -> Html.Attribute msg
+accentBorderStyle direction color =
+    style
+        [ ( "border-" ++ direction, "5px solid " ++ color )
+        , ( "border-radius", "2px" )
+        ]
+
+
+debugBorderStyle : String -> Html.Attribute msg
+debugBorderStyle color =
+    style
+        [ ( "border", "2px solid " ++ color ) ]
