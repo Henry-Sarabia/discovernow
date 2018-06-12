@@ -8,9 +8,6 @@ import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
 
 
--- import Utils exposing (errorToString)
-
-
 fetchLoginCmd : Cmd Msg
 fetchLoginCmd =
     Http.get fetchLoginUrl loginDecoder
@@ -20,8 +17,11 @@ fetchLoginCmd =
 
 fetchLoginUrl : String
 fetchLoginUrl =
-    -- "https://nameless-thicket-99291.herokuapp.com/login"
-    "http://localhost:8080/login"
+    "https://nameless-thicket-99291.herokuapp.com/login"
+
+
+
+-- "http://localhost:8080/login"
 
 
 loginDecoder : Decode.Decoder Login
@@ -55,38 +55,14 @@ createTokenUrl token =
 
 fetchPlaylistUrl : String
 fetchPlaylistUrl =
-    -- "https://nameless-thicket-99291.herokuapp.com/playlist"
-    "http://localhost:8080/playlist"
+    "https://nameless-thicket-99291.herokuapp.com/playlist"
+
+
+
+-- "http://localhost:8080/playlist"
 
 
 playlistDecoder : Decode.Decoder Playlist
 playlistDecoder =
     decode Playlist
         |> required "id" Decode.string
-
-
-
--- checkForRefetchCmd : WebData a -> Maybe Token -> Cmd Msg
--- checkForRefetchCmd msg token =
---     case msg of
---         RemoteData.NotAsked ->
---             Cmd.none
---         RemoteData.Loading ->
---             Cmd.none
---         RemoteData.Success _ ->
---             Cmd.none
---         RemoteData.Failure err ->
---             case err of
---                 Http.BadUrl _ ->
---                     Cmd.none
---                 Http.Timeout ->
---                     Cmd.none
---                 Http.NetworkError ->
---                     Cmd.none
---                 Http.BadStatus resp ->
---                     if resp.status.code == 503 then
---                         fetchSummaryCmd token
---                     else
---                         Cmd.none
---                 Http.BadPayload _ _ ->
---                     Cmd.none

@@ -49,8 +49,5 @@ columns children =
 column : Html Msg -> Html Msg
 column child =
     div
-        [ class "column"
-
-        -- , debugBorderStyle "red"
-        ]
+        [ class "column" ]
         [ child ]

@@ -1,6 +1,6 @@
 module View exposing (..)
 
-import Html exposing (Html, text, div)
+import Html exposing (Html)
 import Models exposing (Model, Token, Login)
 import Msgs exposing (Msg(..))
 import Routing exposing (..)

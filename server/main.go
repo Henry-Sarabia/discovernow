@@ -73,7 +73,6 @@ func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, login)
 }
 
-// TODO: Add error checking to completeAuth
 func httpPlaylist(w http.ResponseWriter, r *http.Request) {
 	g, err := completeAuth(w, r)
 	if err != nil {
