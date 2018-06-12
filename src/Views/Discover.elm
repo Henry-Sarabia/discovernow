@@ -1,16 +1,16 @@
 module Views.Discover exposing (root)
 
-import Http
-import Html exposing (Html, div, text, span, a, iframe, p, h1, button)
+import Html exposing (Html, div, section, text, span, a, iframe, p, i, h1, h2, button)
 import Html.Attributes exposing (class, style, id, src, height, width, attribute)
 import Html.Events exposing (onClick)
-import Models exposing (Model, Token, Playlist)
+import Models exposing (Model, Token, Login, Playlist)
 import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
-import Utils exposing (..)
-import Views.Common exposing (..)
-import Views.Header exposing (heroNavbar)
-import Views.Footer exposing (heroFooter)
+import Views.Buttons exposing (loginButton)
+import Views.Header exposing (heroNavbar, navbar)
+import Views.Icons exposing (..)
+import Views.Footer exposing (simpleFooter)
+import Views.Styles exposing (..)
 
 
 root : Model -> Token -> Html Msg
@@ -18,19 +18,19 @@ root model token =
     div
         []
         [ hero model token
-        , playlistModal model.discover
+        , simpleFooter
         ]
 
 
 hero : Model -> Token -> Html Msg
 hero model token =
-    div
-        [ class "hero is-fullheight is-dark"
-        , photoBackgroundStyle "images/albums.jpg" 0.6
+    section
+        [ class "hero is-fullheight is-light"
+        , svgBackground "images/greenTopography.svg"
         ]
-        [ heroNavbar
+        [ heroNavbar model
         , heroBody model
-        , heroFooter
+        , heroFoot model
         ]
 
 
@@ -40,17 +40,170 @@ heroBody model =
         [ class "hero-body" ]
         [ div
             [ class "container has-text-centered" ]
-            [ phaseHeader "Success!"
-            , phaseSub "Something you'll love is waiting for you on your Spotify account."
-            , previewButton "playlist-modal"
+            [ results model ]
+        ]
+
+
+results : Model -> Html Msg
+results model =
+    case model.discover of
+        RemoteData.NotAsked ->
+            notAsked model.login
+
+        RemoteData.Loading ->
+            loading
+
+        RemoteData.Success response ->
+            success response
+
+        RemoteData.Failure err ->
+            failure
+
+
+notAsked : WebData Login -> Html Msg
+notAsked login =
+    div
+        []
+        [ header "Oh, hey."
+        , subheader "Somehow you got here without asking for a playlist."
+        , copy "Let's fix that."
+        , loginButton login
+        ]
+
+
+success : Playlist -> Html Msg
+success playlist =
+    div
+        []
+        [ header "Success!"
+        , subheader "Something you'll love is waiting for you on your preferred Spotify player."
+        , previewButton "playlist-modal"
+        , playlistModal playlist
+        ]
+
+
+loading : Html Msg
+loading =
+    i
+        [ class "fas fa-spinner fa-pulse fa-5x"
+        , style [ ( "margin-top", "-5rem" ) ]
+        ]
+        []
+
+
+failure : Html Msg
+failure =
+    div
+        []
+        [ header "Uh oh."
+        , subheader "We didn't find enough data to generate your playlist."
+        , copy "Come back after listening to some more music and give it another try."
+        ]
+
+
+header : String -> Html Msg
+header txt =
+    h2
+        []
+        [ headerDesktop txt
+        , headerMobile txt
+        ]
+
+
+headerDesktop : String -> Html Msg
+headerDesktop txt =
+    h2
+        [ class "title has-text-weight-normal has-text-grey-darker is-hidden-mobile"
+        , fontQuicksand
+        , style
+            [ ( "font-size", "4em" )
+            , ( "margin-top", "-5rem" )
             ]
         ]
+        [ text txt ]
+
+
+headerMobile : String -> Html Msg
+headerMobile txt =
+    h2
+        [ class "title is-size-1 has-text-weight-normal has-text-grey-darker is-hidden-tablet"
+        , fontQuicksand
+        , style [ ( "padding-bottom", "0.5rem" ) ]
+        ]
+        [ text txt ]
+
+
+subheader : String -> Html Msg
+subheader txt =
+    h1
+        []
+        [ subheaderDesktop txt
+        , subheaderMobile txt
+        ]
+
+
+subheaderDesktop : String -> Html Msg
+subheaderDesktop txt =
+    h1
+        [ class "title is-size-3 has-text-weight-normal has-text-grey-dark is-hidden-mobile"
+        , fontQuicksand
+        , style [ ( "padding-bottom", "4rem" ) ]
+        ]
+        [ text txt ]
+
+
+subheaderMobile : String -> Html Msg
+subheaderMobile txt =
+    h1
+        [ class "title is-size-4 has-text-weight-normal has-text-grey-dark is-hidden-tablet"
+        , fontQuicksand
+        , style [ ( "padding-bottom", "3rem" ) ]
+        ]
+        [ text txt ]
+
+
+copy : String -> Html Msg
+copy txt =
+    p
+        []
+        [ copyDesktop txt
+        , copyMobile txt
+        ]
+
+
+copyDesktop : String -> Html Msg
+copyDesktop txt =
+    p
+        [ class "is-size-5 has-text-weight-medium has-text-grey-copy is-hidden-mobile"
+        , fontQuicksand
+        ]
+        [ text txt ]
+
+
+copyMobile : String -> Html Msg
+copyMobile txt =
+    p
+        [ class "is-size-6 has-text-weight-medium has-text-grey-copy is-hidden-tablet"
+        , fontQuicksand
+        , style [ ( "padding-bottom", "0.5rem" ) ]
+        ]
+        [ text txt ]
 
 
 previewButton : String -> Html Msg
 previewButton domId =
     a
-        [ class "button is-link is-rounded"
+        []
+        [ previewButtonDesktop domId
+        , previewButtonMobile domId
+        ]
+
+
+previewButtonDesktop : String -> Html Msg
+previewButtonDesktop domId =
+    a
+        [ class "button is-info is-rounded is-hidden-mobile"
+        , style [ ( "margin-top", "-4rem" ) ]
         , onClick (ToggleModal domId)
         ]
         [ icon "far fa-play-circle fa-lg"
@@ -58,30 +211,81 @@ previewButton domId =
         ]
 
 
-phaseHeader : String -> Html Msg
-phaseHeader txt =
-    h1
-        [ class "title"
-        , style
-            [ ( "font-size", "7em" )
-            , ( "font-weight", "200" )
-            , ( "font-family", "Quicksand" )
+previewButtonMobile : String -> Html Msg
+previewButtonMobile domId =
+    a
+        [ class "button is-info is-rounded is-hidden-tablet"
+
+        -- , style [ ( "margin-top", "-4rem" ) ]
+        , onClick (ToggleModal domId)
+        ]
+        [ icon "far fa-play-circle fa-lg"
+        , iconText "Preview"
+        ]
+
+
+heroFoot : Model -> Html Msg
+heroFoot model =
+    div
+        [ class "hero-foot" ]
+        [ div
+            [ class "container has-text-centered" ]
+            [ case model.discover of
+                RemoteData.NotAsked ->
+                    tip "If you see this, someone really messed up."
+
+                RemoteData.Loading ->
+                    div [] []
+
+                RemoteData.Success response ->
+                    tip "Come back after you've listened to some more music, we'll have a completely new playlist for you."
+
+                RemoteData.Failure err ->
+                    tip "If this problem persists, please contact discovernow@protonmail.com."
             ]
         ]
-        [ text txt ]
 
 
-phaseSub : String -> Html Msg
-phaseSub txt =
+tip : String -> Html Msg
+tip txt =
     p
-        [ class "subtitle is-size-3 has-text-weight-light"
-
-        -- , style [ ( "font-family", "Quicksand" ) ]
+        []
+        [ tipDesktop txt
+        , tipMobile txt
         ]
-        [ text txt ]
 
 
-playlistModal : WebData Playlist -> Html Msg
+tipDesktop : String -> Html Msg
+tipDesktop txt =
+    p
+        [ class "is-size-5 has-text-weight-medium has-text-grey-copy is-hidden-mobile"
+        , fontQuicksand
+        , style
+            [ ( "padding-bottom", "4rem" ) ]
+        ]
+        [ p
+            [ class "has-text-weight-semibold is-inline" ]
+            [ text "Tip: " ]
+        , text txt
+        ]
+
+
+tipMobile : String -> Html Msg
+tipMobile txt =
+    p
+        [ class "is-size-6 has-text-weight-medium has-text-grey-copy has-text-left is-hidden-tablet"
+        , fontQuicksand
+        , style
+            [ ( "padding", "1rem 2rem 2rem" ) ]
+        ]
+        [ p
+            [ class "has-text-weight-semibold is-inline" ]
+            [ text "Tip: " ]
+        , text txt
+        ]
+
+
+playlistModal : Playlist -> Html Msg
 playlistModal playlist =
     div
         [ class "modal"
@@ -93,12 +297,8 @@ playlistModal playlist =
             ]
             []
         , div
-            [ class "modal-content has-text-centered"
-
-            -- , style [ ( "background-color", "white" ) ]
-            ]
-            [ playlistResults playlist
-            ]
+            [ class "modal-content has-text-centered" ]
+            [ spotifyWidget playlist ]
         , button
             [ class "modal-close is-large is-hidden-desktop"
             , onClick (ToggleModal "playlist-modal")
@@ -107,48 +307,46 @@ playlistModal playlist =
         ]
 
 
-playlistResults : WebData Playlist -> Html Msg
-playlistResults playlist =
-    case playlist of
-        RemoteData.NotAsked ->
-            text "not asked"
-
-        RemoteData.Loading ->
-            text "loading"
-
-        RemoteData.Success response ->
-            -- text response.id
-            playButton response
-
-        RemoteData.Failure err ->
-            -- errorHelp err
-            testPlayButton
-
-
-playButton : Playlist -> Html Msg
-playButton playlist =
+spotifyWidget : Playlist -> Html Msg
+spotifyWidget playlist =
     div
         []
         [ iframe
-            -- [ src "https://open.spotify.com/embed?uri=spotify%3Auser%3Aspotify%3Aplaylist%3A2PXdUld4Ueio2pHcB6sM8j"
             [ src (createPlaylistUri playlist)
             , width 600
             , height 700
+            , attribute "frameborder" "0"
+            , attribute "allowtransparency" "true"
+            , attribute "allow" "encrypted-media"
             ]
             []
         ]
 
 
-testPlayButton : Html Msg
-testPlayButton =
+spotifyWidgetMobile : Playlist -> Html Msg
+spotifyWidgetMobile playlist =
+    div
+        []
+        [ iframe
+            [ src (createPlaylistUri playlist)
+            , width 300
+            , height 500
+            , attribute "frameborder" "0"
+            , attribute "allowtransparency" "true"
+            , attribute "allow" "encrypted-media"
+            ]
+            []
+        ]
+
+
+testspotifyWidget : Html Msg
+testspotifyWidget =
     div
         []
         [ iframe
             [ src "https://open.spotify.com/embed?uri=spotify%3Auser%3Aspotify%3Aplaylist%3A2PXdUld4Ueio2pHcB6sM8j&theme=white"
-
-            -- , width 300
-            , width 640
-            , height 380
+            , width 300
+            , height 500
             , attribute "frameborder" "0"
             , attribute "allowtransparency" "true"
             , attribute "allow" "encrypted-media"
@@ -160,22 +358,3 @@ testPlayButton =
 createPlaylistUri : Playlist -> String
 createPlaylistUri playlist =
     "https://open.spotify.com/embed?uri=" ++ playlist.id
-
-
-errorHelp : Http.Error -> Html Msg
-errorHelp err =
-    div
-        [ class "message is-warning" ]
-        [ div
-            [ class "message-header" ]
-            [ text "Uh-oh" ]
-        , div
-            [ class "message-body" ]
-            [ text "Seems like you found an error"
-            , text (errorToString err)
-            ]
-        ]
-
-
-
--- spotify:user:blaqkangel:playlist:0MZvTfj3xPcRa7D0LGQeHs

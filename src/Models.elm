@@ -13,12 +13,6 @@ type alias Model =
     }
 
 
-type Range
-    = Short
-    | Medium
-    | Long
-
-
 type alias Login =
     { url : String }
 

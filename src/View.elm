@@ -6,16 +6,8 @@ import Msgs exposing (Msg(..))
 import Routing exposing (..)
 import Views.About as About
 import Views.Discover as Discover
+import Views.Error as Error
 import Views.Landing as Landing
-
-
--- root : Model -> Html Msg
--- root model =
---     div
---         []
---         [ page model
---         -- , infoFooter
---         ]
 
 
 root : Model -> Html Msg
@@ -36,18 +28,10 @@ page model =
             checkResults model
 
         ErrorRoute ->
-            errorPage
+            errorPage model
 
         NotFoundRoute ->
-            notFoundPage
-
-
-
--- landingPage : Model -> Html Msg
--- landingPage model =
---     div
---         []
---         [ Landing.root model ]
+            notFoundPage model
 
 
 landingPage : Model -> Html Msg
@@ -57,36 +41,29 @@ landingPage model =
 
 aboutPage : Model -> Html Msg
 aboutPage model =
-    -- text "about me"
     About.root model
 
 
 discoverPage : Model -> Token -> Html Msg
 discoverPage model token =
-    div
-        []
-        [ Discover.root model token ]
+    Discover.root model token
 
 
-errorPage : Html Msg
-errorPage =
-    div
-        []
-        [ text "Uh oh, looks like you found an error" ]
+errorPage : Model -> Html Msg
+errorPage model =
+    Error.serverErrorPage model
 
 
-notFoundPage : Html Msg
-notFoundPage =
-    div
-        []
-        [ text "404" ]
+notFoundPage : Model -> Html Msg
+notFoundPage model =
+    Error.notFoundPage model
 
 
 checkResults : Model -> Html Msg
 checkResults model =
     case model.token of
         Nothing ->
-            text "you found an error"
+            errorPage model
 
         Just token ->
             discoverPage model token

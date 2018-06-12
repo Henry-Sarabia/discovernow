@@ -1,7 +1,8 @@
 module Utils exposing (..)
 
 import Http
-import Html exposing (Attribute)
+import Html exposing (Html, Attribute, div)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onWithOptions)
 import Json.Decode as Decode
 import Msgs exposing (Msg(..))
@@ -36,3 +37,20 @@ errorToString err =
         -- toString resp.body
         Http.BadPayload message resp ->
             "Bad Payload: " ++ toString message ++ " (" ++ toString resp.status.code ++ ")"
+
+
+columns : List (Html Msg) -> Html Msg
+columns children =
+    div
+        [ class "columns" ]
+        (List.map column children)
+
+
+column : Html Msg -> Html Msg
+column child =
+    div
+        [ class "column"
+
+        -- , debugBorderStyle "red"
+        ]
+        [ child ]

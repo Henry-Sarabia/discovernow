@@ -1,28 +1,17 @@
 module Views.Header exposing (heroNavbar, navbar)
 
-import Html exposing (Html, text, div, img, span, a, nav, i)
+import Html exposing (Html, text, div, img, span, a, nav, i, h1)
 import Html.Attributes exposing (style, src, class, href, attribute)
+import Html.Events exposing (onClick)
+import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
-import Views.Common exposing (..)
+import RemoteData exposing (WebData)
+import Views.Icons exposing (..)
+import Views.Styles exposing (..)
 
 
--- navBrand : Html Msg
--- navBrand =
---     div
---         [ class "navbar-brand" ]
---         [ a
---             [ class "navbar-item" ]
---             [ img
---                 [ src "logoxx.png"
---                 , alt "Logo"
---                 ]
---                 []
---             ]
---         ]
-
-
-navbar : Html Msg
-navbar =
+navbar : Model -> Html Msg
+navbar model =
     nav
         [ class "navbar is-light" ]
         [ div
@@ -33,17 +22,17 @@ navbar =
                 [ div
                     [ class "navbar-end" ]
                     [ navbarItem githubButton
-                    , navbarItem spotifyButton
+                    , navbarItem (loginButton model.login)
                     ]
                 ]
             ]
         ]
 
 
-heroNavbar : Html Msg
-heroNavbar =
+heroNavbar : Model -> Html Msg
+heroNavbar model =
     div
-        [ class "hero-head"
+        [ class "hero-head is-hidden-mobile"
         , style [ ( "box-shadow", "0 1px 0 hsla(0,0%,100%,.2)" ) ]
         ]
         [ nav
@@ -54,7 +43,7 @@ heroNavbar =
                 [ div
                     [ class "navbar-end" ]
                     [ navbarItem githubButton
-                    , navbarItem spotifyButton
+                    , navbarItem (loginButton model.login)
                     ]
                 ]
             ]
@@ -76,23 +65,12 @@ navbarBrand =
 
 logo : Html Msg
 logo =
-    span
-        [ class "icon is-large fa-fw fa-3x has-text-primary" ]
-        [ span
-            [ class "fa-layers fa-fw" ]
-            [ i
-                [ class "far fa-circle"
-
-                -- , attribute "data-fa-transform" "left-0"
-                ]
-                []
-            , i
-                [ class "fas fa-dna"
-                , attribute "data-fa-transform" "shrink-7"
-                ]
-                []
-            ]
+    h1
+        [ class "title is-size-3 has-text-grey-darker"
+        , fontMarker
+        , style [ ( "margin-left", "-1rem" ) ]
         ]
+        [ text "Discover Now" ]
 
 
 navbarItem : Html Msg -> Html Msg
@@ -102,10 +80,27 @@ navbarItem item =
         [ item ]
 
 
-spotifyButton : Html Msg
-spotifyButton =
+loginButton : WebData Login -> Html Msg
+loginButton login =
+    case login of
+        RemoteData.NotAsked ->
+            spotifyButton ForceFetchLogin
+
+        RemoteData.Loading ->
+            spotifyButton ForceFetchLogin
+
+        RemoteData.Success response ->
+            spotifyButton (LoadLogin response.url)
+
+        RemoteData.Failure err ->
+            spotifyButton ForceFetchLogin
+
+
+spotifyButton : Msg -> Html Msg
+spotifyButton msg =
     a
         [ class "button is-primary"
+        , onClick msg
         ]
         [ icon "fab fa-spotify fa-lg"
         , iconText "Connect"
@@ -115,8 +110,9 @@ spotifyButton =
 githubButton : Html Msg
 githubButton =
     a
-        -- [ class "button is-dark is-inverted is outlined" ]
-        [ class "button is-dark is-outlined" ]
+        [ class "button is-dark is-outlined"
+        , href "https://github.com/Henry-Sarabia/myfy"
+        ]
         [ icon "fab fa-github fa-lg"
         , iconText "Explore"
         ]
