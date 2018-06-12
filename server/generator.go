@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"math"
 
@@ -23,6 +22,7 @@ const (
 	requiredTopTracks     = 30
 	publicPlaylist        = true
 	recRetryLimit         = 2
+	playlistName          = "Discover Now"
 )
 
 var (
@@ -48,37 +48,37 @@ func newGenerator(client clienter) *generator {
 
 func (g *generator) MostRelevantPlaylist() (*spotify.FullPlaylist, error) {
 	pl, err := g.TrackDiscover()
-	if err == nil || err == errRecentTracksInsufficient {
+	if err == nil {
 		log.Println("MostRelevantPlaylist: TrackDiscover")
 		return pl, nil
 	}
 
 	pl, err = g.ArtistDiscover()
-	if err == nil || err == errRecentArtistsInsufficient {
+	if err == nil {
 		log.Println("MostRelevantPlaylist: ArtistDiscover")
 		return pl, nil
 	}
 
 	pl, err = g.TrackSummary("short")
-	if err == nil || err == errTopTracksInsufficient {
+	if err == nil {
 		log.Println("MostRelevantPlaylist: Track Summary - Short")
 		return pl, nil
 	}
 
 	pl, err = g.ArtistSummary("short")
-	if err == nil || err == errTopArtistsInsufficient {
+	if err == nil {
 		log.Println("MostRelevantPlaylist: Artist Summary - Short")
 		return pl, nil
 	}
 
 	pl, err = g.ArtistSummary("medium")
-	if err == nil || err == errTopArtistsInsufficient {
+	if err == nil {
 		log.Println("MostRelevantPlaylist: Artist Summary - Medium")
 		return pl, nil
 	}
 
 	pl, err = g.ArtistSummary("long")
-	if err == nil || err == errTopArtistsInsufficient {
+	if err == nil {
 		log.Println("MostRelevantPlaylist: Artist Summary - Long")
 		return pl, nil
 	}
@@ -86,48 +86,10 @@ func (g *generator) MostRelevantPlaylist() (*spotify.FullPlaylist, error) {
 	return nil, errCannotCreatePlaylist
 }
 
-// func (g *generator) ABTest() (*spotify.FullPlaylist, error) {
-// 	pl, err := g.TrackSummary("short")
-// 	if err != nil {
-// 		log.Println("AB Test - Track Summary: ", err)
-// 		return nil, err
-// 	}
-
-// 	pl, err = g.ArtistSummary("short")
-// 	if err != nil {
-// 		log.Println("AB Test - Artist Summary: ", err)
-// 		return nil, err
-// 	}
-// 	return pl, nil
-// }
-
-// func (g *generator) ABTest() (*spotify.FullPlaylist, error) {
-// 	pl, err := g.Discover()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return pl, nil
-// }
-
-func (g *generator) ABTest() (*spotify.FullPlaylist, error) {
-	pl, err := g.ArtistDiscover()
-	if err != nil {
-		return nil, err
-	}
-
-	pl, err = g.TrackDiscover()
-	if err != nil {
-		return nil, err
-	}
-
-	return pl, nil
-}
-
 // TrackDiscover returns a playlist based on the analysis of a user's recently
 // played tracks.
 func (g *generator) TrackDiscover() (*spotify.FullPlaylist, error) {
-	fmt.Println("Starting TrackDiscover")
+	// fmt.Println("Starting TrackDiscover")
 	rt, err := g.c.RecentTracks(maxRequestTracks)
 	if err != nil {
 		return nil, errRecentTracksUnavailable
@@ -141,8 +103,7 @@ func (g *generator) TrackDiscover() (*spotify.FullPlaylist, error) {
 		return nil, errors.WithMessage(err, "discoverTracks: cannot retrieve recommendations")
 	}
 
-	// name := "Discover Now - Popularity " + strconv.Itoa(targetPopularity)
-	name := "Discover Now"
+	name := playlistName
 	IDs := extractTrackIDs(recs)
 	pl, err := g.c.Playlist(name, IDs)
 	if err != nil {
@@ -156,7 +117,7 @@ func (g *generator) TrackDiscover() (*spotify.FullPlaylist, error) {
 // ArtistDiscover creates a playlist for the current user based on the analysis
 // of the user's recently played artists.
 func (g *generator) ArtistDiscover() (*spotify.FullPlaylist, error) {
-	fmt.Println("Starting ArtistDiscover")
+	// fmt.Println("Starting ArtistDiscover")
 	artists, err := g.c.RecentArtists(maxRequestArtists)
 	if err != nil {
 		return nil, err
@@ -170,8 +131,6 @@ func (g *generator) ArtistDiscover() (*spotify.FullPlaylist, error) {
 	if err != nil {
 		return nil, err
 	}
-	// sps := spew.ConfigState{SortKeys: true, MaxDepth: 3}
-	// sps.Dump(genres)
 
 	recs, err := g.recsByGenre(genres)
 	if err != nil {
@@ -179,8 +138,7 @@ func (g *generator) ArtistDiscover() (*spotify.FullPlaylist, error) {
 	}
 
 	IDs := extractTrackIDs(shuffleTracks(recs))
-	pl, err := g.c.Playlist("Discover Now", IDs)
-	// pl, err := g.c.Playlist("Discover 2", IDs)
+	pl, err := g.c.Playlist(playlistName, IDs)
 	if err != nil {
 		return nil, errors.WithMessage(err, "ArtistDiscover: cannot create playlist")
 	}
@@ -190,7 +148,7 @@ func (g *generator) ArtistDiscover() (*spotify.FullPlaylist, error) {
 }
 
 func (g *generator) TrackSummary(time string) (*spotify.FullPlaylist, error) {
-	fmt.Println("Starting TrackSummary - ", time)
+	// fmt.Println("Starting TrackSummary - ", time)
 	top, err := g.c.TopTracks(maxRequestTracks, time)
 	if err != nil {
 		return nil, err
@@ -205,10 +163,8 @@ func (g *generator) TrackSummary(time string) (*spotify.FullPlaylist, error) {
 		return nil, err
 	}
 
-	// name := playlistName(time)
 	IDs := extractTrackIDs(shuffleTracks(recs))
-	// pl, err := g.c.Playlist(name+" - Test 2", IDs)
-	pl, err := g.c.Playlist("Discover Now", IDs)
+	pl, err := g.c.Playlist(playlistName, IDs)
 	if err != nil {
 		return nil, err
 	}
@@ -220,8 +176,7 @@ func (g *generator) TrackSummary(time string) (*spotify.FullPlaylist, error) {
 
 // ArtistSummary returns a playlist based on the analysis of a user's taste profile.
 func (g *generator) ArtistSummary(time string) (*spotify.FullPlaylist, error) {
-	fmt.Println("Starting ArtistSummary - ", time)
-	// ta, err := g.c.TopArtists(maxArtists, time)
+	// fmt.Println("Starting ArtistSummary - ", time)
 	ta, err := g.c.TopArtists(requiredTopArtists, time)
 	if err != nil {
 		return nil, err
@@ -241,10 +196,8 @@ func (g *generator) ArtistSummary(time string) (*spotify.FullPlaylist, error) {
 		return nil, err
 	}
 
-	// name := playlistName(time)
 	IDs := extractTrackIDs(shuffleTracks(recs))
-	// pl, err := g.c.Playlist(name+" - Test 1", IDs)
-	pl, err := g.c.Playlist("Discover Now", IDs)
+	pl, err := g.c.Playlist(playlistName, IDs)
 	if err != nil {
 		return nil, err
 	}
@@ -258,7 +211,6 @@ func (g *generator) ArtistSummary(time string) (*spotify.FullPlaylist, error) {
 func (g *generator) discoverTracks() ([]spotify.SimpleTrack, error) {
 	rt, err := g.c.RecentTracks(maxRequestTracks)
 	if err != nil {
-		// return nil, errors.WithMessage(err, "discoverTracks: cannot retrieve recent tracks")
 		return nil, errRecentTracksUnavailable
 	}
 	if len(rt) < requiredRecentTracks {
@@ -287,7 +239,6 @@ func removeDuplicateArtists(old []spotify.FullArtist) []spotify.FullArtist {
 }
 
 func (g *generator) Recommendations(num int, sd spotify.Seeds) ([]spotify.SimpleTrack, error) {
-	log.Println("Starting newRec")
 	uniq := make([]spotify.SimpleTrack, 0)
 
 	buf := boundedInt(num*3, maxRecommendations)
@@ -312,7 +263,7 @@ func (g *generator) Recommendations(num int, sd spotify.Seeds) ([]spotify.Simple
 	return uniq, nil
 }
 
-// recsByGenre returns a list of about 30 tracks recommended based on the
+// recsByGenre returns a list of about 20 tracks recommended based on the
 // provided genres.
 func (g *generator) recsByGenre(gens []*genre) ([]spotify.SimpleTrack, error) {
 	sum := sumScore(gens)
@@ -359,7 +310,7 @@ func (g *generator) recsByTrack(tracks []spotify.SimpleTrack) ([]spotify.SimpleT
 	for _, a := range ta {
 		g.invalidateArtist(a.Name)
 	}
-	log.Println(len(g.invalidArtists))
+	// log.Println(len(g.invalidArtists))
 
 	recs := make([]spotify.SimpleTrack, 0)
 	num := playlistSize / len(sds)
@@ -369,7 +320,7 @@ func (g *generator) recsByTrack(tracks []spotify.SimpleTrack) ([]spotify.SimpleT
 			return nil, errors.WithMessage(err, "recsByTrack: cannot get recommendation with a track seed")
 		}
 		recs = append(recs, rec...)
-		log.Println(len(g.invalidArtists))
+		// log.Println(len(g.invalidArtists))
 	}
 
 	return recs, nil

@@ -27,6 +27,8 @@ func simpleToFull(full ...spotify.FullTrack) []spotify.SimpleTrack {
 	return simple
 }
 
+// boundedInt returns num unless num is greater than max, in which case max is
+// returned.
 func boundedInt(num int, max int) int {
 	if num > max {
 		return max
@@ -123,19 +125,4 @@ func trackSeedsNew(IDs []spotify.ID) []spotify.Seeds {
 	}
 
 	return sds
-}
-
-// playlistName returns the name to be given to a playlist based on the
-// provided time range.
-func playlistName(t string) string {
-	switch t {
-	case "short":
-		return "New Interests"
-	case "medium":
-		return "Common Trends"
-	case "long":
-		return "Core Taste"
-	default:
-		return "default"
-	}
 }

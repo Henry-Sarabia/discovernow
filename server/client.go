@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 
 	"github.com/zmb3/spotify"
 )
@@ -319,6 +318,6 @@ func (sc *spotClient) Playlist(name string, IDs []spotify.ID) (*spotify.FullPlay
 		return nil, err
 	}
 
-	log.Println("Requests: ", sc.requests)
+	// log.Println("Requests: ", sc.requests)
 	return pl, nil
 }

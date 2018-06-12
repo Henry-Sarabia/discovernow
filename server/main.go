@@ -50,7 +50,6 @@ func main() {
 	r.Use(cors.Default().Handler)
 
 	r.Get("/login", httpLoginURL)
-	r.Get("/summary", httpSummary)
 	r.Get("/playlist", httpPlaylist)
 	r.Get("/test", httpTest)
 
@@ -74,31 +73,6 @@ func httpLoginURL(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, login)
 }
 
-// httpSummary
-func httpSummary(w http.ResponseWriter, r *http.Request) {
-	g, err := completeAuth(w, r)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	var time string
-	if time = r.FormValue("timerange"); !isValidRange(time) {
-		http.NotFound(w, r)
-		log.Printf("Timerange '%s' is not valid", time)
-		return
-	}
-
-	pl, err := g.ArtistSummary(time)
-	if err != nil {
-		log.Print(err)
-		return
-	}
-
-	payload := Playlist{ID: string(pl.URI)}
-	render.JSON(w, r, payload)
-}
-
 // TODO: Add error checking to completeAuth
 func httpPlaylist(w http.ResponseWriter, r *http.Request) {
 	g, err := completeAuth(w, r)
@@ -108,7 +82,6 @@ func httpPlaylist(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pl, err := g.MostRelevantPlaylist()
-	// pl, err := g.ABTest()
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "cannot create playlist", http.StatusInternalServerError)
@@ -136,13 +109,5 @@ func completeAuth(w http.ResponseWriter, r *http.Request) (*generator, error) {
 
 	client := auth.NewClient(tok)
 	client.AutoRetry = true
-	// return &generator{c: spotClient{c: &client}}, nil
 	return newGenerator(&client), nil
-}
-
-func isValidRange(r string) bool {
-	if r == "short" || r == "medium" || r == "long" {
-		return true
-	}
-	return false
 }
