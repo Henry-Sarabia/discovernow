@@ -1,9 +1,18 @@
-module Views.Footer exposing (infoFooter, heroFooter)
+module Views.Footer exposing (heroFooter, simpleFooter)
 
-import Html exposing (Html, div, text, span, a, img, footer)
-import Html.Attributes exposing (class, style, src, href, alt, height, width, attribute)
+import Html exposing (Html, div, text, span, a, footer, p, i, h2, h4)
+import Html.Attributes exposing (class, style, href)
 import Msgs exposing (Msg(..))
-import Views.Common exposing (..)
+import Routing exposing (homePath)
+import Utils exposing (..)
+
+
+simpleFooter : Html Msg
+simpleFooter =
+    footer
+        [ class "footer" ]
+        [ content
+        ]
 
 
 heroFooter : Html Msg
@@ -11,146 +20,161 @@ heroFooter =
     footer
         [ class "hero-foot"
         , style
-            [ ( "padding", "2rem 1.5rem" )
+            [ ( "padding", "4rem 0rem" )
             , ( "box-shadow", "0 -1px 0 hsla(0,0%,100%,.2)" )
             ]
-
-        -- , style [ ( "background-color", "#F0F0F0" ) ]
         ]
         [ div
             [ class "container" ]
-            [ div
-                [ class "columns" ]
-                [ footerItem githubInfo
-                , footerItem authorInfo
-                , footerItem creditInfo
-                ]
-            ]
+            [ content ]
         ]
 
 
-infoFooter : Html Msg
-infoFooter =
-    footer
-        [ class "footer"
-        , style [ ( "background-color", "#F0F0F0" ) ]
-        ]
-        [ div
-            [ class "container" ]
-            [ div
-                [ class "columns" ]
-                [ footerItem githubInfo
-                , footerItem authorInfo
-                , footerItem creditInfo
-                ]
-            ]
-        ]
-
-
-footerItem : Html Msg -> Html Msg
-footerItem child =
+content : Html Msg
+content =
     div
-        [ class "column is-one-third" ]
-        [ child ]
-
-
-authorInfo : Html Msg
-authorInfo =
-    div
-        [ class "has-text-centered" ]
-        [ div
-            []
-            [ text "Created by Henry Sarabia" ]
-        , div
-            []
-            [ text "Licensed under MIT" ]
+        [ class "container" ]
+        [ contentDesktop
+        , contentMobile
         ]
 
 
-githubInfo : Html Msg
-githubInfo =
+contentDesktop : Html Msg
+contentDesktop =
+    div
+        [ class "is-hidden-mobile" ]
+        [ columns
+            [ branding
+            , project
+            , resources
+            , stack
+            ]
+        , authorNote
+        ]
+
+
+contentMobile : Html Msg
+contentMobile =
+    div
+        [ class "is-hidden-tablet"
+        , style [ ( "padding-left", "2rem" ) ]
+        ]
+        [ columns
+            [ project
+            , resources
+            , stack
+            , branding
+            ]
+        , authorNote
+        ]
+
+
+branding : Html Msg
+branding =
     div
         []
-        [ wrap repoButton
+        [ footerHeader "Discover Now"
+        , footerCopy "Discover Now is a Spotify playlist generator that learns from a user's recent musical interests. We are not endorsed by Spotify."
         ]
 
 
-repoButton : Html Msg
-repoButton =
-    a
-        [ class "button" ]
-        [ icon "fab fa-github fa-lg"
-        , spanText "View on GitHub"
-        ]
-
-
-
--- repoButton : Html Msg
--- repoButton =
---     div
---         []
---         [ a
---             [ class "github-button"
---             , href "https://github.com/Henry-Sarabia"
---             , attribute "data-size" "large"
---             , attribute "aria-label" "Follow @Henry-Sarabia on GitHub"
---             ]
---             [  span
---                 []
---                 [ text "Follow @Henry-Sarabia" ]
---             ]
---         ]
--- starButton : Html Msg
--- starButton =
---     div
---         []
---         [ a
---             [ class "github-button"
---             , href "https://github.com/Henry-Sarabia/myfy"
---             , attribute "data-icon" "octicon-star"
---             , attribute "data-size" "large"
---             , attribute "data-show-count" "true"
---             , attribute "aria-label" "Star Henry-Sarabia on GitHub"
---             ]
---             [ span
---                 []
---                 [ text "Star" ]
---             ]]
-
-
-creditInfo : Html Msg
-creditInfo =
+project : Html Msg
+project =
     div
-        [ class "has-text-right" ]
-        [ wrap bulmaButton
-        , wrap unsplashButton
+        []
+        [ footerTitle "Project"
+        , footerLink "https://github.com/Henry-Sarabia/myfy" "GitHub Repository"
+        , footerLink "" "Spotify Page"
+        , footerLink "" "License"
         ]
 
 
-bulmaButton : Html Msg
-bulmaButton =
-    a
-        [ class "button is-small"
-        , href "https://bulma.io"
+resources : Html Msg
+resources =
+    div
+        []
+        [ footerTitle "Resources"
+        , footerLink "https://bulma.io/" "Bulma"
+        , footerLink "https://fontawesome.com/" "Font Awesome"
+        , footerLink "https://unsplash.com/@markusspiske" "Unsplash"
+        , footerLink "https://coolbackgrounds.io/" "Cool Backgrounds"
+
+        -- , footerLink "https://unsplash.com/@umbe" "Umberto Cofini"
         ]
-        [ img
-            [ src "https://bulma.io/images/made-with-bulma--semiblack.png"
-            , alt "Made with Bulma"
-            , width 128
-            , height 24
+
+
+stack : Html Msg
+stack =
+    div
+        [ style [ ( "padding-bottom", "3rem" ) ] ]
+        [ footerTitle "Stack"
+        , footerLink "http://elm-lang.org/" "Elm"
+        , footerLink "https://golang.org/" "Go"
+        , footerLink "https://sass-lang.com/" "Sass"
+        ]
+
+
+footerHeader : String -> Html Msg
+footerHeader txt =
+    h2
+        [ style [ ( "padding-bottom", "1.5rem" ) ] ]
+        [ a
+            [ class "title is-size-3 has-text-primary"
+            , style
+                [ ( "font-family", "Permanent Marker" ) ]
+            , href homePath
+            ]
+            [ text txt ]
+        ]
+
+
+footerTitle : String -> Html Msg
+footerTitle txt =
+    h4
+        [ class "title is-size-5 has-text-primary has-text-weight-medium"
+        , style
+            [ ( "font-family", "Quicksand" )
+            , ( "padding", "0.25em 0em" )
+            ]
+        ]
+        [ text txt ]
+
+
+footerCopy : String -> Html Msg
+footerCopy txt =
+    p
+        [ class "is-size-6 has-text-left has-text-primary"
+        , style [ ( "padding-right", "3.5rem" ) ]
+        ]
+        [ text txt ]
+
+
+footerLink : String -> String -> Html Msg
+footerLink link txt =
+    p
+        [ style
+            [ ( "padding", "0.25em 0em" )
+            , ( "letter-spacing", "0.5px" )
+            ]
+        ]
+        [ a
+            [ class "is-size-6 has-text-left has-text-grey-footer"
+            , href link
+            ]
+            [ text txt ]
+        ]
+
+
+authorNote : Html Msg
+authorNote =
+    div
+        [ class "has-text-primary" ]
+        [ text "Made with "
+        , i
+            [ style
+                [ ( "color", "#ffc0cb" ) ]
+            , class "fas fa-heart"
             ]
             []
-        ]
-
-
-unsplashButton : Html Msg
-unsplashButton =
-    a
-        [ class "button is-small is-text"
-        , href "https://unsplash.com/photos/pFqrYbhIAXs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-        ]
-        [ icon "fas fa-camera fa-lg"
-        , span
-            []
-            [ text "Photo by Luke Chesser" ]
+        , text " by Henry Sarabia"
         ]

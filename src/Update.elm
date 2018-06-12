@@ -1,7 +1,7 @@
 module Update exposing (..)
 
 import Commands exposing (..)
-import Models exposing (Model, Direction(..))
+import Models exposing (Model)
 import Msgs exposing (Msg(..))
 import Navigation
 import Ports exposing (..)
@@ -54,13 +54,8 @@ update msg model =
         OnFetchPlaylist response ->
             ( { model | discover = response }, Cmd.none )
 
-        OnScroll dir domId ->
-            case dir of
-                Up ->
-                    ( model, scrollNextSibling domId )
-
-                Down ->
-                    ( model, scrollPrevSibling domId )
-
         ToggleModal domId ->
             ( model, toggleModal domId )
+
+        ScrollToDomId id ->
+            ( model, scrollIdIntoView id )

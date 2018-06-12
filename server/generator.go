@@ -142,7 +142,7 @@ func (g *generator) TrackDiscover() (*spotify.FullPlaylist, error) {
 	}
 
 	// name := "Discover Now - Popularity " + strconv.Itoa(targetPopularity)
-	name := "Discover 1"
+	name := "Discover Now"
 	IDs := extractTrackIDs(recs)
 	pl, err := g.c.Playlist(name, IDs)
 	if err != nil {
@@ -179,7 +179,7 @@ func (g *generator) ArtistDiscover() (*spotify.FullPlaylist, error) {
 	}
 
 	IDs := extractTrackIDs(shuffleTracks(recs))
-	pl, err := g.c.Playlist("Artist Discover", IDs)
+	pl, err := g.c.Playlist("Discover Now", IDs)
 	// pl, err := g.c.Playlist("Discover 2", IDs)
 	if err != nil {
 		return nil, errors.WithMessage(err, "ArtistDiscover: cannot create playlist")
@@ -205,9 +205,10 @@ func (g *generator) TrackSummary(time string) (*spotify.FullPlaylist, error) {
 		return nil, err
 	}
 
-	name := playlistName(time)
+	// name := playlistName(time)
 	IDs := extractTrackIDs(shuffleTracks(recs))
-	pl, err := g.c.Playlist(name+" - Test 2", IDs)
+	// pl, err := g.c.Playlist(name+" - Test 2", IDs)
+	pl, err := g.c.Playlist("Discover Now", IDs)
 	if err != nil {
 		return nil, err
 	}
@@ -240,9 +241,10 @@ func (g *generator) ArtistSummary(time string) (*spotify.FullPlaylist, error) {
 		return nil, err
 	}
 
-	name := playlistName(time)
+	// name := playlistName(time)
 	IDs := extractTrackIDs(shuffleTracks(recs))
-	pl, err := g.c.Playlist(name+" - Test 1", IDs)
+	// pl, err := g.c.Playlist(name+" - Test 1", IDs)
+	pl, err := g.c.Playlist("Discover Now", IDs)
 	if err != nil {
 		return nil, err
 	}

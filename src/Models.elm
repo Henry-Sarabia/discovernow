@@ -13,17 +13,6 @@ type alias Model =
     }
 
 
-type Range
-    = Short
-    | Medium
-    | Long
-
-
-type Direction
-    = Up
-    | Down
-
-
 type alias Login =
     { url : String }
 
