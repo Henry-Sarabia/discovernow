@@ -1,8 +1,8 @@
 module View exposing (..)
 
 import Html exposing (Html)
-import Models exposing (Model, Token, Login)
-import Msgs exposing (Msg(..))
+import Models exposing (Model, Token)
+import Msgs exposing (Msg)
 import Routing exposing (..)
 import Views.About as About
 import Views.Discover as Discover
@@ -44,9 +44,9 @@ aboutPage model =
     About.root model
 
 
-discoverPage : Model -> Token -> Html Msg
-discoverPage model token =
-    Discover.root model token
+discoverPage : Model -> Html Msg
+discoverPage model =
+    Discover.root model
 
 
 errorPage : Model -> Html Msg
@@ -66,4 +66,4 @@ checkResults model =
             errorPage model
 
         Just token ->
-            discoverPage model token
+            discoverPage model

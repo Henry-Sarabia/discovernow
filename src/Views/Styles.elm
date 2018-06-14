@@ -1,7 +1,7 @@
 module Views.Styles exposing (..)
 
 import Html exposing (Attribute)
-import Html.Attributes exposing (class, style)
+import Html.Attributes exposing (style)
 
 
 alphaPhotoBackground : String -> Float -> Attribute msg

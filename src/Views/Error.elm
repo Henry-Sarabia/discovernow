@@ -1,7 +1,7 @@
 module Views.Error exposing (notFoundPage, serverErrorPage)
 
 import Html exposing (Html, div, text, h1, h2, h3, section, span, a, i)
-import Html.Attributes exposing (class, style, href)
+import Html.Attributes exposing (class, style)
 import Models exposing (Model)
 import Msgs exposing (Msg(..))
 import Routing exposing (homePath)

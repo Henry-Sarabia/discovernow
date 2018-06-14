@@ -1,9 +1,9 @@
 module Views.Discover exposing (root)
 
-import Html exposing (Html, div, section, text, span, a, iframe, p, i, h1, h2, button)
+import Html exposing (Html, div, section, text, a, iframe, p, i, h1, h2, button)
 import Html.Attributes exposing (class, style, id, src, height, width, attribute)
 import Html.Events exposing (onClick)
-import Models exposing (Model, Token, Login, Playlist)
+import Models exposing (Model, Login, Playlist)
 import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
 import Views.Buttons exposing (loginButton)
@@ -13,17 +13,17 @@ import Views.Footer exposing (simpleFooter)
 import Views.Styles exposing (..)
 
 
-root : Model -> Token -> Html Msg
-root model token =
+root : Model -> Html Msg
+root model =
     div
         []
-        [ hero model token
+        [ hero model
         , simpleFooter
         ]
 
 
-hero : Model -> Token -> Html Msg
-hero model token =
+hero : Model -> Html Msg
+hero model =
     section
         [ class "hero is-fullheight is-light"
         , svgBackground "images/greenTopography.svg"
@@ -215,8 +215,6 @@ previewButtonMobile : String -> Html Msg
 previewButtonMobile domId =
     a
         [ class "button is-info is-rounded is-hidden-tablet"
-
-        -- , style [ ( "margin-top", "-4rem" ) ]
         , onClick (ToggleModal domId)
         ]
         [ icon "far fa-play-circle fa-lg"
