@@ -6,8 +6,8 @@ import Html.Events exposing (onClick)
 import Models exposing (Model, Login, Playlist)
 import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
-import Views.Buttons exposing (loginButton)
-import Views.Header exposing (heroNavbar, navbar)
+import Views.Buttons exposing (spotifyButton)
+import Views.Header exposing (navbar)
 import Views.Icons exposing (..)
 import Views.Footer exposing (simpleFooter)
 import Views.Styles exposing (..)
@@ -28,7 +28,7 @@ hero model =
         [ class "hero is-fullheight is-light"
         , svgBackground "images/greenTopography.svg"
         ]
-        [ heroNavbar model
+        [ navbar model
         , heroBody model
         , heroFoot model
         ]
@@ -67,7 +67,7 @@ notAsked login =
         [ header "Oh, hey."
         , subheader "Somehow you got here without asking for a playlist."
         , copy "Let's fix that."
-        , loginButton login
+        , spotifyButton
         ]
 
 
@@ -337,22 +337,6 @@ spotifyWidgetMobile playlist =
         ]
 
 
-testspotifyWidget : Html Msg
-testspotifyWidget =
-    div
-        []
-        [ iframe
-            [ src "https://open.spotify.com/embed?uri=spotify%3Auser%3Aspotify%3Aplaylist%3A2PXdUld4Ueio2pHcB6sM8j&theme=white"
-            , width 300
-            , height 500
-            , attribute "frameborder" "0"
-            , attribute "allowtransparency" "true"
-            , attribute "allow" "encrypted-media"
-            ]
-            []
-        ]
-
-
 createPlaylistUri : Playlist -> String
 createPlaylistUri playlist =
-    "https://open.spotify.com/embed?uri=" ++ playlist.id
+    "https://open.spotify.com/embed?uri=" ++ playlist.uri

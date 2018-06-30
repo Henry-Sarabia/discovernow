@@ -18,7 +18,7 @@ type alias Login =
 
 
 type alias Playlist =
-    { id : String }
+    { uri : String }
 
 
 type alias Token =

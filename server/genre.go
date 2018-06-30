@@ -7,7 +7,6 @@ import (
 )
 
 const (
-	maxArtists    = 50 // max = 50
 	minArtistData = 15
 	maxSeedInput  = 5
 )

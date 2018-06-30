@@ -1,36 +1,15 @@
-module Views.Header exposing (heroNavbar, navbar)
+module Views.Header exposing (navbar)
 
-import Html exposing (Html, text, div, img, span, a, nav, i, h1)
-import Html.Attributes exposing (style, src, class, href, attribute)
-import Html.Events exposing (onClick)
+import Html exposing (Html, text, div, a, nav, h1)
+import Html.Attributes exposing (style, class, href)
 import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
-import RemoteData exposing (WebData)
-import Views.Icons exposing (..)
+import Views.Buttons exposing (smallGithubButton)
 import Views.Styles exposing (..)
 
 
 navbar : Model -> Html Msg
 navbar model =
-    nav
-        [ class "navbar is-light" ]
-        [ div
-            [ class "container" ]
-            [ navbarBrand
-            , div
-                [ class "navbar-menu" ]
-                [ div
-                    [ class "navbar-end" ]
-                    [ navbarItem githubButton
-                    , navbarItem (loginButton model.login)
-                    ]
-                ]
-            ]
-        ]
-
-
-heroNavbar : Model -> Html Msg
-heroNavbar model =
     div
         [ class "hero-head is-hidden-mobile"
         , style [ ( "box-shadow", "0 1px 0 hsla(0,0%,100%,.2)" ) ]
@@ -42,9 +21,7 @@ heroNavbar model =
                 [ class "navbar-menu" ]
                 [ div
                     [ class "navbar-end" ]
-                    [ navbarItem githubButton
-                    , navbarItem (loginButton model.login)
-                    ]
+                    [ navbarItem smallGithubButton ]
                 ]
             ]
         ]
@@ -78,41 +55,3 @@ navbarItem item =
     div
         [ class "navbar-item" ]
         [ item ]
-
-
-loginButton : WebData Login -> Html Msg
-loginButton login =
-    case login of
-        RemoteData.NotAsked ->
-            spotifyButton ForceFetchLogin
-
-        RemoteData.Loading ->
-            spotifyButton ForceFetchLogin
-
-        RemoteData.Success response ->
-            spotifyButton (LoadLogin response.url)
-
-        RemoteData.Failure err ->
-            spotifyButton ForceFetchLogin
-
-
-spotifyButton : Msg -> Html Msg
-spotifyButton msg =
-    a
-        [ class "button is-primary"
-        , onClick msg
-        ]
-        [ icon "fab fa-spotify fa-lg"
-        , iconText "Connect"
-        ]
-
-
-githubButton : Html Msg
-githubButton =
-    a
-        [ class "button is-dark is-outlined"
-        , href "https://github.com/Henry-Sarabia/myfy"
-        ]
-        [ icon "fab fa-github fa-lg"
-        , iconText "Explore"
-        ]

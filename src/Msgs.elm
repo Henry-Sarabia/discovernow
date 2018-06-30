@@ -10,9 +10,6 @@ type Msg
     | OnLocationChange Navigation.Location
     | FetchLogin
     | OnFetchLogin (WebData Login)
-    | LoadLogin String
-    | ForceFetchLogin
-    | OnForceFetchLogin (WebData Login)
     | FetchPlaylist Token
     | OnFetchPlaylist (WebData Playlist)
     | ToggleModal String

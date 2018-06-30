@@ -1,16 +1,14 @@
 package main
 
 import (
+	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
 	"math/rand"
 	"time"
 
 	"github.com/zmb3/spotify"
 )
-
-// TODO: use type alias for simpleTrack, fullTrack to make ID method and accept interface instead
-// func (t spotify.FullTrack) ID() spotify.ID {
-// 	return t.ID
-// }
 
 // simpleToFull returns a list of simple tracks corresponding to the provided
 // full tracks.
@@ -99,30 +97,21 @@ func trackSeeds(tracks []spotify.SimpleTrack) []spotify.Seeds {
 	return sds
 }
 
-func trackSeedNew(IDs []spotify.ID) spotify.Seeds {
-	sd := spotify.Seeds{}
-
-	for _, ID := range IDs {
-		if len(sd.Tracks) > maxSeedInput {
-			break
-		}
-		sd.Tracks = append(sd.Tracks, ID)
-	}
-
-	return sd
+// concatBuf concatenates two strings inside a byte buffer
+func concatBuf(a, b string) bytes.Buffer {
+	var buf bytes.Buffer
+	buf.WriteString(a)
+	buf.WriteString(b)
+	return buf
 }
 
-func trackSeedsNew(IDs []spotify.ID) []spotify.Seeds {
-	sds := make([]spotify.Seeds, 0)
-
-	i := 0
-	for i <= len(IDs)-maxSeedInput {
-		sds = append(sds, trackSeedNew(IDs[i:i+maxSeedInput]))
-		i += maxSeedInput
+// hash returns the HMAC hash of the provided slice of bytes using SHA-256.
+func hash(b []byte) ([]byte, error) {
+	mac := hmac.New(sha256.New, hashKey)
+	_, err := mac.Write(b)
+	if err != nil {
+		return nil, err
 	}
-	if i < len(IDs) {
-		sds = append(sds, trackSeedNew(IDs[i:len(IDs)]))
-	}
-
-	return sds
+	h := mac.Sum(nil)
+	return h, nil
 }

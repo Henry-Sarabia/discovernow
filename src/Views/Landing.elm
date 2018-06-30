@@ -6,7 +6,7 @@ import Html.Events exposing (onClick)
 import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
 import Utils exposing (..)
-import Views.Buttons exposing (loginButton, githubButton)
+import Views.Buttons exposing (spotifyButton, githubButton)
 import Views.Footer exposing (simpleFooter)
 import Views.Icons exposing (..)
 import Views.Colors exposing (..)
@@ -132,7 +132,7 @@ buttonPairDesktop model =
         , style [ ( "margin-left", "-0.5rem" ) ]
         ]
         [ githubButton
-        , loginButton model.login
+        , spotifyButton
         ]
 
 
@@ -144,7 +144,7 @@ buttonPairMobile model =
             [ ( "padding", "1rem" ) ]
         ]
         [ githubButton
-        , loginButton model.login
+        , spotifyButton
         ]
 
 
@@ -414,7 +414,7 @@ steps : Html Msg
 steps =
     section
         [ class "hero is-large"
-        , style [ ( "background", "linear-gradient(45deg, hsl(0, 0%, 100%) 0%, hsla(0, 0%, 100%, 0.738) 19%, hsla(0, 0%, 100%, 0.541) 34%, hsla(0, 0%, 100%, 0.382) 47%, hsla(0, 0%, 100%, 0.278) 56.5%, hsla(0, 0%, 100%, 0.194) 65%, hsla(0, 0%, 100%, 0.126) 73%, hsla(0, 0%, 100%, 0.075) 80.2%, hsla(0, 0%, 100%, 0.042) 86.1%, hsla(0, 0%, 100%, 0.021) 91%, hsla(0, 0%, 100%, 0.008) 95.2%, hsla(0, 0%, 100%, 0.002) 98.2%, hsla(0, 0%, 100%, 0) 100%)" ) ]
+        , whiteGradient
         ]
         [ div
             [ class "hero-body container" ]
@@ -469,11 +469,11 @@ story =
             , columns
                 [ storyCard
                     ( "We make your privacy our priority"
-                    , "We designed Discover Now from the ground up with your privacy in mind. You don't need to create an account with us - we let Spotify handle your sensitive data for us. The first time you use Discover Now, we ask for permission to use some of your play history so our algorithm can do its magic. That data is then discarded the moment your unique playlist is generated. Last but not least, if you want a cookie you'll have to keep looking - we don't keep any of those in your browser either."
+                    , "We designed Discover Now from the ground up with your privacy in mind. You don't need to create an account with us - we let Spotify handle your sensitive data instead. The first time you use Discover Now, we'll ask for permission to use some of your play history so our algorithm can do its magic. That data is then discarded the moment your unique playlist is generated. We don't store your IP, your data, or anything else on our server. Our work begins and ends with connecting you to undiscovered music."
                     )
                 , accentQuote "right"
                     shadowGreen
-                    "Discover Now was designed with your privacy in mind every step of the way - we strive for a balance of convenience and confidentiality."
+                    "Discover Now was designed with your privacy in mind every step of the way - we strive for a balance of convenience and confidentiality. Secure by design."
                 ]
             ]
         ]
@@ -524,7 +524,7 @@ callToAction model txt =
             [ class "hero-body container" ]
             [ columns
                 [ ctaText txt
-                , ctaButton (loginButton model.login)
+                , ctaButton (spotifyButton)
                 ]
             ]
         ]
