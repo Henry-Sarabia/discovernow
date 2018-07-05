@@ -1,8 +1,8 @@
 package main
 
 import (
-	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"errors"
 	"log"
 	"net/http"
@@ -12,7 +12,6 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/oauth2"
 
-	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 
 	"github.com/go-chi/chi"
@@ -24,23 +23,23 @@ import (
 )
 
 const (
-	redirectURI = "http://192.168.1.5:3000/results"
-	// redirectURI = "https://discover-test-69db3.firebaseapp.com/results"
 	sessionName = "discover_now"
 )
 
 var (
-	auth = spotify.NewAuthenticator(
+	frontendURI = os.Getenv("FRONTEND_URI")
+	redirectURI = frontendURI + "/results"
+	auth        = spotify.NewAuthenticator(
 		redirectURI,
 		spotify.ScopeUserReadPrivate,
 		spotify.ScopeUserTopRead,
 		spotify.ScopeUserReadRecentlyPlayed,
 		spotify.ScopePlaylistModifyPublic,
 	)
-	hashKey    = securecookie.GenerateRandomKey(sha256.Size) // Move these keys to an environment variable
-	storeAuth  = securecookie.GenerateRandomKey(64)
-	storeCrypt = securecookie.GenerateRandomKey(32)
-	store      = sessions.NewCookieStore(storeAuth, storeCrypt)
+	hashKey, hashErr     = hex.DecodeString(os.Getenv("DISCOVER_HASH"))
+	storeAuth, authErr   = hex.DecodeString(os.Getenv("DISCOVER_AUTH"))
+	storeCrypt, cryptErr = hex.DecodeString(os.Getenv("DISCOVER_CRYPT"))
+	store                = sessions.NewCookieStore(storeAuth, storeCrypt)
 )
 
 // Login contains the URL configured for Spotify authentication.
@@ -54,14 +53,18 @@ type Playlist struct {
 }
 
 func main() {
-	os.Setenv("PORT", "8080") // remove if deploying to heroku
+	// Check environment
+	err := verifyEnv()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Initialize router
 	r := chi.NewRouter()
 
 	// Configure CORS handler
 	CORS := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://192.168.1.5:3000"}, // add prod server origin on deployment
+		AllowedOrigins:   []string{frontendURI},
 		AllowedMethods:   []string{"GET", "OPTIONS"},
 		AllowedHeaders:   []string{},
 		ExposedHeaders:   []string{},
@@ -73,16 +76,14 @@ func main() {
 	// Specify middleware
 	r.Use(CORS.Handler)
 	r.Use(middleware.RequestID)
-	// r.Use(middleware.RealIP)
-	// r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
 	// Configure session store
 	store.Options = &sessions.Options{
 		Path:     "/",
 		HttpOnly: true,
-		Secure:   false,
-		//Secure: true, // Set to true on deploy
+		Secure:   true,
+		MaxAge:   0,
 	}
 
 	// Handlers
@@ -90,6 +91,7 @@ func main() {
 	r.Get("/playlist", playlistHandler)
 
 	// Serve
+	// os.Setenv("PORT", "8080") // remove on deploy
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
@@ -213,4 +215,21 @@ func authorizeRequest(w http.ResponseWriter, r *http.Request) (*oauth2.Token, er
 	}
 
 	return tok, nil
+}
+
+// verifyEnv returns an error if any of the three secret keys are not set
+// or cause a decode error.
+func verifyEnv() error {
+	switch {
+	case len(frontendURI) == 0:
+		return errors.New("$FRONTEND_URI must be set")
+	case hashErr != nil || len(hashKey) == 0:
+		return errors.New("$DISCOVER_HASH must be set")
+	case authErr != nil || len(storeAuth) == 0:
+		return errors.New("$DISCOVER_AUTH must be set")
+	case cryptErr != nil || len(storeCrypt) == 0:
+		return errors.New("$DISCOVER_CRYPT must be set")
+	default:
+		return nil
+	}
 }
