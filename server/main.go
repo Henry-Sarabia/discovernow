@@ -9,19 +9,15 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-chi/chi/middleware"
-
+	"github.com/go-chi/render"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-
-	uuid "github.com/satori/go.uuid"
-	"golang.org/x/oauth2"
-
 	"github.com/gorilla/sessions"
 
-	"github.com/go-chi/render"
-
 	"github.com/zmb3/spotify"
+	"golang.org/x/oauth2"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 const (
@@ -55,15 +51,19 @@ type Playlist struct {
 }
 
 func main() {
-	// Check environment
 	err := verifyEnv()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	os.Setenv("PORT", "8080") // remove on deploy
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
+
 	r := mux.NewRouter()
 
-	// Configure CORS handler
 	cors := handlers.CORS(
 		handlers.AllowCredentials(),
 		handlers.AllowedOrigins([]string{frontendURI}),
@@ -71,12 +71,9 @@ func main() {
 		handlers.MaxAge(600),                     // 300?
 	)
 
-	// Specify middleware
 	r.Use(cors)
-	r.Use(middleware.RequestID)
-	r.Use(middleware.Recoverer)
+	r.Use(handlers.RecoveryHandler())
 
-	// Configure session store
 	store.Options = &sessions.Options{
 		Path:     "/",
 		HttpOnly: true,
@@ -84,58 +81,10 @@ func main() {
 		MaxAge:   0,
 	}
 
-	// Handlers
 	r.HandleFunc("/login", loginHandler)
 	r.HandleFunc("/playlist", playlistHandler)
 
-	// Serve
-	os.Setenv("PORT", "8080") // remove on deploy
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.Fatal("$PORT must be set")
-	}
 	http.ListenAndServe(":"+port, r)
-
-	/////////////////
-
-	// // Initialize router
-	// r := chi.NewRouter()
-
-	// // Configure CORS handler
-	// CORS := cors.New(cors.Options{
-	// 	AllowedOrigins:   []string{frontendURI},
-	// 	AllowedMethods:   []string{"GET", "OPTIONS"},
-	// 	AllowedHeaders:   []string{},
-	// 	ExposedHeaders:   []string{},
-	// 	AllowCredentials: true,
-	// 	MaxAge:           300,
-	// 	Debug:            false,
-	// })
-
-	// // Specify middleware
-	// r.Use(CORS.Handler)
-	// r.Use(middleware.RequestID)
-	// r.Use(middleware.Recoverer)
-
-	// // Configure session store
-	// store.Options = &sessions.Options{
-	// 	Path:     "/",
-	// 	HttpOnly: true,
-	// 	Secure:   true,
-	// 	MaxAge:   0,
-	// }
-
-	// // Handlers
-	// r.Get("/login", loginHandler)
-	// r.Get("/playlist", playlistHandler)
-
-	// // Serve
-	// // os.Setenv("PORT", "8080") // remove on deploy
-	// port := os.Getenv("PORT")
-	// if port == "" {
-	// 	log.Fatal("$PORT must be set")
-	// }
-	// http.ListenAndServe(":"+port, r)
 }
 
 // loginHandler responds to requests with an authorization URL configured for a
