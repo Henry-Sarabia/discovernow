@@ -1,34 +1,34 @@
 module Views.Discover exposing (root)
 
-import Html exposing (Html, div, section, text, span, a, iframe, p, i, h1, h2, button)
+import Html exposing (Html, div, section, text, a, iframe, p, i, h1, h2, button)
 import Html.Attributes exposing (class, style, id, src, height, width, attribute)
 import Html.Events exposing (onClick)
-import Models exposing (Model, Token, Login, Playlist)
+import Models exposing (Model, Login, Playlist)
 import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
-import Views.Buttons exposing (loginButton)
-import Views.Header exposing (heroNavbar, navbar)
+import Views.Buttons exposing (spotifyButton)
+import Views.Header exposing (navbar)
 import Views.Icons exposing (..)
 import Views.Footer exposing (simpleFooter)
 import Views.Styles exposing (..)
 
 
-root : Model -> Token -> Html Msg
-root model token =
+root : Model -> Html Msg
+root model =
     div
         []
-        [ hero model token
+        [ hero model
         , simpleFooter
         ]
 
 
-hero : Model -> Token -> Html Msg
-hero model token =
+hero : Model -> Html Msg
+hero model =
     section
         [ class "hero is-fullheight is-light"
         , svgBackground "images/greenTopography.svg"
         ]
-        [ heroNavbar model
+        [ navbar model
         , heroBody model
         , heroFoot model
         ]
@@ -67,7 +67,7 @@ notAsked login =
         [ header "Oh, hey."
         , subheader "Somehow you got here without asking for a playlist."
         , copy "Let's fix that."
-        , loginButton login
+        , spotifyButton
         ]
 
 
@@ -215,8 +215,6 @@ previewButtonMobile : String -> Html Msg
 previewButtonMobile domId =
     a
         [ class "button is-info is-rounded is-hidden-tablet"
-
-        -- , style [ ( "margin-top", "-4rem" ) ]
         , onClick (ToggleModal domId)
         ]
         [ icon "far fa-play-circle fa-lg"
@@ -339,22 +337,6 @@ spotifyWidgetMobile playlist =
         ]
 
 
-testspotifyWidget : Html Msg
-testspotifyWidget =
-    div
-        []
-        [ iframe
-            [ src "https://open.spotify.com/embed?uri=spotify%3Auser%3Aspotify%3Aplaylist%3A2PXdUld4Ueio2pHcB6sM8j&theme=white"
-            , width 300
-            , height 500
-            , attribute "frameborder" "0"
-            , attribute "allowtransparency" "true"
-            , attribute "allow" "encrypted-media"
-            ]
-            []
-        ]
-
-
 createPlaylistUri : Playlist -> String
 createPlaylistUri playlist =
-    "https://open.spotify.com/embed?uri=" ++ playlist.id
+    "https://open.spotify.com/embed?uri=" ++ playlist.uri

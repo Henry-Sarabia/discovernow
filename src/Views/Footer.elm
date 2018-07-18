@@ -1,33 +1,18 @@
-module Views.Footer exposing (heroFooter, simpleFooter)
+module Views.Footer exposing (simpleFooter)
 
-import Html exposing (Html, div, text, span, a, footer, p, i, h2, h4)
+import Html exposing (Html, div, text, a, footer, p, i, h2, h4)
 import Html.Attributes exposing (class, style, href)
-import Msgs exposing (Msg(..))
+import Msgs exposing (Msg)
 import Routing exposing (homePath)
 import Utils exposing (..)
+import Views.Styles exposing (..)
 
 
 simpleFooter : Html Msg
 simpleFooter =
     footer
         [ class "footer" ]
-        [ content
-        ]
-
-
-heroFooter : Html Msg
-heroFooter =
-    footer
-        [ class "hero-foot"
-        , style
-            [ ( "padding", "4rem 0rem" )
-            , ( "box-shadow", "0 -1px 0 hsla(0,0%,100%,.2)" )
-            ]
-        ]
-        [ div
-            [ class "container" ]
-            [ content ]
-        ]
+        [ content ]
 
 
 content : Html Msg
@@ -84,7 +69,8 @@ project =
         []
         [ footerTitle "Project"
         , footerLink "https://github.com/Henry-Sarabia/myfy" "GitHub Repository"
-        , footerLink "" "Spotify Page"
+
+        -- , footerLink "" "Spotify Page"
         , footerLink "" "License"
         ]
 
@@ -98,8 +84,6 @@ resources =
         , footerLink "https://fontawesome.com/" "Font Awesome"
         , footerLink "https://unsplash.com/@markusspiske" "Unsplash"
         , footerLink "https://coolbackgrounds.io/" "Cool Backgrounds"
-
-        -- , footerLink "https://unsplash.com/@umbe" "Umberto Cofini"
         ]
 
 
@@ -120,8 +104,7 @@ footerHeader txt =
         [ style [ ( "padding-bottom", "1.5rem" ) ] ]
         [ a
             [ class "title is-size-3 has-text-primary"
-            , style
-                [ ( "font-family", "Permanent Marker" ) ]
+            , fontMarker
             , href homePath
             ]
             [ text txt ]
@@ -132,10 +115,9 @@ footerTitle : String -> Html Msg
 footerTitle txt =
     h4
         [ class "title is-size-5 has-text-primary has-text-weight-medium"
+        , fontQuicksand
         , style
-            [ ( "font-family", "Quicksand" )
-            , ( "padding", "0.25em 0em" )
-            ]
+            [ ( "padding", "0.25em 0em" ) ]
         ]
         [ text txt ]
 

@@ -26,15 +26,6 @@ update msg model =
             ( model, fetchLoginCmd )
 
         OnFetchLogin response ->
-            ( { model | login = response }, Cmd.none )
-
-        LoadLogin url ->
-            ( model, Navigation.load url )
-
-        ForceFetchLogin ->
-            ( model, forceFetchLoginCmd )
-
-        OnForceFetchLogin response ->
             case response of
                 RemoteData.NotAsked ->
                     ( { model | login = response }, Cmd.none )

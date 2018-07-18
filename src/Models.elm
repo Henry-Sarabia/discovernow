@@ -1,6 +1,6 @@
 module Models exposing (..)
 
-import Routing exposing (Route(..))
+import Routing exposing (Route)
 import RemoteData exposing (WebData)
 
 
@@ -18,7 +18,7 @@ type alias Login =
 
 
 type alias Playlist =
-    { id : String }
+    { uri : String }
 
 
 type alias Token =

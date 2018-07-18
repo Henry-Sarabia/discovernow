@@ -8,20 +8,31 @@ import Msgs exposing (Msg(..))
 import RemoteData exposing (WebData)
 
 
--- import Utils exposing (errorToString)
-
-
 fetchLoginCmd : Cmd Msg
 fetchLoginCmd =
-    Http.get fetchLoginUrl loginDecoder
+    corsGetRequest loginEndpoint loginDecoder
         |> RemoteData.sendRequest
         |> Cmd.map OnFetchLogin
 
 
-fetchLoginUrl : String
-fetchLoginUrl =
-    -- "https://nameless-thicket-99291.herokuapp.com/login"
-    "http://localhost:8080/login"
+fetchPlaylistCmd : Token -> Cmd Msg
+fetchPlaylistCmd token =
+    corsGetRequest (playlistEndpoint ++ tokenQuery token) playlistDecoder
+        |> RemoteData.sendRequest
+        |> Cmd.map OnFetchPlaylist
+
+
+corsGetRequest : String -> Decode.Decoder a -> Http.Request a
+corsGetRequest url decoder =
+    Http.request
+        { method = "GET"
+        , headers = []
+        , url = url
+        , body = Http.emptyBody
+        , expect = Http.expectJson decoder
+        , timeout = Nothing
+        , withCredentials = True
+        }
 
 
 loginDecoder : Decode.Decoder Login
@@ -30,22 +41,14 @@ loginDecoder =
         |> required "url" Decode.string
 
 
-forceFetchLoginCmd : Cmd Msg
-forceFetchLoginCmd =
-    Http.get fetchLoginUrl loginDecoder
-        |> RemoteData.sendRequest
-        |> Cmd.map OnForceFetchLogin
+playlistDecoder : Decode.Decoder Playlist
+playlistDecoder =
+    decode Playlist
+        |> required "uri" Decode.string
 
 
-fetchPlaylistCmd : Token -> Cmd Msg
-fetchPlaylistCmd token =
-    Http.get (fetchPlaylistUrl ++ createTokenUrl token) playlistDecoder
-        |> RemoteData.sendRequest
-        |> Cmd.map OnFetchPlaylist
-
-
-createTokenUrl : Token -> String
-createTokenUrl token =
+tokenQuery : Token -> String
+tokenQuery token =
     "?code=" ++ token.code ++ "&state=" ++ token.state
 
 
@@ -53,40 +56,13 @@ createTokenUrl token =
 -- TODO: change to /api/ endpoint
 
 
-fetchPlaylistUrl : String
-fetchPlaylistUrl =
+loginEndpoint : String
+loginEndpoint =
+    -- "https://nameless-thicket-99291.herokuapp.com/login"
+    "http://192.168.1.5:8080/login"
+
+
+playlistEndpoint : String
+playlistEndpoint =
     -- "https://nameless-thicket-99291.herokuapp.com/playlist"
-    "http://localhost:8080/playlist"
-
-
-playlistDecoder : Decode.Decoder Playlist
-playlistDecoder =
-    decode Playlist
-        |> required "id" Decode.string
-
-
-
--- checkForRefetchCmd : WebData a -> Maybe Token -> Cmd Msg
--- checkForRefetchCmd msg token =
---     case msg of
---         RemoteData.NotAsked ->
---             Cmd.none
---         RemoteData.Loading ->
---             Cmd.none
---         RemoteData.Success _ ->
---             Cmd.none
---         RemoteData.Failure err ->
---             case err of
---                 Http.BadUrl _ ->
---                     Cmd.none
---                 Http.Timeout ->
---                     Cmd.none
---                 Http.NetworkError ->
---                     Cmd.none
---                 Http.BadStatus resp ->
---                     if resp.status.code == 503 then
---                         fetchSummaryCmd token
---                     else
---                         Cmd.none
---                 Http.BadPayload _ _ ->
---                     Cmd.none
+    "http://192.168.1.5:8080/playlist"

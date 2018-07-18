@@ -48,7 +48,7 @@ baseModel route =
     { route = route
     , changes = 0
     , token = Nothing
-    , login = RemoteData.Loading
+    , login = RemoteData.NotAsked
     , discover = RemoteData.NotAsked
     }
 
@@ -57,10 +57,10 @@ initialCommands : Route -> Cmd Msg
 initialCommands route =
     case route of
         LandingRoute ->
-            fetchLoginCmd
+            Cmd.none
 
         AboutRoute ->
-            fetchLoginCmd
+            Cmd.none
 
         ResultsRoute maybeCode maybeState ->
             case ( maybeCode, maybeState ) of
