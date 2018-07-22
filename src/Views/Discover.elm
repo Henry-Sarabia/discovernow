@@ -1,7 +1,7 @@
 module Views.Discover exposing (root)
 
-import Html exposing (Html, div, section, text, a, iframe, p, i, h1, h2, button)
-import Html.Attributes exposing (class, style, id, src, height, width, attribute)
+import Html exposing (Html, div, section, text, a, iframe, p, i, h2, h4, button)
+import Html.Attributes exposing (class, id, src, height, width, attribute)
 import Html.Events exposing (onClick)
 import Models exposing (Model, Login, Playlist)
 import Msgs exposing (Msg(..))
@@ -26,7 +26,7 @@ hero : Model -> Html Msg
 hero model =
     section
         [ class "hero is-fullheight is-light"
-        , svgBackground "images/greenTopography.svg"
+        , svgBackground model.flags.bodyBG
         ]
         [ navbar model
         , heroBody model
@@ -85,9 +85,7 @@ success playlist =
 loading : Html Msg
 loading =
     i
-        [ class "fas fa-spinner fa-pulse fa-5x"
-        , style [ ( "margin-top", "-5rem" ) ]
-        ]
+        [ class "fas fa-spinner fa-pulse fa-5x" ]
         []
 
 
@@ -113,29 +111,20 @@ header txt =
 headerDesktop : String -> Html Msg
 headerDesktop txt =
     h2
-        [ class "title has-text-weight-normal has-text-grey-darker is-hidden-mobile"
-        , fontQuicksand
-        , style
-            [ ( "font-size", "4em" )
-            , ( "margin-top", "-5rem" )
-            ]
-        ]
+        [ class "discover-header-desktop title has-text-weight-normal is-hidden-mobile" ]
         [ text txt ]
 
 
 headerMobile : String -> Html Msg
 headerMobile txt =
     h2
-        [ class "title is-size-1 has-text-weight-normal has-text-grey-darker is-hidden-tablet"
-        , fontQuicksand
-        , style [ ( "padding-bottom", "0.5rem" ) ]
-        ]
+        [ class "discover-header-mobile title is-size-1 has-text-weight-normal is-hidden-tablet" ]
         [ text txt ]
 
 
 subheader : String -> Html Msg
 subheader txt =
-    h1
+    h2
         []
         [ subheaderDesktop txt
         , subheaderMobile txt
@@ -144,27 +133,21 @@ subheader txt =
 
 subheaderDesktop : String -> Html Msg
 subheaderDesktop txt =
-    h1
-        [ class "title is-size-3 has-text-weight-normal has-text-grey-dark is-hidden-mobile"
-        , fontQuicksand
-        , style [ ( "padding-bottom", "4rem" ) ]
-        ]
+    h2
+        [ class "discover-subheader-desktop title has-text-weight-normal has-text-grey-dark is-hidden-mobile" ]
         [ text txt ]
 
 
 subheaderMobile : String -> Html Msg
 subheaderMobile txt =
-    h1
-        [ class "title is-size-4 has-text-weight-normal has-text-grey-dark is-hidden-tablet"
-        , fontQuicksand
-        , style [ ( "padding-bottom", "3rem" ) ]
-        ]
+    h2
+        [ class "discover-subheader-mobile title is-size-4 has-text-weight-normal has-text-grey-dark is-hidden-tablet" ]
         [ text txt ]
 
 
 copy : String -> Html Msg
 copy txt =
-    p
+    h4
         []
         [ copyDesktop txt
         , copyMobile txt
@@ -173,20 +156,15 @@ copy txt =
 
 copyDesktop : String -> Html Msg
 copyDesktop txt =
-    p
-        [ class "is-size-5 has-text-weight-medium has-text-grey-copy is-hidden-mobile"
-        , fontQuicksand
-        ]
+    h4
+        [ class "is-size-5 has-text-weight-medium has-text-grey-copy is-hidden-mobile" ]
         [ text txt ]
 
 
 copyMobile : String -> Html Msg
 copyMobile txt =
-    p
-        [ class "is-size-6 has-text-weight-medium has-text-grey-copy is-hidden-tablet"
-        , fontQuicksand
-        , style [ ( "padding-bottom", "0.5rem" ) ]
-        ]
+    h4
+        [ class "discover-copy-mobile is-size-6 has-text-weight-medium has-text-grey-copy is-hidden-tablet" ]
         [ text txt ]
 
 
@@ -202,8 +180,7 @@ previewButton domId =
 previewButtonDesktop : String -> Html Msg
 previewButtonDesktop domId =
     a
-        [ class "button is-info is-rounded is-hidden-mobile"
-        , style [ ( "margin-top", "-4rem" ) ]
+        [ class "preview-button-desktop button is-info is-rounded is-hidden-mobile"
         , onClick (ToggleModal domId)
         ]
         [ icon "far fa-play-circle fa-lg"
@@ -246,7 +223,7 @@ heroFoot model =
 
 tip : String -> Html Msg
 tip txt =
-    p
+    h4
         []
         [ tipDesktop txt
         , tipMobile txt
@@ -255,13 +232,9 @@ tip txt =
 
 tipDesktop : String -> Html Msg
 tipDesktop txt =
-    p
-        [ class "is-size-5 has-text-weight-medium has-text-grey-copy is-hidden-mobile"
-        , fontQuicksand
-        , style
-            [ ( "padding-bottom", "4rem" ) ]
-        ]
-        [ p
+    h4
+        [ class "tip-desktop is-size-5 has-text-weight-medium has-text-grey-copy is-hidden-mobile" ]
+        [ h4
             [ class "has-text-weight-semibold is-inline" ]
             [ text "Tip: " ]
         , text txt
@@ -270,13 +243,9 @@ tipDesktop txt =
 
 tipMobile : String -> Html Msg
 tipMobile txt =
-    p
-        [ class "is-size-6 has-text-weight-medium has-text-grey-copy has-text-left is-hidden-tablet"
-        , fontQuicksand
-        , style
-            [ ( "padding", "1rem 2rem 2rem" ) ]
-        ]
-        [ p
+    h4
+        [ class "tip-mobile is-size-6 has-text-weight-medium has-text-grey-copy has-text-left is-hidden-tablet" ]
+        [ h4
             [ class "has-text-weight-semibold is-inline" ]
             [ text "Tip: " ]
         , text txt

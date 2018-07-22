@@ -26,7 +26,7 @@ root model =
 backgroundHero : Model -> Html Msg
 backgroundHero model =
     div
-        [ svgBackground "images/greenTopography.svg" ]
+        [ svgBackground model.flags.bodyBG ]
         [ features
         , steps
         , story
@@ -40,7 +40,7 @@ splash model =
     section
         [ class "hero is-fullheight"
         , id "splash"
-        , alphaPhotoBackground "images/cassette.jpg" 0.1
+        , alphaPhotoBackground model.flags.splashBG 0.1
         ]
         [ div
             [ class "hero-body" ]
@@ -67,23 +67,14 @@ splashHeader txt =
 splashHeaderDesktop : String -> Html Msg
 splashHeaderDesktop txt =
     h1
-        [ class "title has-text-grey-darker is-hidden-mobile"
-        , fontMarker
-        , style [ ( "font-size", "6rem" ), ( "padding-bottom", "0.5rem" ) ]
-        ]
+        [ class "header-desktop title is-hidden-mobile" ]
         [ text txt ]
 
 
 splashHeaderMobile : String -> Html Msg
 splashHeaderMobile txt =
     h1
-        [ class "title has-text-grey-darker has-text-centered is-hidden-tablet"
-        , fontMarker
-        , style
-            [ ( "font-size", "4.5rem" )
-            , ( "padding-bottom", "1rem" )
-            ]
-        ]
+        [ class "header-mobile title has-text-centered is-hidden-tablet" ]
         [ text txt ]
 
 
@@ -99,20 +90,14 @@ splashSubheader txt =
 splashSubheaderDesktop : String -> Html Msg
 splashSubheaderDesktop txt =
     h2
-        [ class "subtitle is-size-3 has-text-weight-medium has-text-grey-dark is-hidden-mobile"
-        , fontQuicksand
-        , style [ ( "margin-bottom", "-1rem" ), ( "margin-top", "-17rem" ) ]
-        ]
+        [ class "subheader-desktop has-text-weight-medium is-size-3 is-hidden-mobile" ]
         [ text txt ]
 
 
 splashSubheaderMobile : String -> Html Msg
 splashSubheaderMobile txt =
     h2
-        [ class "subtitle is-size-4 has-text-weight-medium has-text-grey-dark has-text-centered is-hidden-tablet"
-        , fontQuicksand
-        , style [ ( "margin-bottom", "0.75rem" ) ]
-        ]
+        [ class "subheader-mobile has-text-weight-medium is-size-4 has-text-centered is-hidden-tablet" ]
         [ text txt ]
 
 
@@ -128,9 +113,7 @@ buttonPair model =
 buttonPairDesktop : Model -> Html Msg
 buttonPairDesktop model =
     div
-        [ class "buttons is-hidden-mobile"
-        , style [ ( "margin-left", "-0.5rem" ) ]
-        ]
+        [ class "buttons-desktop buttons is-hidden-mobile" ]
         [ githubButton
         , spotifyButton
         ]
@@ -139,10 +122,7 @@ buttonPairDesktop model =
 buttonPairMobile : Model -> Html Msg
 buttonPairMobile model =
     div
-        [ class "has-text-centered is-hidden-tablet"
-        , style
-            [ ( "padding", "1rem" ) ]
-        ]
+        [ class "buttons-mobile has-text-centered is-hidden-tablet" ]
         [ githubButton
         , spotifyButton
         ]
@@ -167,19 +147,19 @@ scrollDesktop domId label =
 scrollMobile : String -> String -> Html Msg
 scrollMobile domId label =
     div
-        [ class "has-text-centered is-hidden-tablet"
-        , style [ ( "padding-top", "1rem" ) ]
-        ]
+        [ class "scroll-mobile has-text-centered is-hidden-tablet" ]
         [ scrollButtonElement domId label ]
 
 
 scrollButtonElement : String -> String -> Html Msg
 scrollButtonElement domId label =
+    -- Keep styling local
     a
         [ class "is-size-5"
         , style
-            [ ( "margin-left", "-0.25rem" ) ]
-        , underlineFont
+            [ ( "margin-left", "-0.25rem" )
+            , ( "text-decoration", "underline" )
+            ]
         , onClick (ScrollToDomId domId)
         ]
         [ iconText label
@@ -204,15 +184,12 @@ accentCard : ( String, String ) -> ( String, String ) -> ( String -> String -> H
 accentCard ( direction, accent ) ( primary, secondary ) ( ico, title, txt ) =
     div
         [ class "card"
-        , cardPadding
-        , cardBoxShadow
         , borderAccent direction accent
-        , style [ ( "border-radius", "14px" ) ]
         ]
         [ div
             [ class "card-image has-text-centered" ]
             [ div
-                [ style [ ( "padding-top", "1rem" ) ] ]
+                []
                 [ ico primary secondary ]
             ]
         , div
@@ -231,8 +208,8 @@ features =
         ]
         [ div
             [ class "hero-body container" ]
-            [ bodyHeader "Why you should Discover Now"
-            , bodySubheader "We make it simple to find new music you'll love with ease and confidence"
+            [ heroTitle "Why you should Discover Now"
+            , heroSubtitle "We make it simple to find new music you'll love with ease and confidence"
             , columns
                 [ featureCard
                     ( secondaryGreen, primaryGreen )
@@ -270,81 +247,63 @@ featureCard ( primary, secondary ) ( ico, title, txt ) =
         ( ico, title, txt )
 
 
-bodyHeader : String -> Html Msg
-bodyHeader txt =
+heroTitle : String -> Html Msg
+heroTitle txt =
     h2
         []
-        [ bodyHeaderDesktop txt
-        , bodyHeaderMobile txt
+        [ heroTitleDesktop txt
+        , heroTitleMobile txt
         ]
 
 
-bodyHeaderDesktop : String -> Html Msg
-bodyHeaderDesktop txt =
+heroTitleDesktop : String -> Html Msg
+heroTitleDesktop txt =
     h2
-        [ class "title is-size-2 has-text-weight-medium has-text-grey-dark has-text-left is-hidden-mobile"
-        , fontQuicksand
-        ]
+        [ class "title is-size-2 is-hidden-mobile" ]
         [ text txt ]
 
 
-bodyHeaderMobile : String -> Html Msg
-bodyHeaderMobile txt =
+heroTitleMobile : String -> Html Msg
+heroTitleMobile txt =
     h2
-        [ class "title is-size-2 has-text-weight-medium has-text-grey-dark has-text-centered is-hidden-tablet"
-        , fontQuicksand
-        , style
-            [ ( "padding", "0rem 0rem 1.5rem 0rem" )
-            , ( "margin-top", "-0.75rem" )
-            ]
-        ]
+        [ class "hero-title-mobile title is-size-2 has-text-centered is-hidden-tablet" ]
         [ text txt ]
 
 
-bodySubheader : String -> Html Msg
-bodySubheader txt =
+heroSubtitle : String -> Html Msg
+heroSubtitle txt =
     h3
         []
-        [ bodySubheaderDesktop txt
-        , bodySubheaderMobile txt
+        [ heroSubtitleDesktop txt
+        , heroSubtitleMobile txt
         ]
 
 
-bodySubheaderDesktop : String -> Html Msg
-bodySubheaderDesktop txt =
+heroSubtitleDesktop : String -> Html Msg
+heroSubtitleDesktop txt =
     h3
-        [ class "title is-size-5 has-text-weight-medium has-text-grey-copy has-text-left is-hidden-mobile"
-        , style [ ( "padding-bottom", "1.5rem" ) ]
-        , fontQuicksand
-        ]
+        [ class "hero-subtitle-desktop subtitle has-text-grey-copy is-hidden-mobile" ]
         [ text txt ]
 
 
-bodySubheaderMobile : String -> Html Msg
-bodySubheaderMobile txt =
+heroSubtitleMobile : String -> Html Msg
+heroSubtitleMobile txt =
     h3
-        [ class "title is-size-5 has-text-weight-medium has-text-grey-copy has-text-centered is-hidden-tablet"
-        , fontQuicksand
-        ]
+        [ class "subtitle has-text-grey-copy has-text-centered is-hidden-tablet" ]
         [ text txt ]
 
 
 cardTitle : String -> Html Msg
 cardTitle txt =
     h4
-        [ class "title is-size-5 has-text-weight-medium has-text-grey-dark has-text-centered"
-        , fontQuicksand
-        ]
+        [ class "title is-size-5 has-text-grey-dark has-text-centered" ]
         [ text txt ]
 
 
 cardCopy : String -> Html Msg
 cardCopy txt =
     p
-        [ class "is-size-6 has-text-weight-normal has-text-grey-copy has-text-left"
-        , style
-            [ ( "line-height", "1.7em" ) ]
-        ]
+        [ class "card-copy is-size-6 has-text-grey-copy" ]
         [ text txt ]
 
 
@@ -360,20 +319,14 @@ bodyTitle txt =
 bodyTitleDesktop : String -> Html Msg
 bodyTitleDesktop txt =
     h4
-        [ class "title is-size-5 has-text-weight-medium has-text-grey-dark has-text-left is-hidden-mobile"
-        , fontQuicksand
-        , style [ ( "padding", "1rem 3rem" ) ]
-        ]
+        [ class "body-title-desktop title is-size-5 is-hidden-mobile" ]
         [ text txt ]
 
 
 bodyTitleMobile : String -> Html Msg
 bodyTitleMobile txt =
     h4
-        [ class "title is-size-5 has-text-weight-medium has-text-grey-dark has-text-left is-hidden-tablet"
-        , fontQuicksand
-        , style [ ( "padding", "1rem 1rem 1.5rem 1rem" ) ]
-        ]
+        [ class "body-title-mobile title is-size-5 is-hidden-tablet" ]
         [ text txt ]
 
 
@@ -389,37 +342,25 @@ bodyCopy txt =
 bodyCopyDesktop : String -> Html Msg
 bodyCopyDesktop txt =
     p
-        [ class "is-size-6 has-text-weight-normal has-text-grey-copy has-text-left is-hidden-mobile"
-        , style
-            [ ( "line-height", "1.8em" )
-            , ( "padding", "0rem 3rem 1rem 3rem" )
-            ]
-        ]
+        [ class "body-copy-desktop is-size-6 has-text-grey-copy is-hidden-mobile" ]
         [ text txt ]
 
 
 bodyCopyMobile : String -> Html Msg
 bodyCopyMobile txt =
     p
-        [ class "is-size-6 has-text-weight-normal has-text-grey-copy has-text-left is-hidden-tablet"
-        , style
-            [ ( "line-height", "1.8em" )
-            , ( "padding", "1rem" )
-            ]
-        ]
+        [ class "body-copy-mobile is-size-6 has-text-grey-copy is-hidden-tablet" ]
         [ text txt ]
 
 
 steps : Html Msg
 steps =
     section
-        [ class "hero is-large"
-        , whiteGradient
-        ]
+        [ class "hero is-large gradient" ]
         [ div
             [ class "hero-body container" ]
-            [ bodyHeader "It only takes seconds"
-            , bodySubheader "Faithfully designed to get you listening to new music in as little as a few clicks"
+            [ heroTitle "It only takes seconds"
+            , heroSubtitle "Faithfully designed to get you listening to new music in as little as a few clicks"
             , columns
                 [ stepCard ( secondaryGreen, primaryGreen )
                     ( idIcon
@@ -454,8 +395,8 @@ story =
         [ class "hero is-medium" ]
         [ div
             [ class "hero-body container" ]
-            [ bodyHeader "Made with you in mind"
-            , bodySubheader "We take great care in delivering new discoveries while still protecting your privacy"
+            [ heroTitle "Made with you in mind"
+            , heroSubtitle "We take great care in delivering new discoveries while still protecting your privacy"
             , divider
             , columns
                 [ accentQuote "left"
@@ -482,14 +423,7 @@ story =
 divider : Html Msg
 divider =
     hr
-        [ class "is-hidden-tablet"
-        , style
-            [ ( "margin", "2.5rem 0rem 0rem" )
-            , ( "position", "relative" )
-            , ( "width", "40%" )
-            , ( "left", "30%" )
-            ]
-        ]
+        [ class "divider is-hidden-tablet" ]
         []
 
 
@@ -504,14 +438,9 @@ storyCard ( title, txt ) =
 
 accentQuote : String -> String -> String -> Html Msg
 accentQuote direction color txt =
-    p
-        [ class "is-size-3 has-text-weight-normal has-text-dark-green has-text-centered is-hidden-mobile"
-        , fontQuicksand
+    h2
+        [ class "quote-body is-size-3 has-text-weight-normal has-text-dark-green has-text-centered is-hidden-mobile"
         , borderAccent direction color
-        , style
-            [ ( "line-height", "1.8em" )
-            , ( "padding", "0rem 3rem 1rem 3rem" )
-            ]
         ]
         [ text ("\"" ++ txt ++ "\"") ]
 
@@ -542,19 +471,14 @@ ctaText txt =
 ctaTextDesktop : String -> Html Msg
 ctaTextDesktop txt =
     h2
-        [ class "title is-size-2 has-text-weight-medium has-text-grey-dark has-text-right is-hidden-mobile"
-        , fontQuicksand
-        , style [ ( "margin", "0" ) ]
-        ]
+        [ class "title is-size-2 has-text-right is-marginless is-hidden-mobile" ]
         [ text txt ]
 
 
 ctaTextMobile : String -> Html Msg
 ctaTextMobile txt =
     h2
-        [ class "title is-size-2 has-text-weight-medium has-text-grey-dark has-text-centered is-hidden-tablet"
-        , fontQuicksand
-        ]
+        [ class "title is-size-2 has-text-grey-dark has-text-centered is-hidden-tablet" ]
         [ text txt ]
 
 

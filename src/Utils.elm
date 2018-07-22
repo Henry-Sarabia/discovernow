@@ -30,20 +30,3 @@ column child =
     div
         [ class "column" ]
         [ child ]
-
-
-
--- errorToString : Http.Error -> String
--- errorToString err =
---     case err of
---         Http.BadUrl url ->
---             "Bad URL: " ++ url
---         Http.Timeout ->
---             "HTTP Timeout"
---         Http.NetworkError ->
---             "Network Error"
---         Http.BadStatus resp ->
---             "Bad Status: " ++ toString resp.status.code ++ " (" ++ toString resp.body ++ ")"
---         -- toString resp.body
---         Http.BadPayload message resp ->
---             "Bad Payload: " ++ toString message ++ " (" ++ toString resp.status.code ++ ")"

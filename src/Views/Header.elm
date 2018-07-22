@@ -1,19 +1,16 @@
 module Views.Header exposing (navbar)
 
 import Html exposing (Html, text, div, a, nav, h1)
-import Html.Attributes exposing (style, class, href)
+import Html.Attributes exposing (class, href)
 import Models exposing (Model, Login)
 import Msgs exposing (Msg(..))
 import Views.Buttons exposing (smallGithubButton)
-import Views.Styles exposing (..)
 
 
 navbar : Model -> Html Msg
 navbar model =
     div
-        [ class "hero-head is-hidden-mobile"
-        , style [ ( "box-shadow", "0 1px 0 hsla(0,0%,100%,.2)" ) ]
-        ]
+        [ class "hero-head nav-shadow is-hidden-mobile" ]
         [ nav
             [ class "navbar container" ]
             [ navbarBrand
@@ -43,10 +40,7 @@ navbarBrand =
 logo : Html Msg
 logo =
     h1
-        [ class "title is-size-3 has-text-grey-darker"
-        , fontMarker
-        , style [ ( "margin-left", "-1rem" ) ]
-        ]
+        [ class "logo title has-text-weight-bold has-text-grey-darker" ]
         [ text "Discover Now" ]
 
 

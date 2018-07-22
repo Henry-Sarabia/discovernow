@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Init exposing (initialModel, initialCommands)
 import Navigation
-import Models exposing (Model)
+import Models exposing (Model, Flags)
 import Msgs exposing (Msg(..))
 import Routing exposing (parseLocation)
 import Subscriptions exposing (subscriptions)
@@ -10,18 +10,18 @@ import Update exposing (update)
 import View exposing (root)
 
 
-init : Navigation.Location -> ( Model, Cmd Msg )
-init location =
+init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
+init flags location =
     let
         currentRoute =
             parseLocation location
     in
-        ( initialModel currentRoute, initialCommands currentRoute )
+        ( initialModel flags currentRoute, initialCommands currentRoute )
 
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Navigation.program OnLocationChange
+    Navigation.programWithFlags OnLocationChange
         { view = root
         , init = init
         , update = update
