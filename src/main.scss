@@ -1,7 +1,7 @@
 @import "../node_modules/bulma/sass/utilities/initial-variables";
 @import "../node_modules/bulma/sass/utilities/functions";
 
-// Custom colors
+// Custom color definitions
 
 $green: hsl(141, 59%, 60%);
 $green-invert: findColorInvert($green);
@@ -24,9 +24,8 @@ $greyfooter-invert: findColorInvert($greyfooter);
 $mint: #a7e8bd;
 $mint-invert: findColorInvert($mint);
 
-// Override Bulma vars
+// Bulma variable override
 
-// $family-sans-serif: "Open Sans", "Roboto", sans-serif;
 $family-sans-serif: "Open Sans", BlinkMacSystemFont, -apple-system, "Helvetica", "Arial", sans-serif;
 
 $primary: $green;
@@ -49,20 +48,37 @@ $addColors: (
 );
 $colors: map-merge($colors, $addColors);
 
-// @import "../node_modules/bulma/sass/components/card";
-// $card-shadow: 0 0px 0px;
 $card-shadow: 0 15px 35px rgba(50, 50, 93, .05), 0 5px 15px rgba(0, 0, 0, .07);
 $card-background-color: $white-bis;
 
-// @import "../node_modules/bulma/sass/layout/footer";
 $footer-background-color: $darkgreen;
 
 $title-weight: $weight-medium;
 $subtitle-weight: $weight-medium;
 
-@import "../node_modules/bulma/bulma";
+// Bulma stylesheets import
 
-// Custom classes
+@import "../node_modules/bulma/sass/utilities/animations";
+@import "../node_modules/bulma/sass/utilities/controls";
+@import "../node_modules/bulma/sass/utilities/mixins";
+
+@import "../node_modules/bulma/sass/base/_all";
+
+@import "../node_modules/bulma/sass/components/card";
+@import "../node_modules/bulma/sass/components/modal";
+@import "../node_modules/bulma/sass/components/navbar";
+
+@import "../node_modules/bulma/sass/elements/button";
+@import "../node_modules/bulma/sass/elements/container";
+@import "../node_modules/bulma/sass/elements/icon";
+@import "../node_modules/bulma/sass/elements/other";
+@import "../node_modules/bulma/sass/elements/title";
+
+@import "../node_modules/bulma/sass/grid/columns";
+
+@import "../node_modules/bulma/sass/layout/_all";
+
+// Custom style definitions
 
 $header-font: "Permanent Marker";
 $title-font: "Quicksand";
@@ -76,200 +92,10 @@ h2, h3, h4 {
   font-family: $title-font;
 }
 
-// Landing 
+// Custom stylesheets import
 
-.header-desktop {
-  font-size: 6rem;
-  font-weight: $weight-bold;
-  padding-bottom: 0.5rem;
-}
-
-.header-mobile {
-  font-size: 4.5rem;
-  font-weight: $weight-bold;
-  padding-bottom: 1rem;
-}
-
-.subheader-desktop {
-  margin-bottom: -1.25rem;
-  margin-top: -17rem;
-}
-
-.subheader-mobile {
-  margin-bottom: 0.75rem;
-}
-
-.hero-title-mobile {
-  padding: 0rem 0rem 1.5rem 0rem;
-  margin-top: -0.75rem;
-}
-
-.hero-subtitle-desktop {
-  padding-bottom: 1.5rem
-}
-
-.gradient {
-  background: linear-gradient(45deg, hsl(0, 0%, 100%) 0%, hsla(0, 0%, 100%, 0.738) 19%, hsla(0, 0%, 100%, 0.541) 34%, hsla(0, 0%, 100%, 0.382) 47%, hsla(0, 0%, 100%, 0.278) 56.5%, hsla(0, 0%, 100%, 0.194) 65%, hsla(0, 0%, 100%, 0.126) 73%, hsla(0, 0%, 100%, 0.075) 80.2%, hsla(0, 0%, 100%, 0.042) 86.1%, hsla(0, 0%, 100%, 0.021) 91%, hsla(0, 0%, 100%, 0.008) 95.2%, hsla(0, 0%, 100%, 0.002) 98.2%, hsla(0, 0%, 100%, 0) 100%);
-}
-
-.card {
-  padding: 1rem 0.5rem 2rem 0.5rem;
-  margin-top: 2rem;
-  border-radius: 14px;
-}
-
-.card-image {
-  padding-top: 1rem;
-}
-
-.buttons-desktop {
-  margin-left: -0.5rem;
-}
-
-.buttons-mobile {
-  padding: 1rem;
-}
-
-.button {
-  margin: 0.5rem;
-}
-
-.scroll-mobile {
-  padding-top: 1rem;
-}
-
-.icon-text {
-  font-family: $icon-font;
-  padding-left: 0.33em;
-}
-
-.card-copy {
-  line-height: 1.7em;
-}
-
-.body-title-desktop {
-  padding: 1rem 3rem;
-}
-
-.body-title-mobile {
-  padding: 1rem 1rem 1.5rem 1rem;
-}
-
-.body-copy-desktop {
-  line-height: 1.8em;
-  padding: 0rem 3rem 1rem 3rem;
-}
-
-.body-copy-mobile {
-  line-height: 1.8em;
-  padding: 1rem;
-}
-
-.quote-body {
-  line-height: 1.8em;
-  padding: 0rem 3rem 1rem 3rem;
-}
-
-.divider {
-  margin: 2.5rem 0rem 0rem;
-  position: relative;
-  width: 40%;
-  left: 30%;
-}
-// Discover
-
-.fa-spinner {
-  margin-top: -5rem;
-}
-
-.discover-header-desktop {
-  font-size: 4em;
-  margin-top: -5rem;
-}
-
-.discover-header-mobile {
-  padding-bottom: 0.5rem;
-}
-
-.discover-subheader-desktop {
-  padding-bottom: 4rem;
-}
-
-.discover-subheader-mobile {
-  padding-bottom: 3rem;
-}
-
-.discover-copy-mobile {
-  padding-bottom: 0.5rem
-
-}
-
-.preview-button-desktop {
-  margin-top: -4rem;
-}
-
-.tip-desktop {
-  padding-bottom: 4rem;
-}
-
-.tip-mobile {
-  padding: 1rem 2rem 2rem;
-}
-
-// Header (Navbar)
-
-.nav-shadow {
-  box-shadow: 0 1px 0 hsla(0,0%,100%,.2)
-}
-
-.logo {
-  margin-left: -1rem;
-}
-
-// Footer
-
-.footer-content-mobile {
-  padding-left: 2rem;
-}
-
-.footer-stack {
-  padding-bottom: 3rem;
-}
-
-.footer-header {
-  padding-bottom: 1.5rem;
-}
-
-.footer-title {
-  padding: 0.25em 0em;
-}
-
-.footer-copy {
-  padding-right: 3.5rem;
-}
-
-.footer-link {
-  padding: 0.25rem 0rem;
-  letter-spacing: 0.5px;
-}
-
-.fa-heart {
-  color: #ffc0cb;
-}
-
-// Error
-
-.error-background {
-  background-position: bottom;
-}
-
-.error-header-desktop {
-  margin-top: -20rem;
-  font-size: 6rem;
-  padding-bottom: 1rem;
-}
-
-.error-header-mobile {
-  font-size: 6rem;
-  padding-bottom: 1rem
-}
+@import "./stylesheets/landing";
+@import "./stylesheets/discover";
+@import "./stylesheets/header";
+@import "./stylesheets/footer";
+@import "./stylesheets/error";
