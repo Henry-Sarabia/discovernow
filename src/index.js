@@ -1,10 +1,12 @@
 import { Main } from './Main.elm';
 import './main.css';
 import './icons.css';
-import './fontawesome-all.js';
 import cassette from './images/cassette.jpg';
-import greenTop from './images/greenTopography.svg'
-import roseTop from './images/roseTopography.svg'
+import greenTop from './images/greenTopography.svg';
+import roseTop from './images/roseTopography.svg';
+import { dom, library } from '../node_modules/@fortawesome/fontawesome-svg-core';
+import { faAngleDown, faAngleRight } from '../node_modules/@fortawesome/free-solid-svg-icons';
+import { faSpotify, faGithub } from '../node_modules/@fortawesome/free-brands-svg-icons';
 import registerServiceWorker from './registerServiceWorker';
 
 var elm = Main.embed(document.getElementById('root'), {
@@ -24,5 +26,8 @@ elm.ports.toggleModal.subscribe(function(domId) {
         document.getElementById(domId).classList.toggle("is-active");
     })
 });
+
+library.add(faAngleDown, faAngleRight, faSpotify, faGithub);
+dom.watch();
 
 registerServiceWorker();
