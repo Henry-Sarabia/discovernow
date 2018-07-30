@@ -113,7 +113,7 @@ buttonPair model =
 buttonPairDesktop : Model -> Html Msg
 buttonPairDesktop model =
     div
-        [ class "buttons-desktop buttons is-hidden-mobile" ]
+        [ class "buttonpair-desktop buttons is-hidden-mobile" ]
         [ githubButton
         , spotifyButton
         ]
@@ -122,7 +122,7 @@ buttonPairDesktop model =
 buttonPairMobile : Model -> Html Msg
 buttonPairMobile model =
     div
-        [ class "buttons-mobile has-text-centered is-hidden-tablet" ]
+        [ class "buttonpair-mobile has-text-centered is-hidden-tablet" ]
         [ githubButton
         , spotifyButton
         ]
@@ -213,27 +213,27 @@ features =
             , columns
                 [ featureCard
                     ( secondaryGreen, primaryGreen )
-                    ( codeIcon
-                    , "Explore the open source code"
-                    , "The complete project is hosted on GitHub for your viewing pleasure. Take a quick peek to see what keeps discovery ticking."
-                    )
-                , featureCard
-                    ( secondaryGreen, primaryGreen )
                     ( userLockIcon
                     , "Log in simply and securely"
-                    , "You have more than enough accounts to worry about. Simply connect to your existing Spotify account to get started quickly and easily."
+                    , "You have more than enough accounts and passwords to worry about. Simply connect to your existing Spotify account and we'll take care of the rest."
                     )
                 , featureCard
                     ( secondaryGreen, primaryGreen )
                     ( walletIcon
                     , "Enjoy with no strings attached"
-                    , "Discover new music for free. No advertisements. No analytics. No subscriptions. Simply share and enjoy the experience of discovery."
+                    , "Discover new music for free. We don't advertise, analyze, or as for a subscription. All we ask is for you to share and enjoy your experience of discovery."
                     )
                 , featureCard
                     ( secondaryGreen, primaryGreen )
                     ( devicesIcon
                     , "Discover anytime and anywhere"
-                    , "Designed from the ground up to offer a smooth experience for desktop, mobile, and everything in between. We're ready when you are."
+                    , "Designed from the ground up to offer a polished experience for desktop, mobile, and everything in between. Discovery is only a tap or click away."
+                    )
+                , featureCard
+                    ( secondaryGreen, primaryGreen )
+                    ( codeIcon
+                    , "Explore the open source code"
+                    , "The complete project is hosted on GitHub for your viewing pleasure. Take a quick peek to see how we handle your data and keep discovery ticking."
                     )
                 ]
             ]
@@ -365,17 +365,17 @@ steps =
                 [ stepCard ( secondaryGreen, primaryGreen )
                     ( idIcon
                     , "Connect to Spotify"
-                    , "You can rest assured that your information is safe with all authentication being handled directly by Spotify."
+                    , "When you're ready to give Discover Now a try, you'll be redirected to Spotify where you can log into your account. Once you're logged in, we'll take care of the rest."
                     )
                 , stepCard ( secondaryGreen, primaryGreen )
                     ( pieIcon
                     , "Analyze your interests"
-                    , "Our algorithm will analyze your playback history to establish your recent musical interests and generate a unique."
+                    , "Our algorithm will analyze your listening habits to generate your personalized playlist. Inside, you'll find artists we think you'll love but just haven't connected with yet."
                     )
                 , stepCard ( secondaryGreen, primaryGreen )
                     ( headphonesIcon
                     , "Discover new music"
-                    , "Your discover playlist will be automatically be added to your account for your to enjoy. Enjoy and discover something new."
+                    , "Your Discover Now playlist is then added to your Spotify profile. All that's left is to enjoy your new discovery. If we miss our mark, you can always try again."
                     )
                 ]
             ]
@@ -414,7 +414,7 @@ story =
                     )
                 , accentQuote "right"
                     shadowGreen
-                    "Discover Now was designed with your privacy in mind every step of the way - we strive for a balance of convenience and confidentiality. Secure by design."
+                    "Discover Now was designed with your privacy in mind every step of the way - we strive for a balance of convenience and confidentiality."
                 ]
             ]
         ]
