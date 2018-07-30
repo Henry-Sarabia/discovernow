@@ -58,13 +58,17 @@ tokenQuery token =
 
 loginEndpoint : String
 loginEndpoint =
-    -- "https://nameless-thicket-99291.herokuapp.com/login"
-    -- "http://192.168.1.5:8080/login"
-    "http://127.0.0.1:8080/api/v1/login"
+    "https://discover-now.herokuapp.com/api/v1/login"
+
+
+
+-- "http://127.0.0.1:8080/api/v1/login"
 
 
 playlistEndpoint : String
 playlistEndpoint =
-    -- "https://nameless-thicket-99291.herokuapp.com/playlist"
-    -- "http://192.168.1.5:8080/playlist"
-    "http://127.0.0.1:8080/api/v1/playlist"
+    "https://discover-now.herokuapp.com/api/v1/playlist"
+
+
+
+-- "http://127.0.0.1:8080/api/v1/playlist"
