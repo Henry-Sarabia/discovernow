@@ -1,20 +1,20 @@
 module Init exposing (..)
 
 import Commands exposing (..)
-import Models exposing (Model, Token)
+import Models exposing (Model, Flags, Token)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Routing exposing (Route(..))
 
 
-initialModel : Route -> Model
-initialModel route =
+initialModel : Flags -> Route -> Model
+initialModel flags route =
     case route of
         LandingRoute ->
-            baseModel route
+            baseModel flags route
 
         AboutRoute ->
-            baseModel route
+            baseModel flags route
 
         ResultsRoute maybeCode maybeState ->
             case ( maybeCode, maybeState ) of
@@ -25,28 +25,30 @@ initialModel route =
                     in
                         { route = route
                         , changes = 0
+                        , flags = flags
                         , token = newToken
                         , login = RemoteData.NotAsked
                         , discover = RemoteData.Loading
                         }
 
                 ( Nothing, _ ) ->
-                    baseModel route
+                    baseModel flags route
 
                 ( _, Nothing ) ->
-                    baseModel route
+                    baseModel flags route
 
         ErrorRoute ->
-            baseModel route
+            baseModel flags route
 
         NotFoundRoute ->
-            baseModel route
+            baseModel flags route
 
 
-baseModel : Route -> Model
-baseModel route =
+baseModel : Flags -> Route -> Model
+baseModel flags route =
     { route = route
     , changes = 0
+    , flags = flags
     , token = Nothing
     , login = RemoteData.NotAsked
     , discover = RemoteData.NotAsked

@@ -8,6 +8,9 @@ import Svg.Attributes exposing (class, style, width, height, viewBox, d, transfo
 import Views.Colors exposing (..)
 
 
+-- Styling must stay in-line
+
+
 icon : String -> Html Msg
 icon link =
     span
@@ -21,9 +24,7 @@ icon link =
 iconText : String -> Html Msg
 iconText txt =
     span
-        [ Attributes.style
-            [ ( "padding-left", "0.33em" ), ( "font-family", "Roboto" ) ]
-        ]
+        [ Attributes.class "icon-text" ]
         [ text txt ]
 
 

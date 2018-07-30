@@ -12,7 +12,7 @@ import Views.Styles exposing (..)
 
 notFoundPage : Model -> Html Msg
 notFoundPage model =
-    heroContainer notFoundBody
+    heroContainer model notFoundBody
 
 
 notFoundBody : Html Msg
@@ -31,7 +31,7 @@ notFoundBody =
 
 serverErrorPage : Model -> Html Msg
 serverErrorPage model =
-    heroContainer errorBody
+    heroContainer model errorBody
 
 
 errorBody : Html Msg
@@ -48,12 +48,11 @@ errorBody =
         ]
 
 
-heroContainer : Html Msg -> Html Msg
-heroContainer body =
+heroContainer : Model -> Html Msg -> Html Msg
+heroContainer model body =
     section
-        [ class "hero is-fullheight is-light"
-        , svgBackground "images/roseTopography.svg"
-        , style [ ( "background-position", "bottom" ) ]
+        [ class "hero is-fullheight is-light error-background"
+        , svgBackground model.flags.errorBG
         ]
         [ body ]
 
@@ -70,56 +69,40 @@ errorHeader txt =
 errorHeaderDesktop : String -> Html Msg
 errorHeaderDesktop txt =
     h1
-        [ class "title has-text-left is-hidden-mobile"
-        , fontMarker
-        , style
-            [ ( "margin-top", "-20rem" )
-            , ( "font-size", "6rem" )
-            , ( "padding-bottom", "1rem" )
-            ]
-        ]
+        [ class "error-header-desktop is-hidden-mobile" ]
         [ text txt ]
 
 
 errorHeaderMobile : String -> Html Msg
 errorHeaderMobile txt =
     h1
-        [ class "title has-text-left is-hidden-tablet"
-        , fontMarker
-        , style
-            [ ( "font-size", "6rem" )
-            , ( "padding-bottom", "1rem" )
-            ]
-        ]
+        [ class "error-header-mobile is-hidden-tablet" ]
         [ text txt ]
 
 
 errorTitle : String -> Html Msg
 errorTitle txt =
     h2
-        [ class "title is-size-3 has-text-weight-medium has-text-left is-spaced"
-        , fontQuicksand
-        ]
+        [ class "title is-spaced" ]
         [ text txt ]
 
 
 errorSubtitle : String -> Html Msg
 errorSubtitle txt =
     h3
-        [ class "subtitle is-size-4 has-text-weight-medium has-text-grey-copy has-text-left"
-        , fontQuicksand
-        ]
+        [ class "subtitle is-size-4 has-text-grey-copy" ]
         [ text txt ]
 
 
 homeButton : String -> Html Msg
 homeButton label =
+    -- Keep styling local
     a
         [ class "is-size-4 has-text-link"
         , style
             [ ( "margin-left", "-0.4rem" )
+            , ( "text-decoration", "underline" )
             ]
-        , underlineFont
         , onLinkClick (ChangeLocation homePath)
         ]
         [ iconText label

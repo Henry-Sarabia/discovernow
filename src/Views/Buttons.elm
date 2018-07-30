@@ -5,7 +5,6 @@ import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
 import Msgs exposing (Msg(..))
 import Views.Icons exposing (..)
-import Views.Styles exposing (..)
 
 
 spotifyButton : Html Msg
@@ -13,7 +12,8 @@ spotifyButton =
     a
         [ class "button is-medium is-primary"
         , onClick FetchLogin
-        , buttonMargin
+
+        -- , buttonMargin
         ]
         [ icon "fab fa-spotify fa-lg"
         , iconText "Connect"
@@ -25,7 +25,8 @@ githubButton =
     a
         [ class "button is-medium is-dark is-outlined"
         , href "https://github.com/Henry-Sarabia/myfy"
-        , buttonMargin
+
+        -- , buttonMargin
         ]
         [ icon "fab fa-github fa-lg"
         , iconText "Explore"
@@ -37,7 +38,8 @@ smallGithubButton =
     a
         [ class "button is-dark is-outlined"
         , href "https://github.com/Henry-Sarabia/myfy"
-        , buttonMargin
+
+        -- , buttonMargin
         ]
         [ icon "fab fa-github fa-lg"
         , iconText "Explore"

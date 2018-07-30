@@ -1,11 +1,10 @@
 module Views.Footer exposing (simpleFooter)
 
-import Html exposing (Html, div, text, a, footer, p, i, h2, h4)
-import Html.Attributes exposing (class, style, href)
+import Html exposing (Html, div, text, a, footer, p, i, h1, h4)
+import Html.Attributes exposing (class, href)
 import Msgs exposing (Msg)
 import Routing exposing (homePath)
 import Utils exposing (..)
-import Views.Styles exposing (..)
 
 
 simpleFooter : Html Msg
@@ -41,9 +40,7 @@ contentDesktop =
 contentMobile : Html Msg
 contentMobile =
     div
-        [ class "is-hidden-tablet"
-        , style [ ( "padding-left", "2rem" ) ]
-        ]
+        [ class "footer-content-mobile is-hidden-tablet" ]
         [ columns
             [ project
             , resources
@@ -90,7 +87,7 @@ resources =
 stack : Html Msg
 stack =
     div
-        [ style [ ( "padding-bottom", "3rem" ) ] ]
+        [ class "footer-stack" ]
         [ footerTitle "Stack"
         , footerLink "http://elm-lang.org/" "Elm"
         , footerLink "https://golang.org/" "Go"
@@ -100,11 +97,10 @@ stack =
 
 footerHeader : String -> Html Msg
 footerHeader txt =
-    h2
-        [ style [ ( "padding-bottom", "1.5rem" ) ] ]
+    h1
+        [ class "footer-header" ]
         [ a
-            [ class "title is-size-3 has-text-primary"
-            , fontMarker
+            [ class "title has-text-weight-bold has-text-primary"
             , href homePath
             ]
             [ text txt ]
@@ -114,31 +110,21 @@ footerHeader txt =
 footerTitle : String -> Html Msg
 footerTitle txt =
     h4
-        [ class "title is-size-5 has-text-primary has-text-weight-medium"
-        , fontQuicksand
-        , style
-            [ ( "padding", "0.25em 0em" ) ]
-        ]
+        [ class "footer-title title is-size-5 has-text-primary" ]
         [ text txt ]
 
 
 footerCopy : String -> Html Msg
 footerCopy txt =
     p
-        [ class "is-size-6 has-text-left has-text-primary"
-        , style [ ( "padding-right", "3.5rem" ) ]
-        ]
+        [ class "footer-copy is-size-6 has-text-left has-text-primary" ]
         [ text txt ]
 
 
 footerLink : String -> String -> Html Msg
 footerLink link txt =
     p
-        [ style
-            [ ( "padding", "0.25em 0em" )
-            , ( "letter-spacing", "0.5px" )
-            ]
-        ]
+        [ class "footer-link" ]
         [ a
             [ class "is-size-6 has-text-left has-text-grey-footer"
             , href link
@@ -153,10 +139,7 @@ authorNote =
         [ class "has-text-primary" ]
         [ text "Made with "
         , i
-            [ style
-                [ ( "color", "#ffc0cb" ) ]
-            , class "fas fa-heart"
-            ]
+            [ class "fas fa-heart" ]
             []
         , text " by Henry Sarabia"
         ]
