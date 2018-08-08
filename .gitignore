@@ -15,5 +15,8 @@ node_modules
 
 README.md
 
+# Processed CSS
 public/bulma/
 public/styles/main.scss
+src/main.css
+main.css
