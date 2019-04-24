@@ -1,9 +1,27 @@
 {{define "page"}}
-    <div class="hero is-primary">
+    <section class="hero is-fullheight">
         <div class="hero-body">
-            <h1 class="title">Discover Now</h1>
-            <p class="subtitle">Don't wait for Monday</p>
-            <a class="button" href="{{.URL}}">Connect</a>
+            <div class="container">
+                <h2 class="has-text-weight-medium is-size-3">
+                    Don't wait for Monday.
+                </h2>
+                <h1 class="title">
+                    Discover Now
+                </h1>
+                <div class="buttons">
+                    <a class="button is-medium is-primary" href="{{.URL}}">
+                        Connect
+                    </a>
+                    <a class="button is-medium is-dark is-outlined">
+                        Explore
+                    </a>
+                </div>
+                <div>
+                    <a class="is-size-5">
+                        Learn More
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 {{end}}
