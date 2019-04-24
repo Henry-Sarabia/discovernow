@@ -21,6 +21,7 @@ func main() {
 
 	http.Handle("/", errHandler(indexHandler))
 	http.Handle("/results", errHandler(resultsHandler))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.ListenAndServe(":3000", nil)
 }
 
