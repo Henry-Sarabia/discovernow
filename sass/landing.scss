@@ -1,14 +1,20 @@
-.splash {
+.landing {
   background-image: linear-gradient(rgba(0,0,0,0.1), rgb(0,0,0,0.1)), url(/static/images/cassette.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.splash {
+  margin-top: -17rem;
 
   &__header {
     font-family: "Permanent Marker", serif;
+    font-size: 6rem;
   }
 
   &__subheader {
     font-family: "Quicksand", sans-serif;
+    margin-bottom: -1.25rem;
   }
 }
