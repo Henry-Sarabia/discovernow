@@ -16,8 +16,8 @@ var home *views.View
 var results *views.View
 
 func main() {
-	home = views.NewView("frame", "views/home.gohtml")
-	results = views.NewView("frame", "views/results.gohtml")
+	home = views.NewView("index", "views/home.gohtml")
+	results = views.NewView("index", "views/results.gohtml")
 
 	http.Handle("/", errHandler(indexHandler))
 	http.Handle("/results", errHandler(resultsHandler))
