@@ -44,37 +44,37 @@ func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
 		URL string `json:"url"`
 	}
 
-	resp, err := http.Get(APIURL + "login")
-	if err != nil {
-		return &serverError{
-			Error: err,
-			Message: "Cannot connect to login endpoint",
-			Code: http.StatusBadGateway,
-		}
-	}
-	defer resp.Body.Close()
+	//resp, err := http.Get(APIURL + "login")
+	//if err != nil {
+	//	return &serverError{
+	//		Error: err,
+	//		Message: "Cannot connect to login endpoint",
+	//		Code: http.StatusBadGateway,
+	//	}
+	//}
+	//defer resp.Body.Close()
+	//
+	//b, err := ioutil.ReadAll(resp.Body)
+	//if err != nil {
+	//	return &serverError{
+	//		Error: err,
+	//		Message: "Invalid response body from login endpoint",
+	//		Code: http.StatusInternalServerError,
+	//	}
+	//}
+	//
+	//log := &login{}
+	//
+	//err = json.Unmarshal(b, &log)
+	//if err != nil {
+	//	return &serverError{
+	//		Error: err,
+	//		Message: "Cannot unmarshal JSON response from login endpoint",
+	//		Code: http.StatusInternalServerError,
+	//	}
+	//}
 
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return &serverError{
-			Error: err,
-			Message: "Invalid response body from login endpoint",
-			Code: http.StatusInternalServerError,
-		}
-	}
-
-	log := &login{}
-
-	err = json.Unmarshal(b, &log)
-	if err != nil {
-		return &serverError{
-			Error: err,
-			Message: "Cannot unmarshal JSON response from login endpoint",
-			Code: http.StatusInternalServerError,
-		}
-	}
-
-	landing.Render(w, log)
+	landing.Render(w, nil)
 	return nil
 }
 
