@@ -1,0 +1,14 @@
+$grey: hsl(137, 5%, 27%);
+
+.anchor {
+  color: $grey;
+
+  &__text {
+    text-decoration: underline;
+  }
+
+  &__icon {
+    position: relative;
+    top: 0.25rem;
+  }
+}
