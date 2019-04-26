@@ -1,0 +1,14 @@
+@import "../bulma/utilities/initial-variables";
+@import "../bulma/utilities/functions";
+
+// Define custom colors
+
+$green: hsl(141, 59%, 60%);
+$green-invert: findColorInvert($green);
+
+// Override Bulma vars
+
+$primary: $green;
+$primary-invert: $green-invert;
+
+@import "../bulma/utilities/derived-variables";
