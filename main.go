@@ -12,11 +12,11 @@ import (
 
 const APIURL string = "http://127.0.0.1:8080/api/v1/"
 
-var landing *views.View
+var home *views.View
 var results *views.View
 
 func main() {
-	landing = views.NewView("frame", "views/landing.gohtml")
+	home = views.NewView("frame", "views/home.gohtml")
 	results = views.NewView("frame", "views/results.gohtml")
 
 	http.Handle("/", errHandler(indexHandler))
@@ -74,7 +74,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	//	}
 	//}
 
-	landing.Render(w, nil)
+	home.Render(w, nil)
 	return nil
 }
 
