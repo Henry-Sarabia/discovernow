@@ -4,5 +4,8 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+.splash__header {
+  font-family: "Permanent Marker", serif;
+}
 
 /*# sourceMappingURL=landing.css.map */
