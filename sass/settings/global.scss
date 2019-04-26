@@ -4,9 +4,9 @@
 
 @import "../bulma/utilities/animations";
 @import "../bulma/utilities/controls";
-@import "../bulma/utilities/mixins";
 
-@import "../bulma/base/_all";
+@import "../bulma/base/generic";
+@import "../bulma/base/minireset";
 
 @import "../bulma/components/card";
 @import "../bulma/components/modal";

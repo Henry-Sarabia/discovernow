@@ -1,14 +1,41 @@
 @import "../bulma/utilities/initial-variables";
 @import "../bulma/utilities/functions";
+@import "../bulma/utilities/mixins";
 
 // Define custom colors
 
 $green: hsl(141, 59%, 60%);
 $green-invert: findColorInvert($green);
 
+$grey: hsl(137, 5%, 27%);
+$grey-invert: findColorInvert($grey);
+
 // Override Bulma vars
 
 $primary: $green;
 $primary-invert: $green-invert;
 
+$link: $grey;
+$link-invert: $grey-invert;
+
+$size-0: 6rem;
+$family-sans-serif: "Open Sans", BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+
 @import "../bulma/utilities/derived-variables";
+
+$family-secondary: "Quicksand", serif;
+$family-code: "Permanent Marker", serif;
+
+@import "../bulma/base/helpers";
+
+.has-text-weight-medium {
+  font-weight: $weight-medium !important;
+}
+
+.is-underlined {
+  text-decoration: underline !important;
+}
+
+.is-size-0 {
+  font-size: $size-0 !important;
+}
