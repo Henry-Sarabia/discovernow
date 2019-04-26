@@ -1,0 +1,13 @@
+.splash {
+  margin-top: -17rem;
+}
+.splash__header {
+  font-family: "Permanent Marker", serif;
+  font-size: 6rem;
+}
+.splash__subheader {
+  font-family: "Quicksand", sans-serif;
+  margin-bottom: -1.25rem;
+}
+
+/*# sourceMappingURL=splash.css.map */
