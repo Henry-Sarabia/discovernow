@@ -29,10 +29,22 @@ $family-sans-serif: "Roboto", "Open Sans", BlinkMacSystemFont, -apple-system, "S
 
 @import "../bulma/utilities/derived-variables";
 
+// Override Font family
 $family-primary: $family-sans-serif;
 $family-secondary: "Quicksand", serif;
 $family-code: "Permanent Marker", serif;
 
+// Override titles
+$title-weight: $weight-medium;
+$title-color: $black-ter;
+$subtitle-weight: $weight-medium;
+$subtitle-color: $grey-dark;
+
+// Override card vars
+$card-shadow: 0 15px 35px rgba(50, 50, 93, .05), 0 5px 15px rgba(0, 0, 0, .07);
+$card-background-color: $white-bis;
+
+// Add helpers
 @import "../bulma/base/helpers";
 
 .has-text-weight-medium {
