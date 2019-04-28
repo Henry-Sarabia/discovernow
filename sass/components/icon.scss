@@ -1,0 +1,21 @@
+$icon-green-primary: #9de5b5;
+$icon-green-secondary: #5ed587;
+$icon-rose: #fcf4f4;
+$icon-brown: #dbbbab;
+
+.heroicon-outline {
+  fill: #626262;
+}
+
+.heroicon-component-fill {
+  fill: white;
+}
+
+.heroicon-shadows {
+  fill: #626262;
+  opacity: .4;
+}
+
+.heroicon-component-accent {
+  fill: $icon-green-primary;
+}

@@ -6034,4 +6034,21 @@ body.has-spaced-navbar-fixed-bottom {
   line-height: 1.7em;
 }
 
+.heroicon-outline {
+  fill: #626262;
+}
+
+.heroicon-component-fill {
+  fill: white;
+}
+
+.heroicon-shadows {
+  fill: #626262;
+  opacity: 0.4;
+}
+
+.heroicon-component-accent {
+  fill: palegreen;
+}
+
 /*# sourceMappingURL=global.css.map */
