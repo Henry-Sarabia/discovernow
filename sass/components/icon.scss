@@ -1,5 +1,5 @@
-$icon-green-primary: #9de5b5;
-$icon-green-secondary: #5ed587;
+$icon-light-green: #9de5b5;
+$icon-green: #5ed587;
 $icon-rose: #fcf4f4;
 $icon-brown: #dbbbab;
 
@@ -16,6 +16,18 @@ $icon-brown: #dbbbab;
   opacity: .4;
 }
 
-.heroicon-component-accent {
-  fill: $icon-green-primary;
+.heroicon-light-green {
+  fill: $icon-light-green;
+}
+
+.heroicon-green {
+  fill: $icon-green;
+}
+
+.heroicon-rose {
+  fill: $icon-rose;
+}
+
+.heroicon-brown {
+  fill: $icon-brown;
 }

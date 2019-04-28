@@ -6047,8 +6047,20 @@ body.has-spaced-navbar-fixed-bottom {
   opacity: 0.4;
 }
 
-.heroicon-component-accent {
-  fill: palegreen;
+.heroicon-light-green {
+  fill: #9de5b5;
+}
+
+.heroicon-green {
+  fill: #5ed587;
+}
+
+.heroicon-rose {
+  fill: #fcf4f4;
+}
+
+.heroicon-brown {
+  fill: #dbbbab;
 }
 
 /*# sourceMappingURL=global.css.map */
