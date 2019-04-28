@@ -12,15 +12,16 @@ import (
 
 const APIURL string = "http://127.0.0.1:8080/api/v1/"
 
-var landing *views.View
+var home *views.View
 var results *views.View
 
 func main() {
-	landing = views.NewView("frame", "views/landing.gohtml")
-	results = views.NewView("frame", "views/results.gohtml")
+	home = views.NewView("index", "views/home.gohtml")
+	results = views.NewView("index", "views/results.gohtml")
 
 	http.Handle("/", errHandler(indexHandler))
 	http.Handle("/results", errHandler(resultsHandler))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.ListenAndServe(":3000", nil)
 }
 
@@ -43,37 +44,37 @@ func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
 		URL string `json:"url"`
 	}
 
-	resp, err := http.Get(APIURL + "login")
-	if err != nil {
-		return &serverError{
-			Error: err,
-			Message: "Cannot connect to login endpoint",
-			Code: http.StatusBadGateway,
-		}
-	}
-	defer resp.Body.Close()
+	//resp, err := http.Get(APIURL + "login")
+	//if err != nil {
+	//	return &serverError{
+	//		Error: err,
+	//		Message: "Cannot connect to login endpoint",
+	//		Code: http.StatusBadGateway,
+	//	}
+	//}
+	//defer resp.Body.Close()
+	//
+	//b, err := ioutil.ReadAll(resp.Body)
+	//if err != nil {
+	//	return &serverError{
+	//		Error: err,
+	//		Message: "Invalid response body from login endpoint",
+	//		Code: http.StatusInternalServerError,
+	//	}
+	//}
+	//
+	//log := &login{}
+	//
+	//err = json.Unmarshal(b, &log)
+	//if err != nil {
+	//	return &serverError{
+	//		Error: err,
+	//		Message: "Cannot unmarshal JSON response from login endpoint",
+	//		Code: http.StatusInternalServerError,
+	//	}
+	//}
 
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return &serverError{
-			Error: err,
-			Message: "Invalid response body from login endpoint",
-			Code: http.StatusInternalServerError,
-		}
-	}
-
-	log := &login{}
-
-	err = json.Unmarshal(b, &log)
-	if err != nil {
-		return &serverError{
-			Error: err,
-			Message: "Cannot unmarshal JSON response from login endpoint",
-			Code: http.StatusInternalServerError,
-		}
-	}
-
-	landing.Render(w, log)
+	home.Render(w, nil)
 	return nil
 }
 
