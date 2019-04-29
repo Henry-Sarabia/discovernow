@@ -1,9 +1,15 @@
+// Bulma class
 .card {
   border-radius: 14px;
   margin-top: 2rem;
-  padding: 1rem 0.5rem 2rem 0.5rem;
+  padding: 2rem 1.25rem;
 
   &__copy {
     line-height: 1.7em;
+  }
+
+  // Bulma class
+  &-content {
+    padding: 1.5rem 1.25rem;
   }
 }

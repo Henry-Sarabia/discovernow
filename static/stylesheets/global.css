@@ -6028,10 +6028,13 @@ body.has-spaced-navbar-fixed-bottom {
 .card {
   border-radius: 14px;
   margin-top: 2rem;
-  padding: 1rem 0.5rem 2rem 0.5rem;
+  padding: 2rem 1.25rem;
 }
 .card__copy {
   line-height: 1.7em;
+}
+.card-content {
+  padding: 1.5rem 1.25rem;
 }
 
 .heroicon-outline {
@@ -6047,8 +6050,20 @@ body.has-spaced-navbar-fixed-bottom {
   opacity: 0.4;
 }
 
-.heroicon-component-accent {
-  fill: palegreen;
+.heroicon-light-green {
+  fill: #9de5b5;
+}
+
+.heroicon-green {
+  fill: #5ed587;
+}
+
+.heroicon-rose {
+  fill: #fcf4f4;
+}
+
+.heroicon-brown {
+  fill: #dbbbab;
 }
 
 /*# sourceMappingURL=global.css.map */
