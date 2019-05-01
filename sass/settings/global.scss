@@ -24,11 +24,12 @@
 
 // Import custom stylesheets
 
+@import "../components/splash";
+@import "../components/landing";
+@import "../components/steps";
 @import "../components/anchor";
 @import "../components/button";
-@import "../components/landing";
-@import "../components/splash";
-@import "../components/hero";
-@import "../components/content";
 @import "../components/card";
+@import "../components/content";
+@import "../components/hero";
 @import "../components/icon";
