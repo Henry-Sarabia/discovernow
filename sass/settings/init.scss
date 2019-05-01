@@ -7,6 +7,9 @@
 $green: hsl(141, 59%, 60%);
 $green-invert: findColorInvert($green);
 
+$lightgreen: hsl(152, 58%, 87%);
+$lightgreen-invert: findColorInvert($lightgreen);
+
 $grey: hsl(137, 5%, 27%);
 $grey-invert: findColorInvert($grey);
 
@@ -17,6 +20,9 @@ $primary-invert: $green-invert;
 
 $link: $grey;
 $link-invert: $grey-invert;
+
+$success: $lightgreen;
+$success-invert: $lightgreen-invert;
 
 // Import Google fonts
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker&text=Discover%20NowError404');
