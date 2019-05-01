@@ -1,7 +1,10 @@
 $icon-light-green: #9de5b5;
 $icon-green: #5ed587;
+$icon-yellow: #ffe88f;
 $icon-rose: #fcf4f4;
 $icon-brown: #dbbbab;
+$icon-silver: #bed1d3;
+$icon-grey: #7f807f;
 
 .heroicon-outline {
   fill: #626262;
@@ -24,10 +27,22 @@ $icon-brown: #dbbbab;
   fill: $icon-green;
 }
 
+.heroicon-yellow {
+  fill: $icon-yellow;
+}
+
 .heroicon-rose {
   fill: $icon-rose;
 }
 
 .heroicon-brown {
   fill: $icon-brown;
+}
+
+.heroicon-silver {
+  fill: $icon-silver;
+}
+
+.heroicon-grey {
+  fill: $icon-grey;
 }

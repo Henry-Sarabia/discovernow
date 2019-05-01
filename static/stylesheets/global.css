@@ -5988,22 +5988,6 @@ body.has-spaced-navbar-fixed-bottom {
   padding: 3rem 1.5rem 6rem;
 }
 
-.anchor__icon {
-  position: relative;
-  top: 0.25rem;
-}
-
-.button__text {
-  padding-left: 0.25rem;
-}
-
-.landing {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(/static/images/cassette.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .splash {
   margin-top: -17rem;
 }
@@ -6014,8 +5998,37 @@ body.has-spaced-navbar-fixed-bottom {
   margin-bottom: -1.25rem;
 }
 
-.hero__title {
-  padding-bottom: 1.5rem;
+.landing {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(/static/images/cassette.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.steps {
+  background: linear-gradient(45deg, white 0%, rgba(255, 255, 255, 0.738) 19%, rgba(255, 255, 255, 0.541) 34%, rgba(255, 255, 255, 0.382) 47%, rgba(255, 255, 255, 0.278) 56.5%, rgba(255, 255, 255, 0.194) 65%, rgba(255, 255, 255, 0.126) 73%, rgba(255, 255, 255, 0.075) 80.2%, rgba(255, 255, 255, 0.042) 86.1%, rgba(255, 255, 255, 0.021) 91%, rgba(255, 255, 255, 0.008) 95.2%, rgba(255, 255, 255, 0.002) 98.2%, rgba(255, 255, 255, 0) 100%);
+}
+
+.anchor__icon {
+  position: relative;
+  top: 0.25rem;
+}
+
+.button__text {
+  padding-left: 0.25rem;
+}
+
+.card {
+  border-radius: 14px;
+  margin-top: 2rem;
+  padding: 2rem 1.25rem;
+  border-left: 4px solid #c7dcd5;
+}
+.card__copy {
+  line-height: 1.7em;
+}
+.card-content {
+  padding: 1.5rem 1.25rem;
 }
 
 .content {
@@ -6025,16 +6038,8 @@ body.has-spaced-navbar-fixed-bottom {
   background-size: cover;
 }
 
-.card {
-  border-radius: 14px;
-  margin-top: 2rem;
-  padding: 2rem 1.25rem;
-}
-.card__copy {
-  line-height: 1.7em;
-}
-.card-content {
-  padding: 1.5rem 1.25rem;
+.hero__title {
+  padding-bottom: 1.5rem;
 }
 
 .heroicon-outline {
@@ -6058,12 +6063,24 @@ body.has-spaced-navbar-fixed-bottom {
   fill: #5ed587;
 }
 
+.heroicon-yellow {
+  fill: #ffe88f;
+}
+
 .heroicon-rose {
   fill: #fcf4f4;
 }
 
 .heroicon-brown {
   fill: #dbbbab;
+}
+
+.heroicon-silver {
+  fill: #bed1d3;
+}
+
+.heroicon-grey {
+  fill: #7f807f;
 }
 
 /*# sourceMappingURL=global.css.map */
