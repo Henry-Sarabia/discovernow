@@ -10,11 +10,20 @@ $green-invert: findColorInvert($green);
 $lightgreen: hsl(152, 58%, 87%);
 $lightgreen-invert: findColorInvert($lightgreen);
 
-$darkgreen: hsl(141, 38%, 22%);
-$darkgreen-invert: findColorInvert($darkgreen);
+$forest: hsl(141, 38%, 22%);
+$forest-invert: findColorInvert($forest);
+
+$celadon: hsl(143, 28%, 79%);
+$celadon-invert: findColorInvert($celadon);
 
 $grey: hsl(137, 5%, 27%);
 $grey-invert: findColorInvert($grey);
+
+$ash: hsl(0, 0%, 43.9%);
+$ash-invert: findColorInvert($ash);
+
+$pink: hsl(349.5, 100%, 87.6%);
+$pink-invert: findColorInvert($pink);
 
 // Override Bulma vars
 
@@ -38,6 +47,14 @@ $family-sans-serif: "Roboto", "Open Sans", BlinkMacSystemFont, -apple-system, "S
 
 @import "../bulma/utilities/derived-variables";
 
+// Extend color map
+$addColors: (
+        "celadon": ($celadon, $celadon-invert),
+        "ash": ($ash, $ash-invert),
+        "pink": ($pink, $pink-invert),
+);
+$colors: map-merge($colors, $addColors);
+
 // Override Font family
 $family-primary: $family-sans-serif;
 $family-secondary: "Quicksand", serif;
@@ -54,7 +71,7 @@ $card-shadow: 0 15px 35px rgba(50, 50, 93, .05), 0 5px 15px rgba(0, 0, 0, .07);
 $card-background-color: $white-bis;
 
 // Override footer vars
-$footer-background-color: $darkgreen;
+$footer-background-color: $forest;
 
 // Add helpers
 @import "../bulma/base/helpers";
