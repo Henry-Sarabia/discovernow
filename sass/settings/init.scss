@@ -10,6 +10,9 @@ $green-invert: findColorInvert($green);
 $lightgreen: hsl(152, 58%, 87%);
 $lightgreen-invert: findColorInvert($lightgreen);
 
+$darkgreen: hsl(141, 38%, 22%);
+$darkgreen-invert: findColorInvert($darkgreen);
+
 $grey: hsl(137, 5%, 27%);
 $grey-invert: findColorInvert($grey);
 
@@ -49,6 +52,9 @@ $subtitle-color: $grey-dark;
 // Override card vars
 $card-shadow: 0 15px 35px rgba(50, 50, 93, .05), 0 5px 15px rgba(0, 0, 0, .07);
 $card-background-color: $white-bis;
+
+// Override footer vars
+$footer-background-color: $darkgreen;
 
 // Add helpers
 @import "../bulma/base/helpers";

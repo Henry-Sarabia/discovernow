@@ -5984,7 +5984,7 @@ body.has-spaced-navbar-fixed-bottom {
 }
 
 .footer {
-  background-color: #fafafa;
+  background-color: #234d32;
   padding: 3rem 1.5rem 6rem;
 }
 
@@ -6007,6 +6007,20 @@ body.has-spaced-navbar-fixed-bottom {
 
 .steps {
   background: linear-gradient(45deg, white 0%, rgba(255, 255, 255, 0.738) 19%, rgba(255, 255, 255, 0.541) 34%, rgba(255, 255, 255, 0.382) 47%, rgba(255, 255, 255, 0.278) 56.5%, rgba(255, 255, 255, 0.194) 65%, rgba(255, 255, 255, 0.126) 73%, rgba(255, 255, 255, 0.075) 80.2%, rgba(255, 255, 255, 0.042) 86.1%, rgba(255, 255, 255, 0.021) 91%, rgba(255, 255, 255, 0.008) 95.2%, rgba(255, 255, 255, 0.002) 98.2%, rgba(255, 255, 255, 0) 100%);
+}
+
+.footer .footer__header {
+  padding-bottom: 1.5rem;
+}
+.footer .footer__title {
+  padding: 0.25rem 0;
+}
+.footer .footer__copy {
+  padding-right: 3.5rem;
+}
+.footer .footer__link {
+  padding: 0.25rem 0;
+  letter-spacing: 0.5px;
 }
 
 .anchor__icon {
