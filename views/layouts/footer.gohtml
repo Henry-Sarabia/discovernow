@@ -1,0 +1,38 @@
+{{define "footer"}}
+    <footer class="footer">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <h1 class="footer__header">
+                        <a class="title has-text-weight-bold has-text-primary is-family-code" href="http://127.0.0.1:3000/">
+                            Discover Now
+                        </a>
+                    </h1>
+                    <p class="footer__copy is-size-6 has-text-left has-text-primary">
+                        Discover Now is a Spotify playlist generator that learns from a user's recent musical interests. We are not endorsed by Spotify.
+                    </p>
+                </div>
+                <div class="column">
+                    {{template "footerTitle" "Project"}}
+                    {{template "footerLink" . | arg "Text" "GitHub Repository" | arg "Href" "https://github.com/Henry-Sarabia/discovernow"}}
+                    {{template "footerLink" . | arg "Text" "License" | arg "Href" "placeholder"}}
+                </div>
+                <div class="column">
+                    {{template "footerTitle" "Resources"}}
+                    {{template "footerLink" . | arg "Text" "Bulma" | arg "Href" "https://bulma.io/"}}
+                    {{template "footerLink" . | arg "Text" "Font Awesome" | arg "Href" "https://fontawesome.com/"}}
+                    {{template "footerLink" . | arg "Text" "Unsplash" | arg "Href" "https://unsplash.com/@markusspiske"}}
+                    {{template "footerLink" . | arg "Text" "Cool Backgrounds" | arg "Href" "https://coolbackgrounds.io/"}}
+                </div>
+                <div class="column footer__stack">
+                    {{template "footerTitle" "Powered By"}}
+                    {{template "footerLink" . | arg "Text" "Go" | arg "Href" "https://golang.org/"}}
+                    {{template "footerLink" . | arg "Text" "Sass" | arg "Href" "https://sass-lang.com/"}}
+                </div>
+            </div>
+            <div class="has-text-primary">
+                Made with <span class="has-text-pink"><i class="fas fa-heart"></i></span> by Henry Sarabia
+            </div>
+        </div>
+    </footer>
+{{end}}

@@ -1,0 +1,9 @@
+{{define "footerLink"}}
+    {{if $args := . | require "Text" "string" | require "Href" "string" | args}}
+        <p class="footer__link">
+            <a class="is-size-6 has-text-left has-text-celadon" href="{{$args.Href}}">
+                {{$args.Text}}
+            </a>
+        </p>
+    {{end}}
+{{end}}
