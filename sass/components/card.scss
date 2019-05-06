@@ -2,11 +2,10 @@
 .card {
   border-radius: 14px;
   margin-top: 2rem;
-  //padding: 2rem 1.125rem;
   padding: 1rem .5rem 2rem;
   border-left: 4px solid hsl(160, 23%, 82%);
 
-  &__copy {
+  &__text {
     line-height: 1.7em;
   }
 
