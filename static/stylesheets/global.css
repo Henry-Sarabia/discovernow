@@ -6645,7 +6645,7 @@ body.has-spaced-navbar-fixed-bottom {
   padding: 1rem 0.5rem 2rem;
   border-left: 4px solid #c7dcd5;
 }
-.card__copy {
+.card__text {
   line-height: 1.7em;
 }
 .card-content {
