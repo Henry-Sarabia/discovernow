@@ -1,8 +1,26 @@
 {{define "page"}}
-    <div class="hero is-primary">
-        <div class="hero-body">
-            <h1 class="title">Results</h1>
-            <p class="subtitle">Here is your playlist: {{.URI}}</p>
+    <section class="content">
+        <div class="hero is-fullheight is-light">
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    {{if .URI}}
+                        {{template "resultHeader" "Success!"}}
+                        {{template "resultSubheader" "Something you'll love is waiting for you on your preferred Spotify player."}}
+                        <a class="button is-primary is-rounded">
+                            <span class="icon">
+                                <i class="far fa-play-circle fa-lg"></i>
+                            </span>
+                            <span class="button__text is-family-monospace">
+                                Preview
+                            </span>
+                        </a>
+                    {{else}}
+                        {{template "resultHeader" "Uh oh..."}}
+                        {{template "resultSubheader" "We couldn't find enough data to generate your playlist."}}
+                    {{end}}
+                </div>
+            </div>
+            {{template "footer"}}
         </div>
-    </div>
+    </section>
 {{end}}
