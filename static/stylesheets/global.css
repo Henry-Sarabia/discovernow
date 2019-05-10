@@ -1202,6 +1202,10 @@ a.has-text-pink:hover, a.has-text-pink:focus {
   font-size: 6rem !important;
 }
 
+.is-spaced {
+  padding-bottom: 1rem !important;
+}
+
 @keyframes spinAround {
   from {
     transform: rotate(0deg);
