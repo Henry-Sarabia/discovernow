@@ -10,7 +10,7 @@
                     </div>
                     <div class="column">
                         <div class="has-text-left">
-                            {{template "spotifyButton" .}}
+                            {{template "button" . | arg "Text" "Connect" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary" | arg "Href" .URL}}
                         </div>
                     </div>
                 </div>

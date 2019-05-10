@@ -10,15 +10,8 @@
                         Discover Now
                     </h1>
                     <div class="buttons">
-                        <a class="button is-medium is-dark is-outlined" href="https://github.com/Henry-Sarabia/discovernow">
-                            <span class="icon">
-                                <i class="fab fa-github fa-lg"></i>
-                            </span>
-                            <span class="button__text is-family-monospace">
-                                Explore
-                            </span>
-                        </a>
-                        {{template "spotifyButton" .}}
+                        {{template "button" . | arg "Text" "Explore" | arg "Icon" "fab fa-github fa-lg" | arg "Class" "is-medium is-dark is-outlined" | arg "Href" "https://github.com/Henry-Sarabia/discovernow"}}
+                        {{template "button" . | arg "Text" "Connect" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary" | arg "Href" .URL}}
                     </div>
                     <div>
                         <a class="anchor">

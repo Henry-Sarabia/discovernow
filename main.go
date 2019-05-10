@@ -69,7 +69,8 @@ func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	//	}
 	//}
 
-	home.Render(w, nil)
+	dummy := login{URL: "http://127.0.0.1:3000/results"}
+	home.Render(w, dummy)
 	return nil
 }
 
@@ -140,7 +141,8 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	//	}
 	//}
 
-	results.Render(w, nil)
+	dummy := &playlist{URI: "something"}
+	results.Render(w, dummy)
 	return nil
 }
 

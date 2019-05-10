@@ -1,0 +1,20 @@
+{{define "navbar"}}
+    <nav class="navbar container">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <a href="http://127.0.0.1:3000/">
+                    <h1 class="navbar__logo title has-text-weight-bold has-text-grey-darker">
+                        Discover Now
+                    </h1>
+                </a>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    {{template "button" . | arg "Text" "Explore" | arg "Icon" "fab fa-github fa-lg" | arg "Class" "is-dark is-outlined" | arg "Href" "https://github.com/Henry-Sarabia/discovernow"}}
+                </div>
+            </div>
+        </div>
+    </nav>
+{{end}}
