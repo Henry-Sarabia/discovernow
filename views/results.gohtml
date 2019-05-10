@@ -1,12 +1,12 @@
 {{define "page"}}
     <section class="content">
-        <div class="hero is-fullheight is-light">
+        <div class="hero is-fullheight">
             <div class="hero-body">
                 <div class="container has-text-centered">
                     {{if .URI}}
                         {{template "resultHeader" "Success!"}}
                         {{template "resultSubheader" "Something you'll love is waiting for you on your preferred Spotify player."}}
-                        {{template "button" . | arg "Text" "Preview" | arg "Icon" "far fa-play-circle fa-lg" | arg "Class" "button is-primary is-rounded" | arg "Href" ""}}
+                        {{template "button" . | arg "Text" "Preview" | arg "Icon" "far fa-play-circle fa-lg" | arg "Class" "button is-dark is-rounded is-outlined" | arg "Href" ""}}
                     {{else}}
                         {{template "resultHeader" "Uh oh..."}}
                         {{template "resultSubheader" "We couldn't find enough data to generate your playlist."}}
