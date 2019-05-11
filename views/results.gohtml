@@ -6,7 +6,28 @@
                     {{if .URI}}
                         {{template "resultHeader" "Success!"}}
                         {{template "resultSubheader" "Something you'll love is waiting for you on your preferred Spotify player."}}
-                        {{template "button" . | arg "Text" "Preview" | arg "Icon" "far fa-play-circle fa-lg" | arg "Class" "button is-dark is-rounded is-outlined" | arg "Href" ""}}
+                        <a class="button is-dark is-rounded is-outlined" onclick="toggleModal('widget')">
+                            <span class="icon">
+                                <i class="far fa-play-circle fa-lg"></i>
+                            </span>
+                            <span class="button__text is-family-monospace">
+                                Preview
+                            </span>
+                        </a>
+                        <div class="modal" id="widget">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <iframe src="https://open.spotify.com/embed?uri={{.URI}}"
+                                        width="600"
+                                        height="700"
+                                        frameborder="0"
+                                        allowtransparency="true"
+                                        allow="encrypted-media"
+                                >
+                                </iframe>
+                            </div>
+                            <button class="modal-close is-large" aria-label="close" onclick="toggleModal('widget')"></button>
+                        </div>
                     {{else}}
                         {{template "resultHeader" "Uh oh..."}}
                         {{template "resultSubheader" "We couldn't find enough data to generate your playlist - try again after listening to some music."}}
