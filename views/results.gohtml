@@ -6,7 +6,14 @@
                     {{if .URI}}
                         {{template "resultHeader" "Success!"}}
                         {{template "resultSubheader" "Something you'll love is waiting for you on your preferred Spotify player."}}
-                        {{template "button" . | arg "Text" "Preview" | arg "Icon" "far fa-play-circle fa-lg" | arg "Class" "button is-dark is-rounded is-outlined" | arg "Href" ""}}
+                        <a class="button is-dark is-rounded is-outlined" href="https://open.spotify.com/embed?uri={{.URI}}">
+                            <span class="icon">
+                                <i class="far fa-play-circle fa-lg"></i>
+                            </span>
+                            <span class="button__text is-family-monospace">
+                                Preview
+                            </span>
+                        </a>
                     {{else}}
                         {{template "resultHeader" "Uh oh..."}}
                         {{template "resultSubheader" "We couldn't find enough data to generate your playlist - try again after listening to some music."}}
