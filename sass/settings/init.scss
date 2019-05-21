@@ -1,6 +1,6 @@
-@import "../bulma/utilities/initial-variables";
 @import "../bulma/utilities/functions";
 @import "../bulma/utilities/mixins";
+@import "../bulma/utilities/initial-variables";
 
 // Define custom colors
 
@@ -16,25 +16,22 @@ $forest-invert: findColorInvert($forest);
 $celadon: hsl(143, 28%, 79%);
 $celadon-invert: findColorInvert($celadon);
 
-$grey: hsl(137, 5%, 27%);
+$grey: hsl(0, 0%, 44%);
 $grey-invert: findColorInvert($grey);
-
-$ash: hsl(0, 0%, 43.9%);
-$ash-invert: findColorInvert($ash);
 
 $pink: hsl(349.5, 100%, 87.6%);
 $pink-invert: findColorInvert($pink);
 
-// Override Bulma vars
+// Override derived Bulma vars
 
 $primary: $green;
 $primary-invert: $green-invert;
 
-$link: $grey;
-$link-invert: $grey-invert;
-
 $success: $lightgreen;
 $success-invert: $lightgreen-invert;
+
+$text: $grey;
+$text-invert: $grey-invert;
 
 // Import Google fonts
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker&text=Discover%20NowError404');
@@ -50,7 +47,6 @@ $family-sans-serif: "Open Sans", BlinkMacSystemFont, -apple-system, "Segoe UI", 
 // Extend color map
 $addColors: (
         "celadon": ($celadon, $celadon-invert),
-        "ash": ($ash, $ash-invert),
         "pink": ($pink, $pink-invert),
 );
 $colors: map-merge($colors, $addColors);
