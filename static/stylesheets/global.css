@@ -6453,6 +6453,9 @@ body.has-spaced-navbar-fixed-bottom {
 .card-content {
   padding: 1.5rem;
 }
+.card-image {
+  padding-top: 1rem;
+}
 
 .content {
   background-image: url(/static/images/green.svg), linear-gradient(to right, whitesmoke, whitesmoke);
