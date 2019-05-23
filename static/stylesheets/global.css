@@ -6397,13 +6397,14 @@ body.has-spaced-navbar-fixed-bottom {
   padding: 3rem 1.5rem;
 }
 
-.splash {
-  margin-top: -17rem;
-}
 .splash__header {
-  padding-bottom: 1rem;
+  font-size: 4.5rem;
 }
-.splash__subheader {
+.splash__subheader_desktop {
+  margin-top: -17rem;
+  margin-bottom: -1.25rem;
+}
+.splash__subheader_mobile {
   margin-bottom: -1.25rem;
 }
 

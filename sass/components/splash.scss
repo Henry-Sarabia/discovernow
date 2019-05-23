@@ -1,11 +1,14 @@
 .splash {
-  margin-top: -17rem;
-
   &__header {
-    padding-bottom: 1rem;
+    font-size: 4.5rem;
   }
 
-  &__subheader {
+  &__subheader_desktop {
+    margin-top: -17rem;
+    margin-bottom: -1.25rem;
+  }
+
+  &__subheader_mobile {
     margin-bottom: -1.25rem;
   }
 }
