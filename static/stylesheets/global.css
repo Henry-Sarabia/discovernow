@@ -6397,8 +6397,9 @@ body.has-spaced-navbar-fixed-bottom {
   padding: 3rem 1.5rem;
 }
 
-.splash__header {
+.splash__header_mobile {
   font-size: 4.5rem;
+  margin-bottom: 4rem !important;
 }
 .splash__subheader_desktop {
   margin-top: -17rem;
