@@ -6397,6 +6397,12 @@ body.has-spaced-navbar-fixed-bottom {
   padding: 3rem 1.5rem;
 }
 
+.splash {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(/static/images/cassette.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .splash__header_mobile {
   font-size: 4.5rem;
   margin-bottom: 4rem !important;
