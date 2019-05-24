@@ -1,7 +1,12 @@
 {{define "footerLink"}}
     {{if $args := . | require "Text" "string" | require "Href" "string" | args}}
-        <p class="footer__link">
-            <a class="is-size-6 has-text-left has-text-celadon" href="{{$args.Href}}">
+        <p class="footer__link has-text-left">
+            <a class="is-size-6 has-text-celadon is-hidden-mobile" href="{{$args.Href}}">
+                {{$args.Text}}
+            </a>
+        </p>
+        <p class="footer__link has-text-centered">
+            <a class="is-size-6 has-text-celadon is-hidden-tablet" href="{{$args.Href}}">
                 {{$args.Text}}
             </a>
         </p>

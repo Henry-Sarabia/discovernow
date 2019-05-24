@@ -3,14 +3,8 @@
         <div class="container">
             <div class="columns">
                 <div class="column">
-                    <h1 class="footer__header">
-                        <a class="title has-text-weight-bold has-text-primary is-family-code" href="http://127.0.0.1:3000/">
-                            Discover Now
-                        </a>
-                    </h1>
-                    <p class="footer__copy is-size-6 has-text-left has-text-primary">
-                        Discover Now is a Spotify playlist generator that learns from a user's recent musical interests. We are not endorsed by Spotify.
-                    </p>
+                    {{template "footerHeader" "Discover Now"}}
+                    {{template "footerCopy" "Discover Now is a Spotify playlist generator that learns from a user's recent musical interests. We are not endorsed by Spotify."}}
                 </div>
                 <div class="column">
                     {{template "footerTitle" "Project"}}
@@ -30,8 +24,11 @@
                     {{template "footerLink" . | arg "Text" "Sass" | arg "Href" "https://sass-lang.com/"}}
                 </div>
             </div>
-            <div class="has-text-primary">
-                Made with <span class="has-text-pink"><i class="fas fa-heart"></i></span> by Henry Sarabia
+            <div class="has-text-left is-hidden-mobile">
+                {{template "footerAuthor"}}
+            </div>
+            <div class="has-text-centered is-hidden-tablet">
+                {{template "footerAuthor"}}
             </div>
         </div>
     </footer>

@@ -6397,13 +6397,15 @@ body.has-spaced-navbar-fixed-bottom {
   padding: 3rem 1.5rem;
 }
 
-.splash {
+.splash__header_mobile {
+  font-size: 4.5rem;
+  margin-bottom: 4rem !important;
+}
+.splash__subheader_desktop {
   margin-top: -17rem;
+  margin-bottom: -1.25rem;
 }
-.splash__header {
-  padding-bottom: 1rem;
-}
-.splash__subheader {
+.splash__subheader_mobile {
   margin-bottom: -1.25rem;
 }
 
@@ -6425,7 +6427,7 @@ body.has-spaced-navbar-fixed-bottom {
   padding: 0.25rem 0;
 }
 .footer .footer__copy {
-  padding-right: 3.5rem;
+  padding-right: 2rem;
 }
 .footer .footer__link {
   padding: 0.25rem 0;
