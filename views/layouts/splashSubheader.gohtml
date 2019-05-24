@@ -1,10 +1,8 @@
 {{define "splashSubheader"}}
-    {{if $args := . | require "Text" "string" | args}}
-        <p class="splash__subheader_desktop is-family-secondary has-text-grey-dark has-text-weight-medium is-size-3 is-hidden-mobile">
-            {{$args.Text}}
-        </p>
-        <p class="splash__subheader_mobile is-family-secondary has-text-grey-dark has-text-weight-medium is-size-4 has-text-centered is-spaced is-hidden-tablet">
-            {{$args.Text}}
-        </p>
-    {{end}}
+    <p class="splash__subheader_desktop is-family-secondary has-text-grey-dark has-text-weight-medium is-size-3 is-hidden-mobile">
+        {{.}}
+    </p>
+    <p class="splash__subheader_mobile is-family-secondary has-text-grey-dark has-text-weight-medium is-size-4 has-text-centered is-spaced is-hidden-tablet">
+        {{.}}
+    </p>
 {{end}}

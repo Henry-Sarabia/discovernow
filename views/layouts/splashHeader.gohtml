@@ -1,10 +1,8 @@
 {{define "splashHeader"}}
-    {{if $args := . | require "Text" "string" | args}}
-        <h1 class="title is-family-code has-text-weight-bold is-size-0 is-spaced is-hidden-mobile">
-            {{$args.Text}}
-        </h1>
-        <h1 class="splash__header_mobile title is-fam   ily-code has-text-weight-bold has-text-centered is-hidden-tablet">
-            {{$args.Text}}
-        </h1>
-    {{end}}
+    <h1 class="title is-family-code has-text-weight-bold is-size-0 is-spaced is-hidden-mobile">
+        {{.}}
+    </h1>
+    <h1 class="splash__header_mobile title is-fam   ily-code has-text-weight-bold has-text-centered is-hidden-tablet">
+        {{.}}
+    </h1>
 {{end}}
