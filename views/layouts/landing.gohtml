@@ -5,9 +5,11 @@
                 <div class="splash">
                     {{template  "splashSubheader" . | arg "Text" "Don't wait for Monday."}}
                     {{template "splashHeader" . | arg "Text" "Discover Now"}}
-                    <div class="buttons">
-                        {{template "button" . | arg "Text" "Explore" | arg "Icon" "fab fa-github fa-lg" | arg "Class" "is-medium is-dark is-outlined" | arg "Href" "https://github.com/Henry-Sarabia/discovernow"}}
-                        {{template "button" . | arg "Text" "Connect" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary" | arg "Href" .URL}}
+                    <div class="buttons is-hidden-mobile">
+                        {{template "splashButtons" .}}
+                    </div>
+                    <div class="buttons is-centered is-hidden-tablet">
+                        {{template "splashButtons" .}}
                     </div>
                     <div>
                         <a class="anchor has-text-grey-dark" onclick="smoothScroll('features')">
