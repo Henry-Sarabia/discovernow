@@ -6420,16 +6420,16 @@ body.has-spaced-navbar-fixed-bottom {
 }
 
 .footer__header {
-  padding-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
 }
 .footer__title {
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
 }
 .footer__copy {
   padding-right: 2rem;
 }
 .footer__link {
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
   letter-spacing: 0.5px;
 }
 
