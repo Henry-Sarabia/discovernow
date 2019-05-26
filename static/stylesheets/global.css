@@ -1177,9 +1177,8 @@ a.has-text-pink:hover, a.has-text-pink:focus {
   padding-bottom: 1rem !important;
 }
 
-*:focus {
-  outline: 3px solid #ffe88f !important;
-  outline-offset: 2px !important;
+html {
+  scroll-behavior: smooth;
 }
 
 @keyframes spinAround {

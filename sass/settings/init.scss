@@ -91,7 +91,11 @@ $footer-padding: 3rem 1.5rem;
 }
 
 // Accessibilty focus
-*:focus{
-  outline:3px solid #ffe88f !important;
-  outline-offset:2px !important;
+//*:focus {
+//  outline:2px dotted $grey !important;
+//  outline-offset: 2px !important;
+//}
+
+html {
+  scroll-behavior: smooth;
 }
