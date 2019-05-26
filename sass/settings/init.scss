@@ -1,3 +1,8 @@
+*:focus{
+  outline:3px solid #ffe88f;
+  outline-offset:2px;
+}
+
 @import "../bulma/utilities/functions";
 @import "../bulma/utilities/mixins";
 @import "../bulma/utilities/initial-variables";
