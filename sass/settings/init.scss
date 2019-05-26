@@ -1,8 +1,3 @@
-*:focus{
-  outline:3px solid #ffe88f;
-  outline-offset:2px;
-}
-
 @import "../bulma/utilities/functions";
 @import "../bulma/utilities/mixins";
 @import "../bulma/utilities/initial-variables";
@@ -93,4 +88,10 @@ $footer-padding: 3rem 1.5rem;
 
 .is-spaced {
   padding-bottom: 1rem !important;
+}
+
+// Accessibilty focus
+*:focus{
+  outline:3px solid #ffe88f !important;
+  outline-offset:2px !important;
 }
