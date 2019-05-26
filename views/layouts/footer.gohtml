@@ -8,20 +8,26 @@
                 </div>
                 <div class="column">
                     {{template "footerTitle" "Project"}}
-                    {{template "footerLink" . | arg "Text" "GitHub Repository" | arg "Href" "https://github.com/Henry-Sarabia/discovernow"}}
-                    {{template "footerLink" . | arg "Text" "License" | arg "Href" "placeholder"}}
+                    <ul>
+                        {{template "footerLink" . | arg "Text" "GitHub Repository" | arg "Href" "https://github.com/Henry-Sarabia/discovernow"}}
+                        {{template "footerLink" . | arg "Text" "License" | arg "Href" "placeholder"}}
+                    </ul>
                 </div>
                 <div class="column">
                     {{template "footerTitle" "Resources"}}
-                    {{template "footerLink" . | arg "Text" "Bulma" | arg "Href" "https://bulma.io/"}}
-                    {{template "footerLink" . | arg "Text" "Font Awesome" | arg "Href" "https://fontawesome.com/"}}
-                    {{template "footerLink" . | arg "Text" "Unsplash" | arg "Href" "https://unsplash.com/@markusspiske"}}
-                    {{template "footerLink" . | arg "Text" "Cool Backgrounds" | arg "Href" "https://coolbackgrounds.io/"}}
+                    <ul>
+                        {{template "footerLink" . | arg "Text" "Bulma" | arg "Href" "https://bulma.io/"}}
+                        {{template "footerLink" . | arg "Text" "Font Awesome" | arg "Href" "https://fontawesome.com/"}}
+                        {{template "footerLink" . | arg "Text" "Unsplash" | arg "Href" "https://unsplash.com/@markusspiske"}}
+                        {{template "footerLink" . | arg "Text" "Cool Backgrounds" | arg "Href" "https://coolbackgrounds.io/"}}
+                    </ul>
                 </div>
                 <div class="column">
                     {{template "footerTitle" "Powered By"}}
-                    {{template "footerLink" . | arg "Text" "Go" | arg "Href" "https://golang.org/"}}
-                    {{template "footerLink" . | arg "Text" "Sass" | arg "Href" "https://sass-lang.com/"}}
+                    <ul>
+                        {{template "footerLink" . | arg "Text" "Go" | arg "Href" "https://golang.org/"}}
+                        {{template "footerLink" . | arg "Text" "Sass" | arg "Href" "https://sass-lang.com/"}}
+                    </ul>
                 </div>
             </div>
             <div class="has-text-left is-hidden-mobile">
