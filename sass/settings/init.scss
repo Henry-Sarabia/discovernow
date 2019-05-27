@@ -16,11 +16,8 @@ $forest-invert: findColorInvert($forest);
 $celadon: hsl(143, 28%, 79%);
 $celadon-invert: findColorInvert($celadon);
 
-$grey: hsl(0, 0%, 44%);
+$grey: hsl(0, 0%, 40%);
 $grey-invert: findColorInvert($grey);
-
-$darkgrey: hsl(0, 0%, 39%);
-$darkgrey-invert: findColorInvert($darkgrey);
 
 $pink: hsl(349.5, 100%, 87.6%);
 $pink-invert: findColorInvert($pink);
@@ -32,9 +29,6 @@ $primary-invert: $green-invert;
 
 $success: $lightgreen;
 $success-invert: $lightgreen-invert;
-
-$link: $darkgrey;
-$link-invert: $darkgrey-invert;
 
 $text: $grey;
 $text-invert: $grey-invert;
