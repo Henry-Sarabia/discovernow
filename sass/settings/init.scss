@@ -19,6 +19,9 @@ $celadon-invert: findColorInvert($celadon);
 $grey: hsl(0, 0%, 44%);
 $grey-invert: findColorInvert($grey);
 
+$darkgrey: hsl(0, 0%, 39%);
+$darkgrey-invert: findColorInvert($darkgrey);
+
 $pink: hsl(349.5, 100%, 87.6%);
 $pink-invert: findColorInvert($pink);
 
@@ -30,8 +33,8 @@ $primary-invert: $green-invert;
 $success: $lightgreen;
 $success-invert: $lightgreen-invert;
 
-$link: $grey;
-$link-invert: $grey-invert;
+$link: $darkgrey;
+$link-invert: $darkgrey-invert;
 
 $text: $grey;
 $text-invert: $grey-invert;
