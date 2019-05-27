@@ -1,21 +1,21 @@
 (function(body) {
 
-    var usingMouse;
+    let usingMouse;
 
-    var preFocus = function(event) {
+    let preFocus = function(event) {
         usingMouse = (event.type === 'mousedown');
     };
 
-    var addFocus = function(event) {
+    let addFocus = function(event) {
         if (usingMouse)
             event.target.classList.add('focus--mouse');
     };
 
-    var removeFocus = function(event) {
+    let removeFocus = function(event) {
         event.target.classList.remove('focus--mouse');
     };
 
-    var bindEvents = function() {
+    let bindEvents = function() {
         body.addEventListener('keydown', preFocus);
         body.addEventListener('mousedown', preFocus);
         body.addEventListener('focusin', addFocus);
