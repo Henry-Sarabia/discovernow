@@ -30,6 +30,9 @@ $primary-invert: $green-invert;
 $success: $lightgreen;
 $success-invert: $lightgreen-invert;
 
+$link: $grey;
+$link-invert: $grey-invert;
+
 $text: $grey;
 $text-invert: $grey-invert;
 
@@ -90,11 +93,28 @@ $footer-padding: 3rem 1.5rem;
   padding-bottom: 1rem !important;
 }
 
-// Accessibilty focus
-//*:focus {
-//  outline:2px dotted $grey !important;
-//  outline-offset: 2px !important;
-//}
+// Focus accessibility
+
+.focus--keyboard {
+  outline: #ffe88f solid 2px !important;
+  outline-offset: 1px !important;
+}
+
+.focus--mouse {
+  outline: dimgrey solid thin !important;
+}
+
+a {
+  &:focus {
+    @extend .focus--keyboard;
+  }
+
+  &:focus.focus--mouse {
+    @extend .focus--mouse;
+  }
+}
+
+// Smooth scroll
 
 html {
   scroll-behavior: smooth;
