@@ -16,7 +16,7 @@ $forest-invert: findColorInvert($forest);
 $celadon: hsl(143, 28%, 79%);
 $celadon-invert: findColorInvert($celadon);
 
-$grey: hsl(0, 0%, 44%);
+$grey: hsl(0, 0%, 40%);
 $grey-invert: findColorInvert($grey);
 
 $pink: hsl(349.5, 100%, 87.6%);
@@ -88,4 +88,31 @@ $footer-padding: 3rem 1.5rem;
 
 .is-spaced {
   padding-bottom: 1rem !important;
+}
+
+// Focus accessibility
+
+.focus--keyboard {
+  outline: #ffe88f solid 2px !important;
+  outline-offset: 1px !important;
+}
+
+.focus--mouse {
+  outline: dimgrey solid thin !important;
+}
+
+a {
+  &:focus {
+    @extend .focus--keyboard;
+  }
+
+  &:focus.focus--mouse {
+    @extend .focus--mouse;
+  }
+}
+
+// Smooth scroll
+
+html {
+  scroll-behavior: smooth;
 }

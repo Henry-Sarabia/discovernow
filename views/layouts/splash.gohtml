@@ -1,0 +1,16 @@
+{{define "splash"}}
+    <header class="splash hero is-fullheight">
+        <div class="hero-body">
+            <div class="container">
+                {{template "splashSubheader" "Don't wait for Monday."}}
+                {{template "splashHeader" "Discover Now"}}
+                <div class="buttons is-hidden-mobile">
+                    {{template "splashButtons" .}}
+                </div>
+                <div class="buttons is-centered is-hidden-tablet">
+                    {{template "splashButtons" .}}
+                </div>
+            </div>
+        </div>
+    </header>
+{{end}}
