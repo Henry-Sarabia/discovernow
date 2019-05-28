@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 const APIURL string = "http://127.0.0.1:8080/api/v1/"
@@ -20,10 +21,20 @@ func main() {
 	home = views.NewView("index", "views/home.gohtml")
 	results = views.NewView("index", "views/results.gohtml")
 
-	http.Handle("/", errHandler(indexHandler))
-	http.Handle("/results", errHandler(resultsHandler))
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	http.ListenAndServe(":3000", nil)
+	mux := &http.ServeMux{}
+
+	mux.Handle("/", errHandler(indexHandler))
+	mux.Handle("/results", errHandler(resultsHandler))
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
+	srv := &http.Server{
+		Handler:      mux,
+		Addr:         "127.0.0.1:3000",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	srv.ListenAndServe()
 }
 
 type serverError struct {
