@@ -5,8 +5,8 @@
             Features
         </a>
     {{else}}
-        {{template "button" . | arg "Text" "Connect" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary" | arg "Href" .URL}}
-        <a disabled class="button is-medium is-dark is-outlined" href="#features" aria-label="Learn more about Discover Now and its features">
+        {{template "button" . | arg "Text" "Offline" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary is-disabled" | arg "Href" "#"}}
+        <a class="button is-medium is-dark is-outlined" href="#features" aria-label="Learn more about Discover Now and its features">
             Features
         </a>
     {{end}}

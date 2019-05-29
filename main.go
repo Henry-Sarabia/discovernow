@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -23,8 +24,8 @@ func main() {
 
 	mux := &http.ServeMux{}
 
-	mux.Handle("/", errHandler(indexHandler))
-	mux.Handle("/results", errHandler(resultsHandler))
+	mux.HandleFunc("/", indexHandler)
+	mux.HandleFunc("/results", resultsHandler)
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	srv := &http.Server{
@@ -34,7 +35,7 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	srv.ListenAndServe()
+	log.Fatal(srv.ListenAndServe())
 }
 
 type serverError struct {
@@ -43,56 +44,66 @@ type serverError struct {
 	Code int
 }
 
+func (e serverError) Log() {
+	log.Printf("\n\terror: %v \n\tmessage: %s \n\tcode: %d", e.Error, e.Message, e.Code)
+}
+
 type errHandler func(http.ResponseWriter, *http.Request) *serverError
 
 func (fn errHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err := fn(w, r); err != nil {
-		http.Error(w, err.Message, err.Code)
+		err.Log()
 	}
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
-	type login struct {
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	type auth struct {
 		URL string `json:"url"`
 	}
 
 	resp, err := http.Get(APIURL + "login")
 	if err != nil {
-		return &serverError{
+		serverError{
 			Error: err,
 			Message: "Cannot connect to login endpoint",
 			Code: http.StatusBadGateway,
-		}
+		}.Log()
+
+		home.Render(w, auth{})
+		return
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return &serverError{
+		serverError{
 			Error: err,
 			Message: "Invalid response body from login endpoint",
 			Code: http.StatusInternalServerError,
-		}
+		}.Log()
+
+		home.Render(w, auth{})
+		return
 	}
 
-	log := &login{}
+	au := &auth{}
 
-	err = json.Unmarshal(b, &log)
+	err = json.Unmarshal(b, &au)
 	if err != nil {
-		return &serverError{
+		serverError{
 			Error: err,
 			Message: "Cannot unmarshal JSON response from login endpoint",
 			Code: http.StatusInternalServerError,
-		}
+		}.Log()
+
+		home.Render(w, auth{})
+		return
 	}
 
-	home.Render(w, log)
-	//dummy := login{URL: "http://127.0.0.1:3000/results"}
-	//home.Render(w, dummy)
-	return nil
+	home.Render(w, au)
 }
 
-func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
+func resultsHandler(w http.ResponseWriter, r *http.Request) {
 	type playlist struct {
 		URI template.URL `json:"uri"`
 	}
@@ -101,20 +112,24 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	code := q.Get("code")
 	if blank.Is(code) {
-		return &serverError{
+		serverError{
 			Error: errors.New("results url is missing code"),
 			Message: "Results URL is missing code parameter",
 			Code: http.StatusInternalServerError,
-		}
+		}.Log()
+
+		results.Render(w, nil)
 	}
 
 	state := q.Get("state")
 	if blank.Is(state) {
-		return &serverError{
+		serverError{
 			Error: errors.New("results url is missing state"),
 			Message: "Results URL is missing state parameter",
 			Code: http.StatusInternalServerError,
-		}
+		}.Log()
+
+		results.Render(w, nil)
 	}
 
 	v := url.Values{}
@@ -123,46 +138,50 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	resp, err := http.Get(APIURL + "playlist" + "?" + v.Encode())
 	if err != nil {
-		return &serverError{
+		serverError{
 			Error: err,
 			Message: "Cannot connect to playlist endpoint",
 			Code: http.StatusBadGateway,
-		}
+		}.Log()
+
+		results.Render(w, nil)
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return &serverError{
+		serverError{
 			Error: err,
 			Message: "Invalid response body from playlist endpoint",
 			Code: http.StatusInternalServerError,
-		}
+		}.Log()
+
+		results.Render(w, nil)
 	}
 
 	list := &playlist{}
 
 	err = json.Unmarshal(b, &list)
 	if err != nil {
-		return &serverError{
+		serverError{
 			Error: err,
 			Message: "Cannot unmarshal JSON response from playlist endpoint",
 			Code: http.StatusInternalServerError,
-		}
+		}.Log()
+
+		results.Render(w, nil)
 	}
 
 	if blank.Is(string(list.URI)) {
-		return &serverError {
+		serverError {
 			Error: err,
 			Message: "URI value is blank",
 			Code: http.StatusInternalServerError,
-		}
+		}.Log()
+
+		results.Render(w, nil)
 	}
 
 	results.Render(w, list)
-
-	//dummy := &playlist{URI: "something"}
-	//results.Render(w, dummy)
-	return nil
 }
 
