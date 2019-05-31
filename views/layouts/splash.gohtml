@@ -1,19 +1,21 @@
 {{define "splash"}}
     <header class="splash hero is-fullheight">
         <div class="hero-body">
-            <div class="container">
-                {{template "splashSubheader" "Don't wait for Monday."}}
-                {{template "splashHeader" "Discover Now"}}
-                <div class="has-text-centered-mobile">
-                    {{if .URL}}
-                        {{template "button" . | arg "Text" "Connect" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary" | arg "Href" .URL}}
-                    {{else}}
-                        {{template "button" . | arg "Text" "Offline" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary is-disabled" | arg "Href" "#"}}
-                    {{end}}
-                    <a class="button is-medium is-dark is-outlined" href="#features" aria-label="Learn more about Discover Now and its features">
-                        Features
-                    </a>
-                </div>
+            <div class="container has-text-left-tablet has-text-centered-mobile">
+                <p class="splash__subheader is-size-3-tablet is-size-4-mobile is-family-secondary has-text-grey-dark has-text-weight-medium">
+                    Don't wait for Monday.
+                </p>
+                <h1 class="splash__header title is-family-code has-text-weight-bold">
+                    Discover Now
+                </h1>
+                {{if .URL}}
+                    {{template "button" . | arg "Text" "Connect" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary" | arg "Href" .URL}}
+                {{else}}
+                    {{template "button" . | arg "Text" "Offline" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary is-disabled" | arg "Href" "#"}}
+                {{end}}
+                <a class="button is-medium is-dark is-outlined" href="#features" aria-label="Learn more about Discover Now and its features">
+                    Features
+                </a>
             </div>
         </div>
     </header>
