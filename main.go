@@ -24,8 +24,8 @@ func main() {
 
 	mux := &http.ServeMux{}
 
-	mux.HandleFunc("/", indexHandler)
-	mux.HandleFunc("/results", resultsHandler)
+	mux.Handle("/", errHandler(indexHandler))
+	mux.Handle("/results", errHandler(resultsHandler))
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	srv := &http.Server{
@@ -45,7 +45,7 @@ type serverError struct {
 }
 
 func (e serverError) Log() {
-	log.Printf("\n\terror: %v \n\tmessage: %s \n\tcode: %d", e.Error, e.Message, e.Code)
+	log.Printf("\n\terror: %v \n\tmessage: %s \n\tcode: %d\n\n", e.Error, e.Message, e.Code)
 }
 
 type errHandler func(http.ResponseWriter, *http.Request) *serverError
@@ -56,54 +56,49 @@ func (fn errHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	type auth struct {
 		URL string `json:"url"`
 	}
 
 	resp, err := http.Get(APIURL + "login")
 	if err != nil {
-		serverError{
+		_ = home.Render(w, auth{})
+		return &serverError{
 			Error: err,
 			Message: "Cannot connect to login endpoint",
 			Code: http.StatusBadGateway,
-		}.Log()
-
-		home.Render(w, auth{})
-		return
+		}
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		serverError{
+		_ = home.Render(w, auth{})
+		return &serverError{
 			Error: err,
 			Message: "Invalid response body from login endpoint",
 			Code: http.StatusInternalServerError,
-		}.Log()
-
-		home.Render(w, auth{})
-		return
+		}
 	}
 
 	au := &auth{}
 
 	err = json.Unmarshal(b, &au)
 	if err != nil {
-		serverError{
+		_ = home.Render(w, auth{})
+		return &serverError{
 			Error: err,
 			Message: "Cannot unmarshal JSON response from login endpoint",
 			Code: http.StatusInternalServerError,
-		}.Log()
-
-		home.Render(w, auth{})
-		return
+		}
 	}
 
-	home.Render(w, au)
+	_ = home.Render(w, au)
+	return nil
 }
 
-func resultsHandler(w http.ResponseWriter, r *http.Request) {
+func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	type playlist struct {
 		URI template.URL `json:"uri"`
 	}
@@ -112,24 +107,22 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) {
 
 	code := q.Get("code")
 	if blank.Is(code) {
-		serverError{
+		_ = results.Render(w, &playlist{})
+		return &serverError{
 			Error: errors.New("results url is missing code"),
 			Message: "Results URL is missing code parameter",
 			Code: http.StatusInternalServerError,
-		}.Log()
-
-		results.Render(w, nil)
+		}
 	}
 
 	state := q.Get("state")
 	if blank.Is(state) {
-		serverError{
+		_ = results.Render(w, playlist{})
+		return &serverError{
 			Error: errors.New("results url is missing state"),
 			Message: "Results URL is missing state parameter",
 			Code: http.StatusInternalServerError,
-		}.Log()
-
-		results.Render(w, nil)
+		}
 	}
 
 	v := url.Values{}
@@ -138,50 +131,47 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := http.Get(APIURL + "playlist" + "?" + v.Encode())
 	if err != nil {
-		serverError{
+		_ = results.Render(w, playlist{})
+		return &serverError{
 			Error: err,
 			Message: "Cannot connect to playlist endpoint",
 			Code: http.StatusBadGateway,
-		}.Log()
-
-		results.Render(w, nil)
+		}
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		serverError{
+		_ = results.Render(w, playlist{})
+		return &serverError{
 			Error: err,
 			Message: "Invalid response body from playlist endpoint",
 			Code: http.StatusInternalServerError,
-		}.Log()
-
-		results.Render(w, nil)
+		}
 	}
 
 	list := &playlist{}
 
 	err = json.Unmarshal(b, &list)
 	if err != nil {
-		serverError{
+		_ = results.Render(w, playlist{})
+		return &serverError{
 			Error: err,
 			Message: "Cannot unmarshal JSON response from playlist endpoint",
 			Code: http.StatusInternalServerError,
-		}.Log()
-
-		results.Render(w, nil)
+		}
 	}
 
 	if blank.Is(string(list.URI)) {
-		serverError {
+		_ = results.Render(w, playlist{})
+		return &serverError {
 			Error: err,
 			Message: "URI value is blank",
 			Code: http.StatusInternalServerError,
-		}.Log()
-
-		results.Render(w, nil)
+		}
 	}
 
-	results.Render(w, list)
+	_ = results.Render(w, list)
+	return nil
 }
 
