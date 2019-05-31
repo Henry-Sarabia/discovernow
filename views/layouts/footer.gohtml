@@ -1,5 +1,5 @@
 {{define "footer"}}
-    <footer class="footer">
+    <footer class="footer has-text-left-tablet has-text-centered-mobile">
         <div class="container">
             <div class="columns">
                 <div class="column">
@@ -30,12 +30,9 @@
                     </ul>
                 </div>
             </div>
-            <div class="has-text-left is-hidden-mobile">
-                {{template "footerAuthor"}}
-            </div>
-            <div class="has-text-centered is-hidden-tablet">
-                {{template "footerAuthor"}}
-            </div>
+            <small class="has-text-primary">
+                Made with <span class="has-text-pink"><i class="fas fa-heart"></i></span> by Henry Sarabia
+            </small>
         </div>
     </footer>
 {{end}}
