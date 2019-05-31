@@ -1,6 +1,6 @@
 {{define "page"}}
-    <section class="content">
-        <div class="hero is-fullheight">
+    <main class="content">
+        <section class="hero is-fullheight">
             <div class="hero-body">
                 <div class="container has-text-centered">
                     {{if .URI}}
@@ -20,7 +20,7 @@
                     {{end}}
                 </div>
             </div>
-            <div class="hero-foot">
+            <aside class="hero-foot">
                 <div class="container has-text-centered">
                     {{if .URI}}
                         {{template "resultTip" "Come back after you've listened to some more music, we'll have a completely new playlist for you."}}
@@ -28,8 +28,8 @@
                         {{template "resultTip" "If this problem persists, please contact discovernow@protonmail.com."}}
                     {{end}}
                 </div>
-                {{template "footer"}}
-            </div>
-        </div>
-    </section>
+            </aside>
+        </section>
+    </main>
+    {{template "footer"}}
 {{end}}
