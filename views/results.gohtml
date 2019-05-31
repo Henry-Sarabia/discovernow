@@ -1,8 +1,8 @@
 {{define "page"}}
-    <main class="content">
-        <section class="hero is-fullheight">
-            <div class="hero-body">
-                <div class="container has-text-centered">
+    <div class="content">
+        <div class="hero is-fullheight">
+            <main class="hero-body">
+                <section class="container has-text-centered">
                     {{if .URI}}
                         {{template "resultHeader" "Success!"}}
                         {{template "resultSubheader" "Something you'll love is waiting for you on your preferred Spotify player."}}
@@ -18,18 +18,18 @@
                         {{template "resultHeader" "Uh oh..."}}
                         {{template "resultSubheader" "We couldn't find enough data to generate your playlist - try again after listening to some music."}}
                     {{end}}
-                </div>
-            </div>
-            <aside class="hero-foot">
-                <div class="container has-text-centered">
+                </section>
+            </main>
+            <div class="hero-foot">
+                <aside class="container has-text-centered">
                     {{if .URI}}
                         {{template "resultTip" "Come back after you've listened to some more music, we'll have a completely new playlist for you."}}
                     {{else}}
                         {{template "resultTip" "If this problem persists, please contact discovernow@protonmail.com."}}
                     {{end}}
-                </div>
-            </aside>
-        </section>
-    </main>
-    {{template "footer"}}
+                </aside>
+                {{template "footer"}}
+            </div>
+        </div>
+    </div>
 {{end}}
