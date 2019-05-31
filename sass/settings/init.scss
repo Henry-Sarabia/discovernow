@@ -90,6 +90,11 @@ $footer-padding: 3rem 1.5rem;
   padding-bottom: 1rem !important;
 }
 
+.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 // Focus accessibility
 
 .focus--keyboard {

@@ -1177,6 +1177,11 @@ a.has-text-pink:hover, a.has-text-pink:focus {
   padding-bottom: 1rem !important;
 }
 
+.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .focus--keyboard, a:focus {
   outline: #ffe88f solid 2px !important;
   outline-offset: 1px !important;

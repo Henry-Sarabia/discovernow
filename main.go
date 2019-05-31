@@ -7,8 +7,10 @@ import (
 	"github.com/pkg/errors"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 const APIURL string = "http://127.0.0.1:8080/api/v1/"
@@ -20,10 +22,20 @@ func main() {
 	home = views.NewView("index", "views/home.gohtml")
 	results = views.NewView("index", "views/results.gohtml")
 
-	http.Handle("/", errHandler(indexHandler))
-	http.Handle("/results", errHandler(resultsHandler))
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	http.ListenAndServe(":3000", nil)
+	mux := &http.ServeMux{}
+
+	mux.Handle("/", errHandler(indexHandler))
+	mux.Handle("/results", errHandler(resultsHandler))
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
+	srv := &http.Server{
+		Handler:      mux,
+		Addr:         "127.0.0.1:3000",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	log.Fatal(srv.ListenAndServe())
 }
 
 type serverError struct {
@@ -32,21 +44,26 @@ type serverError struct {
 	Code int
 }
 
+func (e serverError) Log() {
+	log.Printf("\n\terror: %v \n\tmessage: %s \n\tcode: %d\n\n", e.Error, e.Message, e.Code)
+}
+
 type errHandler func(http.ResponseWriter, *http.Request) *serverError
 
 func (fn errHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err := fn(w, r); err != nil {
-		http.Error(w, err.Message, err.Code)
+		err.Log()
 	}
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
-	type login struct {
+	type auth struct {
 		URL string `json:"url"`
 	}
 
 	resp, err := http.Get(APIURL + "login")
 	if err != nil {
+		_ = home.Render(w, auth{})
 		return &serverError{
 			Error: err,
 			Message: "Cannot connect to login endpoint",
@@ -57,6 +74,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		_ = home.Render(w, auth{})
 		return &serverError{
 			Error: err,
 			Message: "Invalid response body from login endpoint",
@@ -64,10 +82,11 @@ func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
 		}
 	}
 
-	log := &login{}
+	au := &auth{}
 
-	err = json.Unmarshal(b, &log)
+	err = json.Unmarshal(b, &au)
 	if err != nil {
+		_ = home.Render(w, auth{})
 		return &serverError{
 			Error: err,
 			Message: "Cannot unmarshal JSON response from login endpoint",
@@ -75,9 +94,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) *serverError {
 		}
 	}
 
-	home.Render(w, log)
-	//dummy := login{URL: "http://127.0.0.1:3000/results"}
-	//home.Render(w, dummy)
+	_ = home.Render(w, au)
 	return nil
 }
 
@@ -90,6 +107,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	code := q.Get("code")
 	if blank.Is(code) {
+		_ = results.Render(w, &playlist{})
 		return &serverError{
 			Error: errors.New("results url is missing code"),
 			Message: "Results URL is missing code parameter",
@@ -99,6 +117,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	state := q.Get("state")
 	if blank.Is(state) {
+		_ = results.Render(w, playlist{})
 		return &serverError{
 			Error: errors.New("results url is missing state"),
 			Message: "Results URL is missing state parameter",
@@ -112,6 +131,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	resp, err := http.Get(APIURL + "playlist" + "?" + v.Encode())
 	if err != nil {
+		_ = results.Render(w, playlist{})
 		return &serverError{
 			Error: err,
 			Message: "Cannot connect to playlist endpoint",
@@ -122,6 +142,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		_ = results.Render(w, playlist{})
 		return &serverError{
 			Error: err,
 			Message: "Invalid response body from playlist endpoint",
@@ -133,6 +154,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	err = json.Unmarshal(b, &list)
 	if err != nil {
+		_ = results.Render(w, playlist{})
 		return &serverError{
 			Error: err,
 			Message: "Cannot unmarshal JSON response from playlist endpoint",
@@ -141,6 +163,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	}
 
 	if blank.Is(string(list.URI)) {
+		_ = results.Render(w, playlist{})
 		return &serverError {
 			Error: err,
 			Message: "URI value is blank",
@@ -148,10 +171,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) *serverError {
 		}
 	}
 
-	results.Render(w, list)
-
-	//dummy := &playlist{URI: "something"}
-	//results.Render(w, dummy)
+	_ = results.Render(w, list)
 	return nil
 }
 
