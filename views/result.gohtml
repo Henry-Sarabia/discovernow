@@ -1,13 +1,13 @@
 {{define "page"}}
-    <div class="content">
+    <div class="background">
         <div class="hero is-fullheight">
             <main class="hero-body">
                 <section class="container has-text-centered">
-                    <div class="results">
+                    <div class="result">
                         {{if .URI}}
                             {{template "resultHeader" "Success!"}}
                             {{template "resultSubheader" "Something you'll love is waiting for you on your preferred Spotify player."}}
-                            <a class="results__button button is-dark is-rounded is-outlined" href="https://open.spotify.com/embed?uri={{.URI}}">
+                            <a class="result__button button is-dark is-rounded is-outlined" href="https://open.spotify.com/embed?uri={{.URI}}">
                             <span class="icon">
                                 <i class="far fa-play-circle fa-lg"></i>
                             </span>
