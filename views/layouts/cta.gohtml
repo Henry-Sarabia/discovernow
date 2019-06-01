@@ -6,9 +6,9 @@
                     It's time to discover.
                 </h2>
                 {{if .URL}}
-                    {{template "button" . | arg "Text" "Connect" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-medium is-primary is-rounded" | arg "Href" .URL}}
+                    {{template "spotifyButton" . | arg "Text" "Connect" | arg "Class" "is-medium is-primary is-rounded" | arg "Href" .URL}}
                 {{else}}
-                    {{template "button" . | arg "Text" "Offline" | arg "Icon" "fab fa-spotify fa-lg" | arg "Class" "is-disabled is-medium is-primary is-rounded is-disabled" | arg "Href" "#"}}
+                    {{template "spotifyButton" . | arg "Text" "Offline" | arg "Class" "is-medium is-primary is-rounded is-disabled" | arg "Href" "#"}}
                 {{end}}
             </div>
         </div>
