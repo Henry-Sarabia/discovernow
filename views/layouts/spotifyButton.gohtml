@@ -1,8 +1,8 @@
-{{define "button"}}
-    {{if $args := . | require "Text" "string" | require "Icon" "string" | require "Class" "string" | require "Href" "string" | args}}
+{{define "spotifyButton"}}
+    {{if $args := . | require "Text" "string" | require "Class" "string" | require "Href" "string" | args}}
         <a class="button {{$args.Class}}" href="{{$args.Href}}">
             <span class="icon">
-                <i class="{{$args.Icon}}"></i>
+                <i class="fab fa-spotify fa-lg"></i>
             </span>
             <span class="button__text is-family-monospace">
                 {{$args.Text}}

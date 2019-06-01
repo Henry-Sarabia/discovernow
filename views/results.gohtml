@@ -3,30 +3,35 @@
         <div class="hero is-fullheight">
             <main class="hero-body">
                 <section class="container has-text-centered">
-                    {{if .URI}}
-                        {{template "resultHeader" "Success!"}}
-                        {{template "resultSubheader" "Something you'll love is waiting for you on your preferred Spotify player."}}
-                        <a class="button is-dark is-rounded is-outlined" href="https://open.spotify.com/embed?uri={{.URI}}">
+                    <div class="results">
+                        {{if .URI}}
+                            {{template "resultHeader" "Success!"}}
+                            {{template "resultSubheader" "Something you'll love is waiting for you on your preferred Spotify player."}}
+                            <a class="results__button button is-dark is-rounded is-outlined" href="https://open.spotify.com/embed?uri={{.URI}}">
                             <span class="icon">
                                 <i class="far fa-play-circle fa-lg"></i>
                             </span>
-                            <span class="button__text is-family-monospace">
+                                <span class="button__text is-family-monospace">
                                 Preview
                             </span>
-                        </a>
-                    {{else}}
-                        {{template "resultHeader" "Uh oh..."}}
-                        {{template "resultSubheader" "We couldn't find enough data to generate your playlist - try again after listening to some music."}}
-                    {{end}}
+                            </a>
+                        {{else}}
+                            {{template "resultHeader" "Uh oh..."}}
+                            {{template "resultSubheader" "We couldn't find enough data to generate your playlist - try again after listening to some music."}}
+                        {{end}}
+                    </div>
                 </section>
             </main>
             <div class="hero-foot">
                 <aside class="container has-text-centered">
-                    {{if .URI}}
-                        {{template "resultTip" "Come back after you've listened to some more music, we'll have a completely new playlist for you."}}
-                    {{else}}
-                        {{template "resultTip" "If this problem persists, please contact discovernow@protonmail.com."}}
-                    {{end}}
+                    <p class="is-spaced is-size-5-tablet is-size-6-mobile has-text-weight-medium">
+                        <span class="has-text-weight-semibold">Tip: </span>
+                        {{if .URI}}
+                            Come back after you've listened to some more music, we'll have a completely new playlist for you.
+                        {{else}}
+                            If this problem persists, please contact discovernow@protonmail.com.
+                        {{end}}
+                    </p>
                 </aside>
                 {{template "footer"}}
             </div>

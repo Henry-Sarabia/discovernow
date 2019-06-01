@@ -1165,14 +1165,6 @@ a.has-text-pink:hover, a.has-text-pink:focus {
   font-weight: 500 !important;
 }
 
-.is-underlined {
-  text-decoration: underline !important;
-}
-
-.is-size-0 {
-  font-size: 6rem !important;
-}
-
 .is-spaced {
   padding-bottom: 1rem !important;
 }
@@ -2774,7 +2766,7 @@ th {
 }
 
 .subtitle {
-  color: #4a4a4a;
+  color: #666666;
   font-size: 1.25rem;
   font-weight: 500;
   line-height: 1.25;
@@ -5254,26 +5246,243 @@ th {
   padding: 3rem 1.5rem;
 }
 
+.is-unselectable, .button, .delete {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.block:not(:last-child), .highlight:not(:last-child), .title:not(:last-child),
+.subtitle:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+.delete {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(10, 10, 10, 0.2);
+  border: none;
+  border-radius: 290486px;
+  cursor: pointer;
+  pointer-events: auto;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: 0;
+  height: 20px;
+  max-height: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  outline: none;
+  position: relative;
+  vertical-align: top;
+  width: 20px;
+}
+.delete::before, .delete::after {
+  background-color: white;
+  content: "";
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  transform-origin: center center;
+}
+.delete::before {
+  height: 2px;
+  width: 50%;
+}
+.delete::after {
+  height: 50%;
+  width: 2px;
+}
+.delete:hover, .delete:focus {
+  background-color: rgba(10, 10, 10, 0.3);
+}
+.delete:active {
+  background-color: rgba(10, 10, 10, 0.4);
+}
+.is-small.delete {
+  height: 16px;
+  max-height: 16px;
+  max-width: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  width: 16px;
+}
+.is-medium.delete {
+  height: 24px;
+  max-height: 24px;
+  max-width: 24px;
+  min-height: 24px;
+  min-width: 24px;
+  width: 24px;
+}
+.is-large.delete {
+  height: 32px;
+  max-height: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  min-width: 32px;
+  width: 32px;
+}
+
+.button.is-loading::after, .loader {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #dbdbdb;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  position: relative;
+  width: 1em;
+}
+
+.is-overlay, .hero-video {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 .splash {
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(/static/images/cassette.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
-.splash__header_mobile {
-  font-size: 4.5rem;
-  margin-bottom: 4rem !important;
+@media screen and (min-width: 769px), print {
+  .splash__header {
+    font-size: 6rem;
+    padding-bottom: 1rem;
+  }
 }
-.splash__subheader_desktop {
-  margin-top: -17rem;
-  margin-bottom: -1.25rem;
+@media screen and (max-width: 768px) {
+  .splash__header {
+    font-size: 4.5rem;
+    margin-bottom: 4rem !important;
+  }
 }
-.splash__subheader_mobile {
-  margin-bottom: -1.25rem;
+@media screen and (min-width: 769px), print {
+  .splash__subheader {
+    margin-top: -17rem;
+    margin-bottom: -1.25rem;
+  }
 }
 
 .procedure {
   background: linear-gradient(45deg, white 0%, rgba(255, 255, 255, 0.738) 19%, rgba(255, 255, 255, 0.541) 34%, rgba(255, 255, 255, 0.382) 47%, rgba(255, 255, 255, 0.278) 56.5%, rgba(255, 255, 255, 0.194) 65%, rgba(255, 255, 255, 0.126) 73%, rgba(255, 255, 255, 0.075) 80.2%, rgba(255, 255, 255, 0.042) 86.1%, rgba(255, 255, 255, 0.021) 91%, rgba(255, 255, 255, 0.008) 95.2%, rgba(255, 255, 255, 0.002) 98.2%, rgba(255, 255, 255, 0) 100%);
+}
+
+.is-unselectable, .button, .delete {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.block:not(:last-child), .highlight:not(:last-child), .title:not(:last-child),
+.subtitle:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+.delete {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(10, 10, 10, 0.2);
+  border: none;
+  border-radius: 290486px;
+  cursor: pointer;
+  pointer-events: auto;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: 0;
+  height: 20px;
+  max-height: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  outline: none;
+  position: relative;
+  vertical-align: top;
+  width: 20px;
+}
+.delete::before, .delete::after {
+  background-color: white;
+  content: "";
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  transform-origin: center center;
+}
+.delete::before {
+  height: 2px;
+  width: 50%;
+}
+.delete::after {
+  height: 50%;
+  width: 2px;
+}
+.delete:hover, .delete:focus {
+  background-color: rgba(10, 10, 10, 0.3);
+}
+.delete:active {
+  background-color: rgba(10, 10, 10, 0.4);
+}
+.is-small.delete {
+  height: 16px;
+  max-height: 16px;
+  max-width: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  width: 16px;
+}
+.is-medium.delete {
+  height: 24px;
+  max-height: 24px;
+  max-width: 24px;
+  min-height: 24px;
+  min-width: 24px;
+  width: 24px;
+}
+.is-large.delete {
+  height: 32px;
+  max-height: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  min-width: 32px;
+  width: 32px;
+}
+
+.button.is-loading::after, .loader {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #dbdbdb;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  position: relative;
+  width: 1em;
+}
+
+.is-overlay, .hero-video {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .footer__header {
@@ -5282,12 +5491,142 @@ th {
 .footer__title {
   padding: 0.5rem 0;
 }
-.footer__copy {
-  padding-right: 2rem;
+@media screen and (min-width: 1088px) {
+  .footer__copy {
+    padding-right: 2rem;
+  }
 }
 .footer__link {
   padding: 0.5rem 0;
   letter-spacing: 0.5px;
+}
+
+.is-unselectable, .button, .delete {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.block:not(:last-child), .highlight:not(:last-child), .title:not(:last-child),
+.subtitle:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+.delete {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(10, 10, 10, 0.2);
+  border: none;
+  border-radius: 290486px;
+  cursor: pointer;
+  pointer-events: auto;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: 0;
+  height: 20px;
+  max-height: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  outline: none;
+  position: relative;
+  vertical-align: top;
+  width: 20px;
+}
+.delete::before, .delete::after {
+  background-color: white;
+  content: "";
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  transform-origin: center center;
+}
+.delete::before {
+  height: 2px;
+  width: 50%;
+}
+.delete::after {
+  height: 50%;
+  width: 2px;
+}
+.delete:hover, .delete:focus {
+  background-color: rgba(10, 10, 10, 0.3);
+}
+.delete:active {
+  background-color: rgba(10, 10, 10, 0.4);
+}
+.is-small.delete {
+  height: 16px;
+  max-height: 16px;
+  max-width: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  width: 16px;
+}
+.is-medium.delete {
+  height: 24px;
+  max-height: 24px;
+  max-width: 24px;
+  min-height: 24px;
+  min-width: 24px;
+  width: 24px;
+}
+.is-large.delete {
+  height: 32px;
+  max-height: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  min-width: 32px;
+  width: 32px;
+}
+
+.button.is-loading::after, .loader {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #dbdbdb;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  position: relative;
+  width: 1em;
+}
+
+.is-overlay, .hero-video {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .results {
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+  }
+}
+@media screen and (min-width: 769px), print {
+  .results__header {
+    font-size: 6rem;
+  }
+}
+@media screen and (min-width: 769px), print {
+  .results__button {
+    margin-top: 2rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .results__button {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
 }
 
 .anchor__icon {
@@ -5323,8 +5662,129 @@ th {
   background-size: cover;
 }
 
+.is-unselectable, .button, .delete {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.block:not(:last-child), .highlight:not(:last-child), .title:not(:last-child),
+.subtitle:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+.delete {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(10, 10, 10, 0.2);
+  border: none;
+  border-radius: 290486px;
+  cursor: pointer;
+  pointer-events: auto;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: 0;
+  height: 20px;
+  max-height: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  outline: none;
+  position: relative;
+  vertical-align: top;
+  width: 20px;
+}
+.delete::before, .delete::after {
+  background-color: white;
+  content: "";
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  transform-origin: center center;
+}
+.delete::before {
+  height: 2px;
+  width: 50%;
+}
+.delete::after {
+  height: 50%;
+  width: 2px;
+}
+.delete:hover, .delete:focus {
+  background-color: rgba(10, 10, 10, 0.3);
+}
+.delete:active {
+  background-color: rgba(10, 10, 10, 0.4);
+}
+.is-small.delete {
+  height: 16px;
+  max-height: 16px;
+  max-width: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  width: 16px;
+}
+.is-medium.delete {
+  height: 24px;
+  max-height: 24px;
+  max-width: 24px;
+  min-height: 24px;
+  min-width: 24px;
+  width: 24px;
+}
+.is-large.delete {
+  height: 32px;
+  max-height: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  min-width: 32px;
+  width: 32px;
+}
+
+.button.is-loading::after, .loader {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #dbdbdb;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  position: relative;
+  width: 1em;
+}
+
+.is-overlay, .hero-video {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 .section__title {
   padding-bottom: 1.5rem;
+}
+@media screen and (max-width: 768px) {
+  .section__title {
+    margin: 0;
+  }
+}
+@media screen and (min-width: 769px), print {
+  .section__subtitle {
+    padding-bottom: 1rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .section__subtitle {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .heroicon-outline {

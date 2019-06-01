@@ -1,10 +1,16 @@
 {{define "footer"}}
-    <footer class="footer">
+    <footer class="footer has-text-left-tablet has-text-centered-mobile">
         <div class="container">
             <div class="columns">
                 <div class="column">
-                    {{template "footerHeader" "Discover Now"}}
-                    {{template "footerCopy" "Discover Now is a Spotify playlist generator that learns from a user's recent musical interests. This project is not endorsed by Spotify."}}
+                    <h2 class="footer__header">
+                        <a class="title is-family-code has-text-weight-bold has-text-primary" href="http://127.0.0.1:3000/">
+                            Discover Now
+                        </a>
+                    </h2>
+                    <p class="footer__copy has-text-primary is-size-6">
+                        Discover Now is a Spotify playlist generator that learns from a user's recent musical interests. This project is not endorsed by Spotify.
+                    </p>
                 </div>
                 <div class="column">
                     {{template "footerTitle" "Project"}}
@@ -30,12 +36,9 @@
                     </ul>
                 </div>
             </div>
-            <div class="has-text-left is-hidden-mobile">
-                {{template "footerAuthor"}}
-            </div>
-            <div class="has-text-centered is-hidden-tablet">
-                {{template "footerAuthor"}}
-            </div>
+            <small class="has-text-primary">
+                Made with <span class="icon is-small has-text-pink" aria-label="love"><i class="fas fa-heart"></i></span> by Henry Sarabia
+            </small>
         </div>
     </footer>
 {{end}}

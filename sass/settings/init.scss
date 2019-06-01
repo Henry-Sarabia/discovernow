@@ -39,7 +39,6 @@ $text-invert: $grey-invert;
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,500&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz%20%27%2C%2D%2E"');
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700');
 
-$size-0: 6rem;
 $family-sans-serif: "Open Sans", BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 
 @import "../bulma/utilities/derived-variables";
@@ -61,7 +60,7 @@ $family-monospace: "Roboto", sans-serif;
 $title-weight: $weight-medium;
 $title-color: $black-ter;
 $subtitle-weight: $weight-medium;
-$subtitle-color: $grey-dark;
+$subtitle-color: $grey;
 
 // Override card vars
 $card-shadow: 0 15px 35px rgba(50, 50, 93, .05), 0 5px 15px rgba(0, 0, 0, .07);
@@ -76,14 +75,6 @@ $footer-padding: 3rem 1.5rem;
 
 .has-text-weight-medium {
   font-weight: $weight-medium !important;
-}
-
-.is-underlined {
-  text-decoration: underline !important;
-}
-
-.is-size-0 {
-  font-size: $size-0 !important;
 }
 
 .is-spaced {
