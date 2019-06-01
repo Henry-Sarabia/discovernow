@@ -1165,14 +1165,6 @@ a.has-text-pink:hover, a.has-text-pink:focus {
   font-weight: 500 !important;
 }
 
-.is-underlined {
-  text-decoration: underline !important;
-}
-
-.is-size-0 {
-  font-size: 6rem !important;
-}
-
 .is-spaced {
   padding-bottom: 1rem !important;
 }
@@ -2774,7 +2766,7 @@ th {
 }
 
 .subtitle {
-  color: #4a4a4a;
+  color: #666666;
   font-size: 1.25rem;
   font-weight: 500;
   line-height: 1.25;
@@ -5623,6 +5615,11 @@ th {
 @media screen and (min-width: 769px), print {
   .results__header {
     font-size: 6rem;
+  }
+}
+@media screen and (min-width: 769px), print {
+  .results__button {
+    margin-top: 2rem;
   }
 }
 @media screen and (max-width: 768px) {

@@ -13,6 +13,10 @@
   }
 
   &__button {
+    @include tablet {
+      margin-top: 2rem;
+    }
+
     @include mobile {
       margin-top: 2rem;
       margin-bottom: 2rem;
