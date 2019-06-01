@@ -1,5 +1,6 @@
 @import "../bulma/utilities/mixins.sass";
 
+// Bulma class
 .footer {
   &__header {
     padding-bottom: 0.75rem;
@@ -9,8 +10,8 @@
     padding: 0.5rem 0;
   }
 
-  @include desktop {
-    &__copy {
+  &__copy {
+    @include desktop {
       padding-right: 2rem;
     }
   }
