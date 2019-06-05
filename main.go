@@ -16,14 +16,19 @@ import (
 
 const APIURL string = "http://127.0.0.1:8080/api/v1/"
 
-var landing *views.View
-var result *views.View
+var (
+	landing *views.View
+	result *views.View
+	notFound *views.View
+)
 
 func main() {
 	landing = views.NewView("index", "views/landing.gohtml")
 	result = views.NewView("index", "views/result.gohtml")
+	notFound = views.NewView("index", "views/notfound.gohtml")
 
 	r := mux.NewRouter()
+	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 
 	r.Handle("/", errHandler(landingHandler))
 	r.Handle("/results", errHandler(resultHandler))
@@ -176,3 +181,6 @@ func resultHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	return nil
 }
 
+func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	_ = notFound.Render(w, nil)
+}
