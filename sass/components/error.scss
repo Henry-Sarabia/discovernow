@@ -1,0 +1,31 @@
+@import "../bulma/utilities/mixins.sass";
+
+.error {
+  background-image: url(/static/images/rose.svg), linear-gradient(to right, hsl(0, 0%, 96%), hsl(0, 0%, 96%));
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  &__header {
+    @include tablet {
+      font-size: 6rem;
+      margin-top: -17rem;
+      padding-bottom: 1rem;
+    }
+
+    @include mobile {
+      font-size: 4.5rem;
+      margin-bottom: 4rem !important;
+    }
+  }
+
+  &__title {
+    @include tablet {
+      margin-left: -0.25rem;
+    }
+
+    @include mobile {
+      padding-bottom: 0.5rem;
+    }
+  }
+}

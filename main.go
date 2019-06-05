@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/Henry-Sarabia/blank"
 	"github.com/Henry-Sarabia/discovernow/views"
+	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"html/template"
 	"io/ioutil"
@@ -15,21 +16,26 @@ import (
 
 const APIURL string = "http://127.0.0.1:8080/api/v1/"
 
-var landing *views.View
-var result *views.View
+var (
+	landing *views.View
+	result *views.View
+	notFound *views.View
+)
 
 func main() {
 	landing = views.NewView("index", "views/landing.gohtml")
 	result = views.NewView("index", "views/result.gohtml")
+	notFound = views.NewView("index", "views/notfound.gohtml")
 
-	mux := &http.ServeMux{}
+	r := mux.NewRouter()
+	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 
-	mux.Handle("/", errHandler(landingHandler))
-	mux.Handle("/results", errHandler(resultHandler))
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	r.Handle("/", errHandler(landingHandler))
+	r.Handle("/results", errHandler(resultHandler))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	srv := &http.Server{
-		Handler:      mux,
+		Handler:      r,
 		Addr:         "127.0.0.1:3000",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
@@ -175,3 +181,6 @@ func resultHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	return nil
 }
 
+func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	_ = notFound.Render(w, nil)
+}
