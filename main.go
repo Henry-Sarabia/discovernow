@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/Henry-Sarabia/blank"
 	"github.com/Henry-Sarabia/discovernow/views"
+	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"html/template"
 	"io/ioutil"
@@ -22,14 +23,14 @@ func main() {
 	landing = views.NewView("index", "views/landing.gohtml")
 	result = views.NewView("index", "views/result.gohtml")
 
-	mux := &http.ServeMux{}
+	r := mux.NewRouter()
 
-	mux.Handle("/", errHandler(landingHandler))
-	mux.Handle("/results", errHandler(resultHandler))
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	r.Handle("/", errHandler(landingHandler))
+	r.Handle("/results", errHandler(resultHandler))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	srv := &http.Server{
-		Handler:      mux,
+		Handler:      r,
 		Addr:         "127.0.0.1:3000",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
