@@ -11,5 +11,21 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+<<<<<<< HEAD
 # Helper batch files
 *.bat
+=======
+# Dependency directories
+node_modules
+
+# Desktop Services Store on macOS
+.DS_Store
+
+README.md
+
+# Processed CSS
+public/bulma/
+public/styles/main.scss
+src/main.css
+main.css
+>>>>>>> db1b4a0b081552935d63764592155532115726a7

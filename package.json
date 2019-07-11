@@ -1,0 +1,11 @@
+{
+  "name": "Discover Now",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Henry-Sarabia/discover-server.git",
+  "author": "Henry-Sarabia <henrysarabia@mail.fresnostate.edu>",
+  "license": "MIT",
+  "dependencies": {
+    "bulma": "^0.6.2"
+  }
+}

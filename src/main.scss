@@ -1,0 +1,103 @@
+@import "../node_modules/bulma/sass/utilities/initial-variables";
+@import "../node_modules/bulma/sass/utilities/functions";
+
+// Custom color definitions
+
+$green: hsl(141, 59%, 60%);
+$green-invert: findColorInvert($green);
+
+$darkgreen: hsl(141, 38%, 22%);
+$darkgreen-invert: findColorInvert($darkgreen);
+
+$lightgreen: hsl(152, 58%, 87%);
+$lightgreen-invert: findColorInvert($lightgreen);
+
+$greycopy: hsl(0,0%,43.9%);
+$greycopy-invert: findColorInvert($greycopy);
+
+$greylink: hsl(137, 5%, 27%);
+$greylink-invert: findColorInvert($greylink);
+
+$greyfooter: hsl(143, 28%, 79%);
+$greyfooter-invert: findColorInvert($greyfooter);
+
+$mint: #a7e8bd;
+$mint-invert: findColorInvert($mint);
+
+// Bulma variable override
+
+$family-sans-serif: "Open Sans", BlinkMacSystemFont, -apple-system, "Helvetica", "Arial", sans-serif;
+
+$primary: $green;
+$primary-invert: $green-invert;
+
+$link: $greylink;
+$link-invert: $greylink-invert;
+
+$success: $lightgreen;
+$success-invert: $lightgreen-invert;
+
+$info: $mint;
+$info-invert: $mint-invert;
+
+@import "../node_modules/bulma/sass/utilities/derived-variables";
+$addColors: (
+  "dark-green": ($darkgreen, $darkgreen-invert),
+  "grey-copy": ($greycopy, $greycopy-invert),
+  "grey-footer": ($greyfooter, $greyfooter-invert)
+);
+$colors: map-merge($colors, $addColors);
+
+$card-shadow: 0 15px 35px rgba(50, 50, 93, .05), 0 5px 15px rgba(0, 0, 0, .07);
+$card-background-color: $white-bis;
+
+$footer-background-color: $darkgreen;
+
+$title-weight: $weight-medium;
+$subtitle-weight: $weight-medium;
+
+// Bulma stylesheets import
+
+@import "../node_modules/bulma/sass/utilities/animations";
+@import "../node_modules/bulma/sass/utilities/controls";
+@import "../node_modules/bulma/sass/utilities/mixins";
+
+@import "../node_modules/bulma/sass/base/_all";
+
+@import "../node_modules/bulma/sass/components/card";
+@import "../node_modules/bulma/sass/components/modal";
+@import "../node_modules/bulma/sass/components/navbar";
+
+@import "../node_modules/bulma/sass/elements/button";
+@import "../node_modules/bulma/sass/elements/container";
+@import "../node_modules/bulma/sass/elements/icon";
+@import "../node_modules/bulma/sass/elements/other";
+@import "../node_modules/bulma/sass/elements/title";
+
+@import "../node_modules/bulma/sass/grid/columns";
+
+@import "../node_modules/bulma/sass/layout/_all";
+
+// Custom style definitions
+
+$header-font: "Permanent Marker";
+$title-font: "Quicksand";
+$icon-font: "Roboto";
+
+h1 {
+  font-family: $header-font;
+}
+
+h2, h3, h4 {
+  font-family: $title-font;
+}
+
+// Custom stylesheets import
+
+@import "./stylesheets/landing";
+@import "./stylesheets/discover";
+@import "./stylesheets/header";
+@import "./stylesheets/footer";
+@import "./stylesheets/error";
+@import "./stylesheets/buttons";
+@import "./stylesheets/icons";
