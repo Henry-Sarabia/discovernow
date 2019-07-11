@@ -1,0 +1,23 @@
+@import "../bulma/utilities/mixins.sass";
+
+// Bulma class
+.footer {
+  &__header {
+    padding-bottom: 0.75rem;
+  }
+
+  &__title {
+    padding: 0.5rem 0;
+  }
+
+  &__copy {
+    @include desktop {
+      padding-right: 2rem;
+    }
+  }
+
+  &__link {
+    padding: 0.5rem 0;
+    letter-spacing: 0.5px;
+  }
+}

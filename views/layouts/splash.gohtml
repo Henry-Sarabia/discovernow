@@ -1,0 +1,22 @@
+{{define "splash"}}
+    <header class="splash hero is-fullheight">
+        <div class="hero-body">
+            <div class="container has-text-left-tablet has-text-centered-mobile">
+                <p class="splash__subheader is-family-secondary has-text-weight-medium has-text-grey-dark is-size-3-tablet is-size-4-mobile">
+                    Don't wait for Monday.
+                </p>
+                <h1 class="splash__header title is-family-code has-text-weight-bold">
+                    Discover Now
+                </h1>
+                {{if .URL}}
+                    {{template "spotifyButton" . | arg "Text" "Connect" | arg "Class" "is-medium is-primary" | arg "Href" .URL}}
+                {{else}}
+                    {{template "spotifyButton" . | arg "Text" "Offline" | arg "Class" "is-medium is-primary is-disabled" | arg "Href" "#"}}
+                {{end}}
+                <a class="button is-medium is-dark is-outlined" href="#features" aria-label="Learn more about Discover Now and its features">
+                    Features
+                </a>
+            </div>
+        </div>
+    </header>
+{{end}}

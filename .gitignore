@@ -1,19 +1,15 @@
-# Distribution
-build/
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
 
-# elm-package generated files
-elm-stuff
+# Test binary, built with `go test -c`
+*.test
 
-# elm-repl generated files
-repl-temp-*
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
 
-# Dependency directories
-node_modules
-
-# Desktop Services Store on macOS
-.DS_Store
-
-README.md
-
-public/bulma/
-public/styles/main.scss
+# Helper batch files
+*.bat

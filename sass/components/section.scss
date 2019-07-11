@@ -1,0 +1,23 @@
+@import "../bulma/utilities/mixins.sass";
+
+// Bulma class
+.section {
+  &__title {
+    padding-bottom: 1.5rem;
+
+    @include mobile {
+      margin: 0;
+    }
+  }
+
+  &__subtitle {
+    @include tablet {
+      padding-bottom: 1rem;
+    }
+
+    @include mobile {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
