@@ -11,7 +11,6 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/pkg/errors"
 	"github.com/zmb3/spotify"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -141,13 +140,9 @@ func (fn errHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func landingHandler(w http.ResponseWriter, r *http.Request) *serverError {
-	type auth struct {
-		URL string `json:"url"`
-	}
-
 	resp, err := http.Get(APIURL + "login")
 	if err != nil {
-		_ = landing.Render(w, auth{})
+		_ = landing.Render(w, login{})
 		return &serverError{
 			Error:   err,
 			Message: "Cannot connect to login endpoint",
@@ -158,7 +153,7 @@ func landingHandler(w http.ResponseWriter, r *http.Request) *serverError {
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		_ = landing.Render(w, auth{})
+		_ = landing.Render(w, login{})
 		return &serverError{
 			Error:   err,
 			Message: "Invalid response body from login endpoint",
@@ -166,11 +161,11 @@ func landingHandler(w http.ResponseWriter, r *http.Request) *serverError {
 		}
 	}
 
-	au := &auth{}
+	au := &login{}
 
 	err = json.Unmarshal(b, &au)
 	if err != nil {
-		_ = landing.Render(w, auth{})
+		_ = landing.Render(w, login{})
 		return &serverError{
 			Error:   err,
 			Message: "Cannot unmarshal JSON response from login endpoint",
@@ -183,10 +178,6 @@ func landingHandler(w http.ResponseWriter, r *http.Request) *serverError {
 }
 
 func resultHandler(w http.ResponseWriter, r *http.Request) *serverError {
-	type playlist struct {
-		URI template.URL `json:"uri"`
-	}
-
 	q := r.URL.Query()
 
 	code := q.Get("code")

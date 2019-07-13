@@ -17,8 +17,8 @@ const (
 	playlistDescription string = "Curated by Discover Now"
 )
 
-// Playlist contains the URI of a user's playlist.
-type Playlist struct {
+// playlist contains the URI of a user's playlist.
+type playlist struct {
 	URI string `json:"uri"`
 }
 
@@ -86,7 +86,7 @@ func playlistHandler(w http.ResponseWriter, r *http.Request) *serverError {
 		}
 	}
 
-	payload := Playlist{URI: string(pl.URI)}
+	payload := playlist{URI: string(pl.URI)}
 	render.JSON(w, r, payload)
 
 	return nil

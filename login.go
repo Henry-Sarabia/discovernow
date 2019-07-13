@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-// Login contains the URL configured for Spotify authentication.
-type Login struct {
+// login contains the URL configured for Spotify authentication.
+type login struct {
 	URL string `json:"url"`
 }
 
@@ -16,6 +16,6 @@ type Login struct {
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	url := auth.AuthURL(state)
 
-	login := Login{URL: url}
-	render.JSON(w, r, login)
+	l := login{URL: url}
+	render.JSON(w, r, l)
 }
