@@ -86,8 +86,8 @@ func playlistHandler(w http.ResponseWriter, r *http.Request) *serverError {
 		}
 	}
 
-	payload := playlist{URI: string(pl.URI)}
-	render.JSON(w, r, payload)
+	p := playlist{URI: string(pl.URI)}
+	render.JSON(w, r, p)
 
 	return nil
 }
