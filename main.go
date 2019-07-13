@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -23,10 +24,11 @@ const (
 	playlistEndpoint string = "playlist"
 	redirectPath     string = "/results"
 	state            string = "abc123"
-	hashKeyName      string = "DISCOVER_HASH"
-	storeAuthName    string = "DISCOVER_AUTH"
-	storeCryptName   string = "DISCOVER_CRYPT"
-	frontendURIName  string = "FRONTEND_URI"
+
+	hashKeyName     string = "DISCOVER_HASH"
+	storeAuthName   string = "DISCOVER_AUTH"
+	storeCryptName  string = "DISCOVER_CRYPT"
+	frontendURIName string = "FRONTEND_URI"
 )
 
 var (
@@ -48,20 +50,21 @@ func main() {
 	notFound = views.NewView("index", "views/notfound.gohtml")
 
 	r := mux.NewRouter()
+
 	r.Use(handlers.RecoveryHandler())
 	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 
 	r.Handle("/", errHandler(landingHandler))
-	r.Handle("/results", errHandler(resultHandler))
+	r.Handle(redirectPath, errHandler(resultHandler))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	api := r.PathPrefix("/api/v1/").Subrouter()
-	api.HandleFunc("/login", loginHandler)
-	api.Handle("/playlist", errHandler(playlistHandler))
+	api := r.PathPrefix(apiPath).Subrouter()
+	api.HandleFunc("/"+loginEndpoint, loginHandler)
+	api.Handle("/"+playlistEndpoint, errHandler(playlistHandler))
 
 	srv := &http.Server{
-		Handler:      handlers.LoggingHandler(os.Stdout, r),
-		Addr:         "127.0.0.1:3000",
+		Handler: handlers.LoggingHandler(os.Stdout, r),
+		Addr:         strings.TrimPrefix(frontendURI, "http://"),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
@@ -70,7 +73,7 @@ func main() {
 }
 
 func landingHandler(w http.ResponseWriter, r *http.Request) *serverError {
-	resp, err := http.Get(frontendURI+apiPath+loginEndpoint)
+	resp, err := http.Get(frontendURI + apiPath + loginEndpoint)
 	if err != nil {
 		_ = landing.Render(w, login{})
 		return &serverError{
@@ -134,7 +137,7 @@ func resultHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	v.Set("code", code)
 	v.Set("state", state)
 
-	resp, err := http.Get(frontendURI+apiPath+playlistEndpoint + "?" + v.Encode())
+	resp, err := http.Get(frontendURI + apiPath + playlistEndpoint + "?" + v.Encode())
 	if err != nil {
 		_ = result.Render(w, playlist{})
 		return &serverError{
