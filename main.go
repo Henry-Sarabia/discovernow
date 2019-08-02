@@ -54,13 +54,13 @@ func main() {
 	r.Use(handlers.RecoveryHandler())
 	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 
-	r.Handle("/", errHandler(landingHandler))
-	r.Handle(redirectPath, errHandler(resultHandler))
+	r.Handle("/", appHandler(landingHandler))
+	r.Handle(redirectPath, appHandler(resultHandler))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	api := r.PathPrefix(apiPath).Subrouter()
 	api.HandleFunc("/"+loginEndpoint, loginHandler)
-	api.Handle("/"+playlistEndpoint, errHandler(playlistHandler))
+	api.Handle("/"+playlistEndpoint, appHandler(playlistHandler))
 
 	srv := &http.Server{
 		Handler: handlers.LoggingHandler(os.Stdout, r),
@@ -72,26 +72,18 @@ func main() {
 	log.Fatal(srv.ListenAndServe())
 }
 
-func landingHandler(w http.ResponseWriter, r *http.Request) *serverError {
+func landingHandler(w http.ResponseWriter, r *http.Request) (int, error) {
 	resp, err := http.Get(frontendURI + apiPath + loginEndpoint)
 	if err != nil {
 		_ = landing.Render(w, login{})
-		return &serverError{
-			Error:   err,
-			Message: "Cannot connect to login endpoint",
-			Code:    http.StatusBadGateway,
-		}
+		return http.StatusBadGateway, err
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		_ = landing.Render(w, login{})
-		return &serverError{
-			Error:   err,
-			Message: "Invalid response body from login endpoint",
-			Code:    http.StatusInternalServerError,
-		}
+		return http.StatusInternalServerError, err
 	}
 
 	l := &login{}
@@ -99,38 +91,26 @@ func landingHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	err = json.Unmarshal(b, &l)
 	if err != nil {
 		_ = landing.Render(w, login{})
-		return &serverError{
-			Error:   err,
-			Message: "Cannot unmarshal JSON response from login endpoint",
-			Code:    http.StatusInternalServerError,
-		}
+		return http.StatusInternalServerError, err
 	}
 
-	_ = landing.Render(w, l)
-	return nil
+	_ = landing.Render(w, l) //TODO: check if returning this function is enough; renderTemplate
+	return http.StatusOK, nil
 }
 
-func resultHandler(w http.ResponseWriter, r *http.Request) *serverError {
+func resultHandler(w http.ResponseWriter, r *http.Request) (int, error) {
 	q := r.URL.Query()
 
 	code := q.Get("code")
 	if blank.Is(code) {
 		_ = result.Render(w, &playlist{})
-		return &serverError{
-			Error:   errors.New("result url is missing code"),
-			Message: "Results URL is missing code parameter",
-			Code:    http.StatusInternalServerError,
-		}
+		return http.StatusInternalServerError, errors.New("result url is missing code")
 	}
 
 	state := q.Get("state")
 	if blank.Is(state) {
 		_ = result.Render(w, playlist{})
-		return &serverError{
-			Error:   errors.New("result url is missing state"),
-			Message: "Results URL is missing state parameter",
-			Code:    http.StatusInternalServerError,
-		}
+		return http.StatusInternalServerError, errors.New("result url is missing state")
 	}
 
 	v := url.Values{}
@@ -140,22 +120,14 @@ func resultHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	resp, err := http.Get(frontendURI + apiPath + playlistEndpoint + "?" + v.Encode())
 	if err != nil {
 		_ = result.Render(w, playlist{})
-		return &serverError{
-			Error:   err,
-			Message: "Cannot connect to playlist endpoint",
-			Code:    http.StatusBadGateway,
-		}
+		return http.StatusBadGateway, err
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		_ = result.Render(w, playlist{})
-		return &serverError{
-			Error:   err,
-			Message: "Invalid response body from playlist endpoint",
-			Code:    http.StatusInternalServerError,
-		}
+		return http.StatusInternalServerError, errors.Wrap(err, "invalid response body from playlist endpoint")
 	}
 
 	play := &playlist{}
@@ -163,24 +135,16 @@ func resultHandler(w http.ResponseWriter, r *http.Request) *serverError {
 	err = json.Unmarshal(b, &play)
 	if err != nil {
 		_ = result.Render(w, playlist{})
-		return &serverError{
-			Error:   err,
-			Message: "Cannot unmarshal JSON response from playlist endpoint",
-			Code:    http.StatusInternalServerError,
-		}
+		return http.StatusInternalServerError, errors.Wrap(err, "cannot unmarshal JSON response from playlist endpoint")
 	}
 
 	if blank.Is(string(play.URI)) {
 		_ = result.Render(w, playlist{})
-		return &serverError{
-			Error:   err,
-			Message: "URI value is blank",
-			Code:    http.StatusInternalServerError,
-		}
+		return http.StatusInternalServerError, errors.Wrap(err, "URI value is blank")
 	}
 
 	_ = result.Render(w, play)
-	return nil
+	return http.StatusOK, nil
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
