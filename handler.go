@@ -37,11 +37,14 @@ type Env struct {
 	Auth  *spotify.Authenticator
 }
 
+// Handler holds the application environment and a custom handler function.
 type Handler struct {
 	*Env
 	H func(e *Env, w http.ResponseWriter, r *http.Request) error
 }
 
+// ServeHTTP handles errors from a Handler's custom handler function and
+// satisfies the http.Handler interface.
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	err := h.H(h.Env, w, r)
 	if err != nil {
