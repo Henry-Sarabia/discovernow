@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/hex"
-	spotifyservice "github.com/Henry-Sarabia/refind/spotify"
 	"github.com/pkg/errors"
 	"log"
 	"os"
@@ -29,11 +28,6 @@ func init() {
 	frontendURI, err = getEnv(frontendURIName)
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	auth, err = spotifyservice.Authenticator(frontendURI + redirectPath)
-	if err != nil {
-		log.Fatalf("stack trace:\n%+v\n", err)
 	}
 }
 

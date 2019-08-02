@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"github.com/Henry-Sarabia/blank"
 	"github.com/Henry-Sarabia/discovernow/views"
+	spotifyservice "github.com/Henry-Sarabia/refind/spotify"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 	"github.com/pkg/errors"
-	"github.com/zmb3/spotify"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -19,11 +18,11 @@ import (
 )
 
 const (
-	apiPath          string = "/api/v1/"
-	loginEndpoint    string = "login"
-	playlistEndpoint string = "playlist"
-	redirectPath     string = "/results"
-	state            string = "abc123"
+	apiPath      string = "/api/v1/"
+	loginPath    string = "login"
+	playlistPath string = "playlist"
+	redirectPath string = "/results"
+	state        string = "abc123"
 
 	hashKeyName     string = "DISCOVER_HASH"
 	storeAuthName   string = "DISCOVER_AUTH"
@@ -36,12 +35,11 @@ var (
 	result   *views.View
 	notFound *views.View
 
-	hashKey     string
-	storeAuth   string
-	storeCrypt  string
-	store       sessions.CookieStore
+	hashKey    string
+	storeAuth  string
+	storeCrypt string
+	//store       sessions.CookieStore
 	frontendURI string
-	auth        *spotify.Authenticator
 )
 
 func main() {
@@ -49,21 +47,30 @@ func main() {
 	result = views.NewView("index", "views/result.gohtml")
 	notFound = views.NewView("index", "views/notfound.gohtml")
 
+	auth, err := spotifyservice.Authenticator(frontendURI + redirectPath)
+	if err != nil {
+		log.Fatalf("stack trace:\n%+v\n", err)
+	}
+
+	env := &Env{
+		Auth: auth,
+	}
+
 	r := mux.NewRouter()
 
 	r.Use(handlers.RecoveryHandler())
 	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 
-	r.Handle("/", appHandler(landingHandler))
-	r.Handle(redirectPath, appHandler(resultHandler))
+	r.Handle("/", Handler{env, landingHandler})
+	r.Handle(redirectPath, Handler{env, resultHandler})
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	api := r.PathPrefix(apiPath).Subrouter()
-	api.HandleFunc("/"+loginEndpoint, loginHandler)
-	api.Handle("/"+playlistEndpoint, appHandler(playlistHandler))
+	api.Handle("/"+loginPath, Handler{env, loginHandler})
+	api.Handle("/"+playlistPath, Handler{env, playlistHandler})
 
 	srv := &http.Server{
-		Handler: handlers.LoggingHandler(os.Stdout, r),
+		Handler:      handlers.LoggingHandler(os.Stdout, r),
 		Addr:         strings.TrimPrefix(frontendURI, "http://"),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
@@ -72,18 +79,18 @@ func main() {
 	log.Fatal(srv.ListenAndServe())
 }
 
-func landingHandler(w http.ResponseWriter, r *http.Request) (int, error) {
-	resp, err := http.Get(frontendURI + apiPath + loginEndpoint)
+func landingHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
+	resp, err := http.Get(frontendURI + apiPath + loginPath)
 	if err != nil {
 		_ = landing.Render(w, login{})
-		return http.StatusBadGateway, err
+		return StatusError{http.StatusBadGateway, err}
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		_ = landing.Render(w, login{})
-		return http.StatusInternalServerError, err
+		return StatusError{http.StatusInternalServerError, err}
 	}
 
 	l := &login{}
@@ -91,43 +98,43 @@ func landingHandler(w http.ResponseWriter, r *http.Request) (int, error) {
 	err = json.Unmarshal(b, &l)
 	if err != nil {
 		_ = landing.Render(w, login{})
-		return http.StatusInternalServerError, err
+		return StatusError{http.StatusInternalServerError, err}
 	}
 
 	_ = landing.Render(w, l) //TODO: check if returning this function is enough; renderTemplate
-	return http.StatusOK, nil
+	return nil
 }
 
-func resultHandler(w http.ResponseWriter, r *http.Request) (int, error) {
+func resultHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
 	q := r.URL.Query()
 
 	code := q.Get("code")
 	if blank.Is(code) {
 		_ = result.Render(w, &playlist{})
-		return http.StatusInternalServerError, errors.New("result url is missing code")
+		return StatusError{http.StatusInternalServerError, errors.New("result url is missing code")}
 	}
 
 	state := q.Get("state")
 	if blank.Is(state) {
 		_ = result.Render(w, playlist{})
-		return http.StatusInternalServerError, errors.New("result url is missing state")
+		return StatusError{http.StatusInternalServerError, errors.New("result url is missing state")}
 	}
 
 	v := url.Values{}
 	v.Set("code", code)
 	v.Set("state", state)
 
-	resp, err := http.Get(frontendURI + apiPath + playlistEndpoint + "?" + v.Encode())
+	resp, err := http.Get(frontendURI + apiPath + playlistPath + "?" + v.Encode())
 	if err != nil {
 		_ = result.Render(w, playlist{})
-		return http.StatusBadGateway, err
+		return StatusError{http.StatusBadGateway, err}
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		_ = result.Render(w, playlist{})
-		return http.StatusInternalServerError, errors.Wrap(err, "invalid response body from playlist endpoint")
+		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "invalid response body from playlist endpoint")}
 	}
 
 	play := &playlist{}
@@ -135,16 +142,16 @@ func resultHandler(w http.ResponseWriter, r *http.Request) (int, error) {
 	err = json.Unmarshal(b, &play)
 	if err != nil {
 		_ = result.Render(w, playlist{})
-		return http.StatusInternalServerError, errors.Wrap(err, "cannot unmarshal JSON response from playlist endpoint")
+		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "cannot unmarshal JSON response from playlist endpoint")}
 	}
 
 	if blank.Is(string(play.URI)) {
 		_ = result.Render(w, playlist{})
-		return http.StatusInternalServerError, errors.Wrap(err, "URI value is blank")
+		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "URI value is blank")}
 	}
 
 	_ = result.Render(w, play)
-	return http.StatusOK, nil
+	return nil
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
