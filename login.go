@@ -13,9 +13,11 @@ type login struct {
 // loginHandler responds to requests with an authorization URL configured for a
 // user's Spotify data. In addition, a session is created to store the caller's
 // UUID and time of request. Sessions are saved as secure, encrypted cookies.
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	url := auth.AuthURL(state)
+func loginHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
+	url := env.Auth.AuthURL(state)
 
 	l := login{URL: url}
 	render.JSON(w, r, l)
+
+	return nil
 }
