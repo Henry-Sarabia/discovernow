@@ -1,17 +1,12 @@
 package main
 
 import (
-	"encoding/json"
-	"github.com/Henry-Sarabia/blank"
 	"github.com/Henry-Sarabia/discovernow/views"
 	spotifyservice "github.com/Henry-Sarabia/refind/spotify"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -77,81 +72,6 @@ func main() {
 	}
 
 	log.Fatal(srv.ListenAndServe())
-}
-
-func landingHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
-	resp, err := http.Get(frontendURI + apiPath + loginPath)
-	if err != nil {
-		_ = landing.Render(w, login{})
-		return StatusError{http.StatusBadGateway, err}
-	}
-	defer resp.Body.Close()
-
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		_ = landing.Render(w, login{})
-		return StatusError{http.StatusInternalServerError, err}
-	}
-
-	l := &login{}
-
-	err = json.Unmarshal(b, &l)
-	if err != nil {
-		_ = landing.Render(w, login{})
-		return StatusError{http.StatusInternalServerError, err}
-	}
-
-	_ = landing.Render(w, l) //TODO: check if returning this function is enough; renderTemplate
-	return nil
-}
-
-func resultHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
-	q := r.URL.Query()
-
-	code := q.Get("code")
-	if blank.Is(code) {
-		_ = result.Render(w, &playlist{})
-		return StatusError{http.StatusInternalServerError, errors.New("result url is missing code")}
-	}
-
-	state := q.Get("state")
-	if blank.Is(state) {
-		_ = result.Render(w, playlist{})
-		return StatusError{http.StatusInternalServerError, errors.New("result url is missing state")}
-	}
-
-	v := url.Values{}
-	v.Set("code", code)
-	v.Set("state", state)
-
-	resp, err := http.Get(frontendURI + apiPath + playlistPath + "?" + v.Encode())
-	if err != nil {
-		_ = result.Render(w, playlist{})
-		return StatusError{http.StatusBadGateway, err}
-	}
-	defer resp.Body.Close()
-
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		_ = result.Render(w, playlist{})
-		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "invalid response body from playlist endpoint")}
-	}
-
-	play := &playlist{}
-
-	err = json.Unmarshal(b, &play)
-	if err != nil {
-		_ = result.Render(w, playlist{})
-		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "cannot unmarshal JSON response from playlist endpoint")}
-	}
-
-	if blank.Is(string(play.URI)) {
-		_ = result.Render(w, playlist{})
-		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "URI value is blank")}
-	}
-
-	_ = result.Render(w, play)
-	return nil
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
