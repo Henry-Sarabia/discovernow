@@ -15,12 +15,13 @@ import (
 )
 
 const (
-	apiPath      string = "/api/v1/"
-	loginPath    string = "login"
-	playlistPath string = "playlist"
+	apiPath      string = "/api/v1"
+	loginPath    string = "/login"
+	playlistPath string = "/playlist"
 	redirectPath string = "/results"
 	state        string = "abc123"
 
+	indexLayout  string = "index"
 	landingView  string = "landing"
 	resultView   string = "result"
 	notfoundView string = "notfound"
@@ -48,9 +49,9 @@ func main() {
 	env := &Env{
 		Auth: auth,
 		Views: map[string]*views.View{
-			landingView:  views.NewView("index", fmt.Sprintf("views/%s.gohtml", landingView)),
-			resultView:   views.NewView("index", fmt.Sprintf("views/%s.gohtml", resultView)),
-			notfoundView: views.NewView("index", fmt.Sprintf("views/%s.gohtml", notfoundView)),
+			landingView:  views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", landingView)),
+			resultView:   views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", resultView)),
+			notfoundView: views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", notfoundView)),
 		},
 	}
 
@@ -63,9 +64,9 @@ func main() {
 	r.Handle(redirectPath, Handler{env, resultHandler})
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	api := r.PathPrefix(apiPath).Subrouter()
-	api.Handle("/"+loginPath, Handler{env, loginHandler})
-	api.Handle("/"+playlistPath, Handler{env, playlistHandler})
+	api := r.PathPrefix(apiPath + "/").Subrouter()
+	api.Handle(loginPath, Handler{env, loginHandler})
+	api.Handle(playlistPath, Handler{env, playlistHandler})
 
 	srv := &http.Server{
 		Handler:      handlers.LoggingHandler(os.Stdout, r),
