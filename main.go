@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Henry-Sarabia/discovernow/views"
 	spotifyservice "github.com/Henry-Sarabia/refind/spotify"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/pkg/errors"
 	"log"
 	"net/http"
 	"os"
@@ -13,11 +15,16 @@ import (
 )
 
 const (
-	apiPath      string = "/api/v1/"
-	loginPath    string = "login"
-	playlistPath string = "playlist"
+	apiPath      string = "/api/v1"
+	loginPath    string = "/login"
+	playlistPath string = "/playlist"
 	redirectPath string = "/results"
 	state        string = "abc123"
+
+	indexLayout  string = "index"
+	landingView  string = "landing"
+	resultView   string = "result"
+	notfoundView string = "notfound"
 
 	hashKeyName     string = "DISCOVER_HASH"
 	storeAuthName   string = "DISCOVER_AUTH"
@@ -26,10 +33,6 @@ const (
 )
 
 var (
-	landing  *views.View
-	result   *views.View
-	notFound *views.View
-
 	hashKey    string
 	storeAuth  string
 	storeCrypt string
@@ -38,10 +41,6 @@ var (
 )
 
 func main() {
-	landing = views.NewView("index", "views/landing.gohtml")
-	result = views.NewView("index", "views/result.gohtml")
-	notFound = views.NewView("index", "views/notfound.gohtml")
-
 	auth, err := spotifyservice.Authenticator(frontendURI + redirectPath)
 	if err != nil {
 		log.Fatalf("stack trace:\n%+v\n", err)
@@ -49,20 +48,25 @@ func main() {
 
 	env := &Env{
 		Auth: auth,
+		Views: map[string]*views.View{
+			landingView:  views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", landingView)),
+			resultView:   views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", resultView)),
+			notfoundView: views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", notfoundView)),
+		},
 	}
 
 	r := mux.NewRouter()
 
 	r.Use(handlers.RecoveryHandler())
-	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
+	r.NotFoundHandler = Handler{env, notFoundHandler}
 
 	r.Handle("/", Handler{env, landingHandler})
 	r.Handle(redirectPath, Handler{env, resultHandler})
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	api := r.PathPrefix(apiPath).Subrouter()
-	api.Handle("/"+loginPath, Handler{env, loginHandler})
-	api.Handle("/"+playlistPath, Handler{env, playlistHandler})
+	api := r.PathPrefix(apiPath + "/").Subrouter()
+	api.Handle(loginPath, Handler{env, loginHandler})
+	api.Handle(playlistPath, Handler{env, playlistHandler})
 
 	srv := &http.Server{
 		Handler:      handlers.LoggingHandler(os.Stdout, r),
@@ -74,6 +78,10 @@ func main() {
 	log.Fatal(srv.ListenAndServe())
 }
 
-func notFoundHandler(w http.ResponseWriter, r *http.Request) {
-	_ = notFound.Render(w, nil)
+func notFoundHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
+	v, ok := env.Views[notfoundView]
+	if !ok {
+		return errors.Errorf("cannot find '%s' view", notfoundView)
+	}
+	return v.Render(w, nil)
 }
