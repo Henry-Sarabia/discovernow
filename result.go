@@ -33,7 +33,7 @@ func resultHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
 	val.Set("code", code)
 	val.Set("state", state)
 
-	resp, err := http.Get(frontendURI + apiPath + playlistPath + "?" + val.Encode())
+	resp, err := http.Get(env.FrontendURI + apiPath + playlistPath + "?" + val.Encode())
 	if err != nil {
 		_ = v.Render(w, playlist{})
 		return StatusError{http.StatusBadGateway, err}

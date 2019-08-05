@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/Henry-Sarabia/discovernow/views"
-	spotifyservice "github.com/Henry-Sarabia/refind/spotify"
+	spotserv "github.com/Henry-Sarabia/refind/spotify"
+	envvar "github.com/caarlos0/env"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
@@ -25,23 +26,15 @@ const (
 	landingView  string = "landing"
 	resultView   string = "result"
 	notfoundView string = "notfound"
-
-	hashKeyName     string = "DISCOVER_HASH"
-	storeAuthName   string = "DISCOVER_AUTH"
-	storeCryptName  string = "DISCOVER_CRYPT"
-	frontendURIName string = "FRONTEND_URI"
-)
-
-var (
-	hashKey    string
-	storeAuth  string
-	storeCrypt string
-	//store       sessions.CookieStore
-	frontendURI string
 )
 
 func main() {
-	auth, err := spotifyservice.Authenticator(frontendURI + redirectPath)
+	cfg := config{}
+	if err := envvar.Parse(&cfg); err != nil {
+		log.Fatalf("%+v\n", err)
+	}
+
+	auth, err := spotserv.Authenticator(cfg.FrontendURI + redirectPath)
 	if err != nil {
 		log.Fatalf("stack trace:\n%+v\n", err)
 	}
@@ -53,6 +46,7 @@ func main() {
 			resultView:   views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", resultView)),
 			notfoundView: views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", notfoundView)),
 		},
+		FrontendURI: cfg.FrontendURI,
 	}
 
 	r := mux.NewRouter()
@@ -70,7 +64,7 @@ func main() {
 
 	srv := &http.Server{
 		Handler:      handlers.LoggingHandler(os.Stdout, r),
-		Addr:         strings.TrimPrefix(frontendURI, "http://"),
+		Addr:         strings.TrimPrefix(cfg.FrontendURI, "http://"),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
