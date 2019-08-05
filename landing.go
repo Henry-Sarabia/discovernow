@@ -13,7 +13,7 @@ func landingHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
 		return errors.Errorf("cannot find '%s' view", landingView)
 	}
 
-	resp, err := http.Get(frontendURI + apiPath + loginPath)
+	resp, err := http.Get(env.FrontendURI + apiPath + loginPath)
 	if err != nil {
 		_ = v.Render(w, login{})
 		return StatusError{http.StatusBadGateway, err}

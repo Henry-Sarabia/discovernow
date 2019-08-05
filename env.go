@@ -8,7 +8,16 @@ import (
 
 // Env contains the application environment.
 type Env struct {
-	Store *sessions.CookieStore
-	Auth  *spotify.Authenticator
-	Views map[string]*views.View
+	Store       *sessions.CookieStore
+	Auth        *spotify.Authenticator
+	Views       map[string]*views.View
+	FrontendURI string
+}
+
+// config contains the application environment variables.
+type config struct {
+	HashKey     string `env:"DISCOVER_HASH"`
+	StoreAuth   string `env:"DISCOVER_AUTH"`
+	StoreCrypt  string `env:"DISCOVER_CRYPT"`
+	FrontendURI string `env:"FRONTEND_URI"` //TODO: standardize with `DISCOVER` prefix
 }
