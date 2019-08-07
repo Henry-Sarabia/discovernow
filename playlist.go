@@ -1,11 +1,11 @@
 package main
 
 import (
+	"encoding/base64"
 	"github.com/Henry-Sarabia/refind"
 	"github.com/Henry-Sarabia/refind/buffer"
 	"github.com/go-chi/render"
 	"github.com/pkg/errors"
-	"github.com/zmb3/spotify"
 	"golang.org/x/oauth2"
 	"net/http"
 	"strings"
@@ -39,7 +39,7 @@ func playlistHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	tok, err := authorizeRequest(env.Auth, r)
+	tok, err := authorizeRequest(env, r)
 	if err != nil {
 		return StatusError{http.StatusBadGateway, errors.Wrap(err, "cannot authorize Spotify request")}
 	}
@@ -89,8 +89,30 @@ func playlistHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
 // particular user's Spotify data after verifying the same user both
 // initiated and authorized the request. This verification is done by checking
 // for a matching state from the initial request and this subsequent callback.
-func authorizeRequest(auth *spotify.Authenticator, r *http.Request) (*oauth2.Token, error) {
-	tok, err := auth.Token(state, r)
+func authorizeRequest(env *Env, r *http.Request) (*oauth2.Token, error) {
+	sess, err := env.Store.Get(r, sessionName)
+	if err != nil {
+		return nil, err
+	}
+
+	id, ok := sess.Values["id"].(string)
+	if !ok {
+		return nil, errors.New("cannot find 'id' value")
+	}
+
+	tm, ok := sess.Values["time"].(string)
+	if !ok {
+		return nil, errors.New("cannot find 'time' value")
+	}
+
+	sum := id + tm
+	state, err := hash([]byte(sum), []byte(env.HashKey))
+	if err != nil {
+		return nil, err
+	}
+
+	enc := base64.URLEncoding.EncodeToString(state)
+	tok, err := env.Auth.Token(enc, r)
 	if err != nil {
 		return nil, err
 	}

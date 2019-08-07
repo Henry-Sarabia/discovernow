@@ -22,7 +22,6 @@ const (
 	playlistPath string = "/playlist"
 	redirectPath string = "/results"
 	sessionName  string = "discover_now"
-	state        string = "abc123"
 
 	indexLayout  string = "index"
 	landingView  string = "landing"
