@@ -29,7 +29,17 @@ type playlist struct {
 // user's session and is used as the response to any further requests unless
 // the URI is cleared from the session.
 func playlistHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
-	tok, err := authorizeRequest(env.Auth, w, r)
+	sess, err := env.Store.Get(r, sessionName)
+	if err != nil {
+		return StatusError{http.StatusInternalServerError, errors.Wrapf(err, "cannot get session '%s'", sessionName)}
+	}
+	if uri, ok := sess.Values["playlist"].(string); ok {
+		p := playlist{URI: uri}
+		render.JSON(w, r, p)
+		return nil
+	}
+
+	tok, err := authorizeRequest(env.Auth, r)
 	if err != nil {
 		return StatusError{http.StatusBadGateway, errors.Wrap(err, "cannot authorize Spotify request")}
 	}
@@ -64,6 +74,11 @@ func playlistHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
 		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "cannot create user playlist")}
 	}
 
+	sess.Values["playlist"] = string(pl.URI)
+	if err := sess.Save(r, w); err != nil {
+		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "cannot save session")}
+	}
+
 	p := playlist{URI: string(pl.URI)}
 	render.JSON(w, r, p)
 
@@ -74,7 +89,7 @@ func playlistHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
 // particular user's Spotify data after verifying the same user both
 // initiated and authorized the request. This verification is done by checking
 // for a matching state from the initial request and this subsequent callback.
-func authorizeRequest(auth *spotify.Authenticator, w http.ResponseWriter, r *http.Request) (*oauth2.Token, error) {
+func authorizeRequest(auth *spotify.Authenticator, r *http.Request) (*oauth2.Token, error) {
 	tok, err := auth.Token(state, r)
 	if err != nil {
 		return nil, err

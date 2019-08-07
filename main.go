@@ -7,6 +7,7 @@ import (
 	envvar "github.com/caarlos0/env"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"github.com/pkg/errors"
 	"log"
 	"net/http"
@@ -20,6 +21,7 @@ const (
 	loginPath    string = "/login"
 	playlistPath string = "/playlist"
 	redirectPath string = "/results"
+	sessionName  string = "discover_now"
 	state        string = "abc123"
 
 	indexLayout  string = "index"
@@ -34,19 +36,29 @@ func main() {
 		log.Fatalf("%+v\n", err)
 	}
 
+	store := sessions.NewCookieStore([]byte(cfg.StoreAuth), []byte(cfg.StoreCrypt))
+	store.Options = &sessions.Options{
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   !cfg.Production,
+		MaxAge:   0,
+	}
+
 	auth, err := spotserv.Authenticator(cfg.FrontendURI + redirectPath)
 	if err != nil {
 		log.Fatalf("stack trace:\n%+v\n", err)
 	}
 
 	env := &Env{
-		Auth: auth,
+		Store: store,
+		Auth:  auth,
 		Views: map[string]*views.View{
 			landingView:  views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", landingView)),
 			resultView:   views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", resultView)),
 			notfoundView: views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", notfoundView)),
 		},
 		FrontendURI: cfg.FrontendURI,
+		HashKey: cfg.HashKey,
 	}
 
 	r := mux.NewRouter()

@@ -12,10 +12,12 @@ type Env struct {
 	Auth        *spotify.Authenticator
 	Views       map[string]*views.View
 	FrontendURI string
+	HashKey     string
 }
 
 // config contains the application environment variables.
 type config struct {
+	Production  bool   `env:"DISCOVER_PRODUCTION"`
 	HashKey     string `env:"DISCOVER_HASH"`
 	StoreAuth   string `env:"DISCOVER_AUTH"`
 	StoreCrypt  string `env:"DISCOVER_CRYPT"`
