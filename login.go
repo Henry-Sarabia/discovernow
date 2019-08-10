@@ -38,7 +38,7 @@ func loginHandler(env *Env, w http.ResponseWriter, r *http.Request) error {
 	delete(sess.Values, "playlist")
 
 	sum := id + now
-	state, err := hash([]byte(sum), []byte(env.HashKey)) //TODO: Can I use a []byte variable instead?
+	state, err := hash([]byte(sum), env.HashKey) //TODO: Can I use a []byte variable instead?
 	if err != nil {
 		return StatusError{http.StatusInternalServerError, errors.Wrap(err, "cannot get state hash")}
 	}

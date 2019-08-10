@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/Henry-Sarabia/discovernow/views"
 	spotserv "github.com/Henry-Sarabia/refind/spotify"
-	envvar "github.com/caarlos0/env"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
@@ -12,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -27,23 +27,29 @@ const (
 	landingView  string = "landing"
 	resultView   string = "result"
 	notfoundView string = "notfound"
+
+	production  string = "DISCOVER_PRODUCTION"
+	hashKey     string = "DISCOVER_HASH"
+	storeAuth   string = "DISCOVER_AUTH"
+	storeCrypt  string = "DISCOVER_CRYPT"
+	frontendURI string = "FRONTEND_URI" //TODO: prepend with 'DISCOVER'
 )
 
 func main() {
-	cfg := config{}
-	if err := envvar.Parse(&cfg); err != nil {
-		log.Fatalf("%+v\n", err)
+	prod, err := strconv.ParseBool(mustGetEnv(production))
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	store := sessions.NewCookieStore([]byte(cfg.StoreAuth), []byte(cfg.StoreCrypt))
+	store := sessions.NewCookieStore(mustDecodeHexEnv(storeAuth), mustDecodeHexEnv(storeCrypt))
 	store.Options = &sessions.Options{
 		Path:     "/",
 		HttpOnly: true,
-		Secure:   !cfg.Production,
+		Secure:   prod,
 		MaxAge:   0,
 	}
 
-	auth, err := spotserv.Authenticator(cfg.FrontendURI + redirectPath)
+	auth, err := spotserv.Authenticator(mustGetEnv(frontendURI) + redirectPath)
 	if err != nil {
 		log.Fatalf("stack trace:\n%+v\n", err)
 	}
@@ -56,8 +62,8 @@ func main() {
 			resultView:   views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", resultView)),
 			notfoundView: views.NewView(indexLayout, fmt.Sprintf("views/%s.gohtml", notfoundView)),
 		},
-		FrontendURI: cfg.FrontendURI,
-		HashKey: cfg.HashKey,
+		FrontendURI: mustGetEnv(frontendURI),
+		HashKey:     mustDecodeHexEnv(hashKey),
 	}
 
 	r := mux.NewRouter()
@@ -75,7 +81,7 @@ func main() {
 
 	srv := &http.Server{
 		Handler:      handlers.LoggingHandler(os.Stdout, r),
-		Addr:         strings.TrimPrefix(cfg.FrontendURI, "http://"),
+		Addr:         strings.TrimPrefix(mustGetEnv(frontendURI), "http://"),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}

@@ -106,7 +106,7 @@ func authorizeRequest(env *Env, r *http.Request) (*oauth2.Token, error) {
 	}
 
 	sum := id + tm
-	state, err := hash([]byte(sum), []byte(env.HashKey))
+	state, err := hash([]byte(sum), env.HashKey)
 	if err != nil {
 		return nil, err
 	}
